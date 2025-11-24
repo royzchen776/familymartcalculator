@@ -47,7 +47,7 @@
                 <div class="flex items-center gap-2">
                     <div class="flex flex-col items-end text-[9px] text-gray-400 leading-tight mr-1">
                         <span class="scale-[0.9] origin-right">RoyZChen@LITEON</span>
-                        <span class="scale-[0.9] origin-right">v1.0</span>
+                        <span class="scale-[0.9] origin-right">v1.1 FixRound</span>
                     </div>
                     <button id="btn-reset" class="text-xs bg-gray-800 hover:bg-gray-700 active:bg-gray-600 px-2 py-1.5 rounded transition flex items-center gap-1 text-gray-300 border border-gray-700 btn-active">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"/></svg> 重置
@@ -100,7 +100,15 @@
 
                 <!-- Member Code Btn -->
                 <button id="btn-member" class="flex-1 h-10 bg-gray-800 hover:bg-gray-700 active:bg-gray-600 rounded transition flex items-center justify-center text-blue-300 border border-blue-900/50 btn-active min-w-0">
-                    <span class="text-sm font-bold">會員</span>
+                    <!-- 寬版長方形卡片圖示 -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="5" width="20" height="14" rx="2" />
+                        <path d="M6 9v6" />
+                        <path d="M9 9v6" />
+                        <path d="M12 9v6" />
+                        <path d="M15 9v6" />
+                        <path d="M18 9v6" />
+                    </svg>
                 </button>
 
                 <!-- Toggle Keypad -->
@@ -381,14 +389,16 @@
             if (remaining < 0) {
                 statusClass = 'bg-red-900/40 text-red-200 border-red-800';
                 statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>';
-                statusMsg = `⚠️ 需補差額 ${formatMoney(Math.abs(remaining))} 元`;
+                // MODIFY HERE: Use Math.ceil
+                statusMsg = `⚠️ 需補差額 ${Math.ceil(Math.abs(remaining))} 元`;
             } else if (!isMainSatisfied) {
                 statusClass = 'bg-orange-900/40 text-orange-200 border-orange-800';
                 statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>';
                 
                 let msgParts = [];
                 if (totalMissingValue > 0) {
-                    msgParts.push(`總金額少$${formatMoney(totalMissingValue)}`);
+                    // MODIFY HERE: Use Math.ceil
+                    msgParts.push(`總金額少$${Math.ceil(totalMissingValue)}`);
                 } else {
                 }
                 
@@ -446,41 +456,21 @@
                 }).join('') + '<div class="h-2"></div>';
             }
 
-            // Keypad View
-            if (state.showKeypad) {
-                els.keypadArea.style.maxHeight = '500px';
-                els.iconChevronDown.classList.remove('hidden');
-                els.iconKeyboard.classList.add('hidden');
-                els.btnToggleKeypad.classList.replace('text-gray-400', 'text-yellow-400');
-                els.btnToggleKeypad.classList.replace('border-gray-700', 'border-yellow-900/50');
-                els.miniStatus.classList.add('hidden');
-            } else {
-                els.keypadArea.style.maxHeight = '0';
-                els.iconChevronDown.classList.add('hidden');
-                els.iconKeyboard.classList.remove('hidden');
-                els.btnToggleKeypad.classList.replace('text-yellow-400', 'text-gray-400');
-                els.btnToggleKeypad.classList.replace('border-yellow-900/50', 'border-gray-700');
-                els.miniStatus.classList.remove('hidden');
-                els.miniStatusLabel.textContent = remaining < 0 ? '需補差額' : '剩餘額度';
-                els.miniStatusVal.textContent = `$${formatMoney(Math.abs(remaining))}`;
-                els.miniStatusVal.className = `font-bold text-xl ${remaining < 0 ? 'text-red-400' : 'text-green-400'}`;
-                els.miniReqStatus.innerHTML = isMainSatisfied 
-                    ? `<div class="text-green-500 text-xs font-bold flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> 主食達標</div>`
-                    : `<div class="flex flex-col items-end text-[10px] leading-tight text-orange-300"><span>需${reqMainCount}主食 (折後$${reqMainValue})</span><span class="text-red-400 font-bold">缺: ${missingCount}件 / $${formatMoney(missingVal)}</span></div>`;
-            }
-
             // Input & Budget Display (Updated Logic)
             els.displayPrice.textContent = state.price;
             els.displayPricePlaceholder.style.display = state.price ? 'none' : 'inline';
             els.inputContainer.classList.toggle('active', state.price.length > 0); // Highlight underline
             
             els.mainBudgetLabel.textContent = remaining < 0 ? '需補' : '剩餘';
-            els.mainBudgetVal.textContent = `$${formatMoney(Math.abs(remaining))}`;
+            // MODIFY HERE: Use Math.ceil
+            els.mainBudgetVal.textContent = `$${remaining < 0 ? Math.ceil(Math.abs(remaining)) : formatMoney(Math.abs(remaining))}`;
             els.mainBudgetVal.className = `font-bold text-xl leading-none ${remaining < 0 ? 'text-red-400' : 'text-green-400'}`;
 
             updateDiscountButtons();
         };
 
+        // ... (Rest of the code remains the same) ...
+        
         // --- Init ---
         const initDiscountButtons = () => {
             const topDiscounts = CONSTANTS.DISCOUNTS.filter(d => d.top);
