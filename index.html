@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>全家換餐小幫手</title>
     
+    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#111827">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,7 +13,9 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3757/3757881.png">
 
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- JsBarcode -->
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 
     <style>
@@ -26,7 +29,7 @@
         .input-underline { border-bottom: 1px solid #374151; transition: border-color 0.3s; }
         .input-underline.active { border-bottom: 1px solid #10b981; }
         
-        /* PWA Safe Area */
+        /* PWA Safe Area for iPhone X+ */
         .safe-pb { padding-bottom: env(safe-area-inset-bottom); }
     </style>
 </head>
@@ -34,6 +37,7 @@
 
     <div class="w-full max-w-md bg-gray-900 shadow-xl h-[100dvh] flex flex-col border-x border-gray-800 relative">
         
+        <!-- Header -->
         <div class="bg-gray-900 px-3 py-2 text-white shadow-md sticky top-0 z-20 border-b border-gray-800 pt-safe-top">
             <div class="flex justify-between items-center mb-1">
                 <h1 class="text-lg font-bold flex items-center gap-2 text-green-400">
@@ -43,7 +47,7 @@
                 <div class="flex items-center gap-2">
                     <div class="flex flex-col items-end text-[9px] text-gray-400 leading-tight mr-1">
                         <span class="scale-[0.9] origin-right">RoyZChen@LITEON</span>
-                        <span class="scale-[0.9] origin-right">v0.8 MemberIcon</span>
+                        <span class="scale-[0.9] origin-right">v1.0</span>
                     </div>
                     <button id="btn-reset" class="text-xs bg-gray-800 hover:bg-gray-700 active:bg-gray-600 px-2 py-1.5 rounded transition flex items-center gap-1 text-gray-300 border border-gray-700 btn-active">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"/></svg> 重置
@@ -61,11 +65,13 @@
             </div>
         </div>
 
+        <!-- Status Bar -->
         <div id="status-bar" class="py-1.5 px-3 border-b flex items-center justify-center gap-2 font-medium transition-colors duration-300 shadow-sm text-xs bg-blue-900/40 text-blue-200 border-blue-800">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
             <span id="status-text">👍 符合門檻，還可以買</span>
         </div>
 
+        <!-- List Area -->
         <div id="item-list" class="flex-1 p-2 overflow-y-auto space-y-1.5 min-h-0">
             <div id="empty-state" class="text-center text-gray-600 mt-8 flex flex-col items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2 opacity-20"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
@@ -76,10 +82,13 @@
         
         <div class="h-2 bg-gray-900"></div>
 
+        <!-- Bottom Interaction Area -->
         <div class="bg-gray-900 border-t border-gray-800 shadow-[0_-4px_20px_-1px_rgba(0,0,0,0.5)] z-30 transition-all duration-300 safe-pb">
             
+            <!-- Row 1: Controls -->
             <div class="bg-gray-800/50 border-b border-gray-700 p-2 flex items-center gap-2">
                 
+                <!-- Card Counter -->
                 <div class="flex items-center justify-between bg-black/40 rounded-lg p-0.5 border border-gray-700 shrink-0" style="width: calc(40% - 0.3rem);">
                     <button id="btn-card-minus" class="flex-1 h-10 bg-gray-700 rounded hover:bg-gray-600 active:bg-gray-500 transition flex items-center justify-center text-white btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg></button>
                     <span id="display-card-count" class="text-lg font-bold w-6 text-center text-white">1</span>
@@ -89,25 +98,19 @@
                     </div>
                 </div>
 
+                <!-- Member Code Btn -->
                 <button id="btn-member" class="flex-1 h-10 bg-gray-800 hover:bg-gray-700 active:bg-gray-600 rounded transition flex items-center justify-center text-blue-300 border border-blue-900/50 btn-active min-w-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
-                        <path d="M3 7V5a2 2 0 0 1 2-2h2" />
-                        <path d="M17 3h2a2 2 0 0 1 2 2v2" />
-                        <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
-                        <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
-                        <path d="M8 7v10" />
-                        <path d="M12 7v10" />
-                        <path d="M16 7v10" />
-                    </svg>
-                    <span class="text-xs font-bold hidden sm:inline">會員</span>
+                    <span class="text-sm font-bold">會員</span>
                 </button>
 
+                <!-- Toggle Keypad -->
                 <button id="btn-toggle-keypad" class="flex-1 h-10 bg-gray-800 hover:bg-gray-700 active:bg-gray-600 rounded transition flex items-center justify-center border border-gray-700 text-yellow-400 border-yellow-900/50 btn-active min-w-0">
                     <svg id="icon-chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                     <svg id="icon-keyboard" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M6 8h.001"/><path d="M10 8h.001"/><path d="M14 8h.001"/><path d="M18 8h.001"/><path d="M6 12h.001"/><path d="M10 12h.001"/><path d="M14 12h.001"/><path d="M18 12h.001"/></svg>
                 </button>
             </div>
 
+            <!-- Mini Status -->
             <div id="mini-status" class="px-3 py-2 bg-gray-900 flex justify-between items-center border-b border-gray-800 hidden">
                 <div class="flex flex-col text-xs">
                     <span id="mini-status-label" class="text-gray-400">剩餘額度</span>
@@ -116,9 +119,13 @@
                 <div id="mini-req-status"></div>
             </div>
 
+            <!-- Keypad Container -->
             <div id="keypad-area" class="transition-all duration-200 overflow-hidden" style="max-height: 550px;">
+                <!-- Row 2 -->
                 <div class="p-2 pb-1 flex gap-2 h-16 items-end">
+                    <!-- Top Discounts: 40% Width -->
                     <div id="top-discounts" class="flex gap-2 shrink-0" style="width: calc(40% - 0.3rem);"></div>
+                    
                     <div id="input-container" class="flex-1 h-14 flex items-center justify-center relative overflow-hidden input-underline">
                         <span id="display-price" class="text-3xl font-bold text-white tracking-widest"></span>
                         <span id="display-price-placeholder" class="text-gray-600 text-sm">輸入金額</span>
@@ -129,8 +136,10 @@
                     </div>
                 </div>
 
+                <!-- Row 3 -->
                 <div id="discount-row" class="px-2 pt-1 pb-2 flex gap-2 w-full overflow-x-auto no-scrollbar"></div>
 
+                <!-- Row 4: Keypad -->
                 <div class="px-2 pb-4">
                     <div class="grid grid-cols-4 gap-2 h-64">
                         <div class="col-span-3 grid grid-cols-3 gap-2">
@@ -165,6 +174,7 @@
             </div>
         </div>
 
+        <!-- Reset Modal -->
         <div id="reset-modal" class="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 hidden">
             <div class="bg-white w-full max-w-xs rounded-xl p-5 flex flex-col items-center shadow-2xl">
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500 mb-3"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
@@ -177,6 +187,7 @@
             </div>
         </div>
 
+        <!-- Member Modal -->
         <div id="member-modal" class="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 hidden">
             <div class="bg-white w-full max-w-sm rounded-2xl p-6 flex flex-col items-center shadow-2xl relative text-gray-900">
                 <button id="btn-close-member" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6 18 18"/></svg></button>
@@ -220,13 +231,64 @@
             BUDGET_PER_CARD: 80,
             MAIN_DISH_THRESHOLD: 30,
             DISCOUNTS: [
-                { id: 'none', label: '原價', short: '原價', color: 'bg-gray-700 text-gray-300 border-gray-600', calc: p => Number(p.toFixed(1)), top: true },
-                { id: 'p88', label: '88折', short: '-12%', color: 'bg-blue-900/50 text-blue-300 border-blue-700', calc: p => Number((p * 0.88).toFixed(1)), top: true },
-                { id: 'p70', label: '友善7折', short: '-30%', color: 'bg-green-900/50 text-green-300 border-green-700', calc: p => Number((p * 0.7).toFixed(1)) },
-                { id: 'b2_79', label: '2件79折', short: '2件79折', color: 'bg-teal-900/50 text-teal-300 border-teal-700', calc: p => Number((p * 2 * 0.79).toFixed(1)) },
-                { id: 'b2_69', label: '2件69折', short: '2件69折', color: 'bg-indigo-900/50 text-indigo-300 border-indigo-700', calc: p => Number((p * 2 * 0.69).toFixed(1)) },
-                { id: 'b1g2_60', label: '第2件6折', short: '2件6折', color: 'bg-purple-900/50 text-purple-300 border-purple-700', calc: p => Number((p + (p * 0.6)).toFixed(1)) },
-                { id: 'b1g2_10', label: '第2件$10', short: '+10元', color: 'bg-orange-900/50 text-orange-300 border-orange-700', calc: p => Number((p + 10).toFixed(1)) }
+                { 
+                    id: 'none', 
+                    label: '原價', 
+                    html: '<span class="text-2xl font-bold">原價</span>', 
+                    short: '原價', 
+                    color: 'bg-gray-700 text-gray-300 border-gray-600', 
+                    calc: p => Number(p.toFixed(1)), 
+                    top: true 
+                },
+                { 
+                    id: 'p88', 
+                    label: '88折', 
+                    html: '<span class="text-2xl font-bold">88折</span>', 
+                    short: '-12%', 
+                    color: 'bg-blue-900/50 text-blue-300 border-blue-700', 
+                    calc: p => Number((p * 0.88).toFixed(1)), 
+                    top: true 
+                },
+                { 
+                    id: 'p70', 
+                    label: '友善7折', 
+                    html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">友善時光</span><span class="text-xl font-bold">7折</span></div>',
+                    short: '-30%', 
+                    color: 'bg-green-900/50 text-green-300 border-green-700', 
+                    calc: p => Number((p * 0.7).toFixed(1)) 
+                },
+                { 
+                    id: 'b1g2_10', 
+                    label: '第2件$10', 
+                    html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">第2件</span><span class="text-xl font-bold">+$10</span></div>',
+                    short: '+10元', 
+                    color: 'bg-orange-900/50 text-orange-300 border-orange-700', 
+                    calc: p => Number((p + 10).toFixed(1)) 
+                },
+                { 
+                    id: 'b2_79', 
+                    label: '2件79折', 
+                    html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">2件</span><span class="text-xl font-bold">79折</span></div>',
+                    short: '2件79折', 
+                    color: 'bg-teal-900/50 text-teal-300 border-teal-700', 
+                    calc: p => Number((p * 2 * 0.79).toFixed(1)) 
+                },
+                { 
+                    id: 'b2_69', 
+                    label: '2件69折', 
+                    html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">2件</span><span class="text-xl font-bold">69折</span></div>',
+                    short: '2件69折', 
+                    color: 'bg-indigo-900/50 text-indigo-300 border-indigo-700', 
+                    calc: p => Number((p * 2 * 0.69).toFixed(1)) 
+                },
+                { 
+                    id: 'b1g2_60', 
+                    label: '第2件6折', 
+                    html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">第2件</span><span class="text-xl font-bold">6折</span></div>',
+                    short: '2件6折', 
+                    color: 'bg-purple-900/50 text-purple-300 border-purple-700', 
+                    calc: p => Number((p + (p * 0.6)).toFixed(1)) 
+                }
             ]
         };
 
@@ -283,20 +345,32 @@
             const totalSpent = state.items.reduce((acc, item) => acc + item.finalPrice, 0);
             const remaining = totalBudget - totalSpent;
 
-            const mainDishItems = state.items.filter(item => item.type === 'main');
-            const totalMainDishFinalPrice = mainDishItems.reduce((acc, item) => acc + item.finalPrice, 0);
-            const mainDishCount = mainDishItems.length;
+            // Logic for Main Dish Threshold (Bin Packing / Greedy)
+            const mainDishes = state.items.filter(item => item.type === 'main').map(i => ({...i, used: false})).sort((a, b) => b.finalPrice - a.finalPrice);
             
-            const reqMainValue = state.cardCount * CONSTANTS.MAIN_DISH_THRESHOLD;
-            const reqMainCount = state.cardCount;
-
-            const isMainValOk = totalMainDishFinalPrice >= reqMainValue;
-            const isMainCountOk = mainDishCount >= reqMainCount;
-            const isMainSatisfied = isMainValOk && isMainCountOk;
+            let satisfiedCards = 0;
+            let totalMissingValue = 0;
             
-            const missingVal = Math.max(0, reqMainValue - totalMainDishFinalPrice);
-            const missingCount = Math.max(0, reqMainCount - mainDishCount);
-
+            for (let i = 0; i < state.cardCount; i++) {
+                let currentSum = 0;
+                for (let j = 0; j < mainDishes.length; j++) {
+                    if (!mainDishes[j].used) {
+                        currentSum += mainDishes[j].finalPrice;
+                        mainDishes[j].used = true;
+                        if (currentSum >= CONSTANTS.MAIN_DISH_THRESHOLD) break;
+                    }
+                }
+                
+                if (currentSum >= CONSTANTS.MAIN_DISH_THRESHOLD) {
+                    satisfiedCards++;
+                } else {
+                    totalMissingValue += (CONSTANTS.MAIN_DISH_THRESHOLD - currentSum);
+                }
+            }
+            
+            const missingCount = state.cardCount - satisfiedCards;
+            const isMainSatisfied = missingCount === 0;
+            
             // Update Displays
             els.displayBudget.textContent = `$${totalBudget}`;
             els.displaySpent.textContent = `$${formatMoney(totalSpent)}`;
@@ -311,10 +385,16 @@
             } else if (!isMainSatisfied) {
                 statusClass = 'bg-orange-900/40 text-orange-200 border-orange-800';
                 statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>';
-                let errs = [];
-                if(!isMainCountOk) errs.push(`缺 ${missingCount} 件主食`);
-                if(!isMainValOk) errs.push(`主食少 $${formatMoney(missingVal)}`);
-                statusMsg = `⚠️ 門檻未達: ${errs.join('，')}`;
+                
+                let msgParts = [];
+                if (totalMissingValue > 0) {
+                    msgParts.push(`總金額少$${formatMoney(totalMissingValue)}`);
+                } else {
+                }
+                
+                msgParts.push(`需再${missingCount}件主食`);
+                statusMsg = `⚠️ 主食門檻未達: ${msgParts.join('，')}`;
+
             } else if (Math.abs(remaining) < 0.1) {
                 statusClass = 'bg-green-900/40 text-green-300 border-green-800';
                 statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
@@ -389,9 +469,10 @@
                     : `<div class="flex flex-col items-end text-[10px] leading-tight text-orange-300"><span>需${reqMainCount}主食 (折後$${reqMainValue})</span><span class="text-red-400 font-bold">缺: ${missingCount}件 / $${formatMoney(missingVal)}</span></div>`;
             }
 
+            // Input & Budget Display (Updated Logic)
             els.displayPrice.textContent = state.price;
             els.displayPricePlaceholder.style.display = state.price ? 'none' : 'inline';
-            els.inputContainer.classList.toggle('active', state.price.length > 0);
+            els.inputContainer.classList.toggle('active', state.price.length > 0); // Highlight underline
             
             els.mainBudgetLabel.textContent = remaining < 0 ? '需補' : '剩餘';
             els.mainBudgetVal.textContent = `$${formatMoney(Math.abs(remaining))}`;
@@ -400,19 +481,22 @@
             updateDiscountButtons();
         };
 
+        // --- Init ---
         const initDiscountButtons = () => {
             const topDiscounts = CONSTANTS.DISCOUNTS.filter(d => d.top);
             const bottomDiscounts = CONSTANTS.DISCOUNTS.filter(d => !d.top);
 
+            // Top: Width calculated to align with first 2 bottom buttons (40% minus gap adjustment)
             els.topDiscounts.innerHTML = topDiscounts.map(d => `
-                <button onclick="setDiscount('${d.id}')" class="btn-discount flex-1 h-14 px-1 rounded text-sm font-bold tracking-tighter border transition-all truncate whitespace-nowrap" data-id="${d.id}">
-                    ${d.label}
+                <button onclick="setDiscount('${d.id}')" class="btn-discount flex-1 h-14 px-1 rounded text-sm font-bold tracking-tighter border transition-all truncate whitespace-nowrap ${d.html ? 'flex flex-col justify-center items-center' : ''}" data-id="${d.id}">
+                    ${d.html ? d.html : d.label}
                 </button>
             `).join('');
 
+            // Bottom: Distributed
             els.discountRow.innerHTML = bottomDiscounts.map(d => `
-                <button onclick="setDiscount('${d.id}')" class="btn-discount flex-1 h-14 px-0.5 rounded text-sm font-bold tracking-tighter border transition-all truncate whitespace-nowrap min-w-[60px]" data-id="${d.id}">
-                    ${d.label}
+                <button onclick="setDiscount('${d.id}')" class="btn-discount flex-1 h-14 px-0.5 rounded text-sm font-bold tracking-tighter border transition-all truncate whitespace-nowrap min-w-[60px] ${d.html ? 'flex flex-col justify-center items-center' : ''}" data-id="${d.id}">
+                    ${d.html ? d.html : d.label}
                 </button>
             `).join('');
         };
@@ -420,7 +504,8 @@
         const updateDiscountButtons = () => {
             document.querySelectorAll('.btn-discount').forEach(btn => {
                 const id = btn.getAttribute('data-id');
-                let baseClass = "btn-discount flex-1 h-14 rounded text-sm font-bold tracking-tighter border transition-all truncate whitespace-nowrap btn-active ";
+                // Modified baseClass to include centering
+                let baseClass = "btn-discount flex-1 h-14 rounded text-sm font-bold tracking-tighter border transition-all btn-active flex justify-center items-center ";
                 if (btn.parentElement.id === 'top-discounts') baseClass += "px-1 ";
                 else baseClass += "px-0.5 min-w-[60px] ";
 
@@ -432,6 +517,7 @@
             });
         };
 
+        // --- Global Actions ---
         window.setDiscount = (id) => { triggerHaptic(); state.discountType = id; render(); };
         window.toggleItemType = (id) => { 
             triggerHaptic(); 
@@ -440,10 +526,11 @@
         };
         window.removeItem = (id) => { triggerHaptic(); state.items = state.items.filter(item => item.id !== id); render(); };
 
+        // --- Events ---
         els.btnCardMinus.addEventListener('click', () => { triggerHaptic(); state.cardCount = Math.max(1, state.cardCount - 1); render(); });
         els.btnCardPlus.addEventListener('click', () => { 
             triggerHaptic(); 
-            state.cardCount = Math.min(9, state.cardCount + 1);
+            state.cardCount = Math.min(9, state.cardCount + 1); // Limit to 9
             render(); 
         });
         els.btnToggleKeypad.addEventListener('click', () => { triggerHaptic(); state.showKeypad = !state.showKeypad; render(); });
@@ -458,12 +545,16 @@
         els.btnBackspace.addEventListener('click', () => { triggerHaptic(); state.price = state.price.slice(0, -1); render(); });
         els.btnAc.addEventListener('click', () => { triggerHaptic(); state.price = ''; render(); });
 
+        // Add Item Logic with Zero Check
         const addItem = (type) => {
             triggerHaptic();
             const originalPrice = parseInt(state.price);
             
             if (!state.price || isNaN(originalPrice) || originalPrice === 0) {
-                if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                // Error feedback
+                if (navigator.vibrate) navigator.vibrate([50, 50, 50]); // Error pattern
+                
+                // Clear input
                 state.price = '';
                 render();
                 return;
@@ -483,6 +574,7 @@
         els.btnAddMain.addEventListener('click', () => addItem('main'));
         els.btnAddGeneral.addEventListener('click', () => addItem('general'));
 
+        // Reset
         els.btnReset.addEventListener('click', () => {
             triggerHaptic();
             state.items.length > 0 ? els.resetModal.classList.remove('hidden') : fullReset();
@@ -496,24 +588,16 @@
             render();
         };
 
+        // Member
         els.btnMember.addEventListener('click', () => { triggerHaptic(); els.memberModal.classList.remove('hidden'); updateMemberModal(); });
         els.btnCloseMember.addEventListener('click', () => { triggerHaptic(); els.memberModal.classList.add('hidden'); });
-
-        // 點擊視窗外部關閉
-        els.memberModal.addEventListener('click', (e) => {
-            if (e.target === els.memberModal) {
-                triggerHaptic();
-                els.memberModal.classList.add('hidden');
-            }
-        });
 
         const updateMemberModal = () => {
             if (state.memberId) {
                 els.memberInputView.classList.add('hidden');
                 els.memberDisplayView.classList.remove('hidden');
                 els.displayMemberId.textContent = state.memberId;
-                // 修正處：調整 JsBarcode 參數
-                setTimeout(() => { try { JsBarcode("#barcode-svg", state.memberId, { format: "CODE128", width: 4, height: 70, displayValue: false, margin: 5, background: "#ffffff", lineColor: "#000000" }); } catch(e) {} }, 50);
+                setTimeout(() => { try { JsBarcode("#barcode-svg", state.memberId, { format: "CODE128", width: 2.8, height: 100, displayValue: false, margin: 10, background: "#ffffff", lineColor: "#000000" }); } catch(e) {} }, 50);
             } else {
                 els.memberInputView.classList.remove('hidden');
                 els.memberDisplayView.classList.add('hidden');
