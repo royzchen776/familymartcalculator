@@ -11,6 +11,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="換餐小幫手">
     <link rel="manifest" href="manifest.json">
+    <!-- 線上圖示 -->
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3757/3757881.png">
 
     <!-- Tailwind CSS -->
@@ -29,7 +30,7 @@
         .input-underline { border-bottom: 1px solid #374151; transition: border-color 0.3s; }
         .input-underline.active { border-bottom: 1px solid #10b981; }
         
-        /* PWA Safe Area for iPhone X+ */
+        /* PWA Safe Area */
         .safe-pb { padding-bottom: env(safe-area-inset-bottom); }
     </style>
 </head>
@@ -47,7 +48,7 @@
                 <div class="flex items-center gap-2">
                     <div class="flex flex-col items-end text-[9px] text-gray-400 leading-tight mr-1">
                         <span class="scale-[0.9] origin-right">RoyZChen@LITEON</span>
-                        <span class="scale-[0.9] origin-right">v0.5 UX</span>
+                        <span class="scale-[0.9] origin-right">v0.7 IconFix</span>
                     </div>
                     <button id="btn-reset" class="text-xs bg-gray-800 hover:bg-gray-700 active:bg-gray-600 px-2 py-1.5 rounded transition flex items-center gap-1 text-gray-300 border border-gray-700 btn-active">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"/></svg> 重置
@@ -68,7 +69,7 @@
         <!-- Status Bar -->
         <div id="status-bar" class="py-1.5 px-3 border-b flex items-center justify-center gap-2 font-medium transition-colors duration-300 shadow-sm text-xs bg-blue-900/40 text-blue-200 border-blue-800">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-            <span id="status-text">👍 符合門檻</span>
+            <span id="status-text">👍 符合門檻，還可以買</span>
         </div>
 
         <!-- List Area -->
@@ -88,7 +89,7 @@
             <!-- Row 1: Controls -->
             <div class="bg-gray-800/50 border-b border-gray-700 p-2 flex items-center gap-2">
                 
-                <!-- Card Counter (40% width) -->
+                <!-- Card Counter -->
                 <div class="flex items-center justify-between bg-black/40 rounded-lg p-0.5 border border-gray-700 shrink-0" style="width: calc(40% - 0.3rem);">
                     <button id="btn-card-minus" class="flex-1 h-10 bg-gray-700 rounded hover:bg-gray-600 active:bg-gray-500 transition flex items-center justify-center text-white btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg></button>
                     <span id="display-card-count" class="text-lg font-bold w-6 text-center text-white">1</span>
@@ -98,13 +99,21 @@
                     </div>
                 </div>
 
-                <!-- Member Code Btn (Flex-1) -->
+                <!-- Member Code Btn -->
                 <button id="btn-member" class="flex-1 h-10 bg-gray-800 hover:bg-gray-700 active:bg-gray-600 rounded transition flex items-center justify-center text-blue-300 border border-blue-900/50 btn-active min-w-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect width="2" height="12" x="7" y="6"/><rect width="2" height="12" x="11" y="6"/><rect width="2" height="12" x="15" y="6"/></svg>
+                    <!-- 修正處：更換為寬版長方形卡片+條碼線的圖示 -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+                        <rect x="2" y="5" width="20" height="14" rx="2" />
+                        <path d="M6 9v6" />
+                        <path d="M9 9v6" />
+                        <path d="M12 9v6" />
+                        <path d="M15 9v6" />
+                        <path d="M18 9v6" />
+                    </svg>
                     <span class="text-xs font-bold hidden sm:inline">會員</span>
                 </button>
 
-                <!-- Toggle Keypad (Flex-1, Equal Width) -->
+                <!-- Toggle Keypad -->
                 <button id="btn-toggle-keypad" class="flex-1 h-10 bg-gray-800 hover:bg-gray-700 active:bg-gray-600 rounded transition flex items-center justify-center border border-gray-700 text-yellow-400 border-yellow-900/50 btn-active min-w-0">
                     <svg id="icon-chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                     <svg id="icon-keyboard" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M6 8h.001"/><path d="M10 8h.001"/><path d="M14 8h.001"/><path d="M18 8h.001"/><path d="M6 12h.001"/><path d="M10 12h.001"/><path d="M14 12h.001"/><path d="M18 12h.001"/></svg>
@@ -124,9 +133,7 @@
             <div id="keypad-area" class="transition-all duration-200 overflow-hidden" style="max-height: 550px;">
                 <!-- Row 2 -->
                 <div class="p-2 pb-1 flex gap-2 h-16 items-end">
-                    <!-- Top Discounts: 40% Width -->
                     <div id="top-discounts" class="flex gap-2 shrink-0" style="width: calc(40% - 0.3rem);"></div>
-                    
                     <div id="input-container" class="flex-1 h-14 flex items-center justify-center relative overflow-hidden input-underline">
                         <span id="display-price" class="text-3xl font-bold text-white tracking-widest"></span>
                         <span id="display-price-placeholder" class="text-gray-600 text-sm">輸入金額</span>
@@ -200,350 +207,5 @@
                 </div>
                 <div id="member-display-view" class="flex flex-col items-center w-full">
                     <div id="display-member-id" class="text-3xl font-bold text-gray-800 tracking-[0.2em] mb-4 font-mono"></div>
-                    <div class="bg-white p-4 rounded-xl mb-6 w-full flex justify-center border-2 border-gray-100 overflow-hidden"><svg id="barcode-svg" class="w-full h-32"></svg></div>
-                    <button id="btn-rebind-member" class="text-gray-400 text-sm flex items-center gap-1 hover:text-gray-600 btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> 重新綁定號碼</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        // PWA Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW registered!', reg))
-                    .catch(err => console.log('SW registration failed: ', err));
-            });
-        }
-
-        const state = {
-            cardCount: 1,
-            items: [],
-            price: '',
-            discountType: 'p88',
-            showKeypad: true,
-            memberId: localStorage.getItem('fm_member_id') || '1341700735',
-            tempMemberId: ''
-        };
-
-        const CONSTANTS = {
-            BUDGET_PER_CARD: 80,
-            MAIN_DISH_THRESHOLD: 30,
-            DISCOUNTS: [
-                { id: 'none', label: '原價', short: '原價', color: 'bg-gray-700 text-gray-300 border-gray-600', calc: p => Number(p.toFixed(1)), top: true },
-                { id: 'p88', label: '88折', short: '-12%', color: 'bg-blue-900/50 text-blue-300 border-blue-700', calc: p => Number((p * 0.88).toFixed(1)), top: true },
-                { id: 'p70', label: '友善7折', short: '-30%', color: 'bg-green-900/50 text-green-300 border-green-700', calc: p => Number((p * 0.7).toFixed(1)) },
-                { id: 'b2_79', label: '2件79折', short: '2件79折', color: 'bg-teal-900/50 text-teal-300 border-teal-700', calc: p => Number((p * 2 * 0.79).toFixed(1)) },
-                { id: 'b2_69', label: '2件69折', short: '2件69折', color: 'bg-indigo-900/50 text-indigo-300 border-indigo-700', calc: p => Number((p * 2 * 0.69).toFixed(1)) },
-                { id: 'b1g2_60', label: '第2件6折', short: '2件6折', color: 'bg-purple-900/50 text-purple-300 border-purple-700', calc: p => Number((p + (p * 0.6)).toFixed(1)) },
-                { id: 'b1g2_10', label: '第2件$10', short: '+10元', color: 'bg-orange-900/50 text-orange-300 border-orange-700', calc: p => Number((p + 10).toFixed(1)) }
-            ]
-        };
-
-        const els = {
-            itemList: document.getElementById('item-list'),
-            emptyState: document.getElementById('empty-state'),
-            displayBudget: document.getElementById('display-budget'),
-            displaySpent: document.getElementById('display-spent'),
-            statusBar: document.getElementById('status-bar'),
-            btnCardMinus: document.getElementById('btn-card-minus'),
-            btnCardPlus: document.getElementById('btn-card-plus'),
-            displayCardCount: document.getElementById('display-card-count'),
-            btnToggleKeypad: document.getElementById('btn-toggle-keypad'),
-            keypadArea: document.getElementById('keypad-area'),
-            miniStatus: document.getElementById('mini-status'),
-            miniStatusLabel: document.getElementById('mini-status-label'),
-            miniStatusVal: document.getElementById('mini-status-val'),
-            miniReqStatus: document.getElementById('mini-req-status'),
-            displayPrice: document.getElementById('display-price'),
-            displayPricePlaceholder: document.getElementById('display-price-placeholder'),
-            topDiscounts: document.getElementById('top-discounts'),
-            discountRow: document.getElementById('discount-row'),
-            mainBudgetVal: document.getElementById('main-budget-val'),
-            mainBudgetLabel: document.getElementById('main-budget-label'),
-            iconChevronDown: document.getElementById('icon-chevron-down'),
-            iconKeyboard: document.getElementById('icon-keyboard'),
-            inputContainer: document.getElementById('input-container'),
-            // Modals
-            memberModal: document.getElementById('member-modal'),
-            btnMember: document.getElementById('btn-member'),
-            btnCloseMember: document.getElementById('btn-close-member'),
-            memberInputView: document.getElementById('member-input-view'),
-            memberDisplayView: document.getElementById('member-display-view'),
-            inputMemberId: document.getElementById('input-member-id'),
-            btnSaveMember: document.getElementById('btn-save-member'),
-            displayMemberId: document.getElementById('display-member-id'),
-            btnRebindMember: document.getElementById('btn-rebind-member'),
-            resetModal: document.getElementById('reset-modal'),
-            btnReset: document.getElementById('btn-reset'),
-            btnCancelReset: document.getElementById('btn-cancel-reset'),
-            btnConfirmReset: document.getElementById('btn-confirm-reset'),
-            // Actions
-            btnAddMain: document.getElementById('btn-add-main'),
-            btnAddGeneral: document.getElementById('btn-add-general'),
-            btnBackspace: document.getElementById('btn-backspace'),
-            btnAc: document.getElementById('btn-ac'),
-        };
-
-        const triggerHaptic = () => { if (navigator.vibrate) navigator.vibrate(15); };
-        const formatMoney = (val) => val.toFixed(1).replace(/\.0$/, '');
-
-        const render = () => {
-            const totalBudget = state.cardCount * CONSTANTS.BUDGET_PER_CARD;
-            const totalSpent = state.items.reduce((acc, item) => acc + item.finalPrice, 0);
-            const remaining = totalBudget - totalSpent;
-
-            const mainDishItems = state.items.filter(item => item.type === 'main');
-            const totalMainDishFinalPrice = mainDishItems.reduce((acc, item) => acc + item.finalPrice, 0);
-            const mainDishCount = mainDishItems.length;
-            
-            const reqMainValue = state.cardCount * CONSTANTS.MAIN_DISH_THRESHOLD;
-            const reqMainCount = state.cardCount;
-
-            const isMainValOk = totalMainDishFinalPrice >= reqMainValue;
-            const isMainCountOk = mainDishCount >= reqMainCount;
-            const isMainSatisfied = isMainValOk && isMainCountOk;
-            
-            const missingVal = Math.max(0, reqMainValue - totalMainDishFinalPrice);
-            const missingCount = Math.max(0, reqMainCount - mainDishCount);
-
-            // Update Displays
-            els.displayBudget.textContent = `$${totalBudget}`;
-            els.displaySpent.textContent = `$${formatMoney(totalSpent)}`;
-            els.displayCardCount.textContent = state.cardCount;
-
-            // Status Bar
-            let statusClass = '', statusIcon = '', statusMsg = '';
-            if (remaining < 0) {
-                statusClass = 'bg-red-900/40 text-red-200 border-red-800';
-                statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>';
-                statusMsg = `⚠️ 需補差額 ${formatMoney(Math.abs(remaining))} 元`;
-            } else if (!isMainSatisfied) {
-                statusClass = 'bg-orange-900/40 text-orange-200 border-orange-800';
-                statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>';
-                let errs = [];
-                if(!isMainCountOk) errs.push(`缺 ${missingCount} 件主食`);
-                if(!isMainValOk) errs.push(`主食少 $${formatMoney(missingVal)}`);
-                statusMsg = `⚠️ 門檻未達: ${errs.join('，')}`;
-            } else if (Math.abs(remaining) < 0.1) {
-                statusClass = 'bg-green-900/40 text-green-300 border-green-800';
-                statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
-                statusMsg = '🎉 完美！符合規定且用完額度';
-            } else {
-                statusClass = 'bg-blue-900/40 text-blue-200 border-blue-800';
-                statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>';
-                statusMsg = '👍 符合門檻，還可以買';
-            }
-            els.statusBar.className = `py-1.5 px-3 border-b flex items-center justify-center gap-2 font-medium transition-colors duration-300 shadow-sm text-xs ${statusClass}`;
-            els.statusBar.innerHTML = `${statusIcon}<span>${statusMsg}</span>`;
-
-            // List
-            if (state.items.length === 0) {
-                els.emptyState.style.display = 'flex';
-                els.itemList.innerHTML = '';
-                els.itemList.appendChild(els.emptyState);
-            } else {
-                els.emptyState.style.display = 'none';
-                els.itemList.innerHTML = state.items.map(item => {
-                    const isMain = item.type === 'main';
-                    const discount = item.discountInfo;
-                    const icon = isMain 
-                        ? `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`
-                        : `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>`;
-                    const typeBtnClass = isMain ? 'bg-green-900/40 border-green-700 text-green-400 hover:bg-green-800/60 shadow-[0_0_10px_rgba(74,222,128,0.1)]' : 'bg-gray-800 border-gray-600 text-gray-400 hover:bg-gray-700';
-                    const itemBorderClass = isMain ? 'bg-green-950/20 border-green-900/40' : 'bg-gray-800/60 border-gray-700';
-                    return `
-                        <li class="border shadow-sm rounded px-2 py-2 flex justify-between items-center animate-in fade-in slide-in-from-bottom-2 duration-300 ${itemBorderClass}">
-                            <div class="flex flex-col min-w-0 flex-1 mr-2">
-                                <div class="flex items-center gap-3">
-                                    <button onclick="toggleItemType(${item.id})" class="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold transition-all w-20 shrink-0 border ${typeBtnClass} btn-active">
-                                        ${icon} ${isMain ? '主食' : '一般'}
-                                    </button>
-                                    <div class="flex items-center gap-2 flex-wrap">
-                                        <span class="text-sm text-gray-300 font-bold tracking-wide whitespace-nowrap">${discount.id !== 'none' ? `原$${item.originalPrice}` : '原價'}</span>
-                                        ${discount.id !== 'none' ? `<span class="text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap border ${discount.color}">${discount.short}</span>` : ''}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="text-base font-bold text-white tracking-wide">$${formatMoney(item.finalPrice)}</span>
-                                <button onclick="removeItem(${item.id})" class="text-gray-600 hover:text-red-400 transition btn-active">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                                </button>
-                            </div>
-                        </li>
-                    `;
-                }).join('') + '<div class="h-2"></div>';
-            }
-
-            // Keypad View
-            if (state.showKeypad) {
-                els.keypadArea.style.maxHeight = '500px';
-                els.iconChevronDown.classList.remove('hidden');
-                els.iconKeyboard.classList.add('hidden');
-                els.btnToggleKeypad.classList.replace('text-gray-400', 'text-yellow-400');
-                els.btnToggleKeypad.classList.replace('border-gray-700', 'border-yellow-900/50');
-                els.miniStatus.classList.add('hidden');
-            } else {
-                els.keypadArea.style.maxHeight = '0';
-                els.iconChevronDown.classList.add('hidden');
-                els.iconKeyboard.classList.remove('hidden');
-                els.btnToggleKeypad.classList.replace('text-yellow-400', 'text-gray-400');
-                els.btnToggleKeypad.classList.replace('border-yellow-900/50', 'border-gray-700');
-                els.miniStatus.classList.remove('hidden');
-                els.miniStatusLabel.textContent = remaining < 0 ? '需補差額' : '剩餘額度';
-                els.miniStatusVal.textContent = `$${formatMoney(Math.abs(remaining))}`;
-                els.miniStatusVal.className = `font-bold text-xl ${remaining < 0 ? 'text-red-400' : 'text-green-400'}`;
-                els.miniReqStatus.innerHTML = isMainSatisfied 
-                    ? `<div class="text-green-500 text-xs font-bold flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> 主食達標</div>`
-                    : `<div class="flex flex-col items-end text-[10px] leading-tight text-orange-300"><span>需${reqMainCount}主食 (折後$${reqMainValue})</span><span class="text-red-400 font-bold">缺: ${missingCount}件 / $${formatMoney(missingVal)}</span></div>`;
-            }
-
-            els.displayPrice.textContent = state.price;
-            els.displayPricePlaceholder.style.display = state.price ? 'none' : 'inline';
-            els.inputContainer.classList.toggle('active', state.price.length > 0);
-            
-            els.mainBudgetLabel.textContent = remaining < 0 ? '需補' : '剩餘';
-            els.mainBudgetVal.textContent = `$${formatMoney(Math.abs(remaining))}`;
-            els.mainBudgetVal.className = `font-bold text-xl leading-none ${remaining < 0 ? 'text-red-400' : 'text-green-400'}`;
-
-            updateDiscountButtons();
-        };
-
-        const initDiscountButtons = () => {
-            const topDiscounts = CONSTANTS.DISCOUNTS.filter(d => d.top);
-            const bottomDiscounts = CONSTANTS.DISCOUNTS.filter(d => !d.top);
-
-            els.topDiscounts.innerHTML = topDiscounts.map(d => `
-                <button onclick="setDiscount('${d.id}')" class="btn-discount flex-1 h-14 px-1 rounded text-sm font-bold tracking-tighter border transition-all truncate whitespace-nowrap" data-id="${d.id}">
-                    ${d.label}
-                </button>
-            `).join('');
-
-            els.discountRow.innerHTML = bottomDiscounts.map(d => `
-                <button onclick="setDiscount('${d.id}')" class="btn-discount flex-1 h-14 px-0.5 rounded text-sm font-bold tracking-tighter border transition-all truncate whitespace-nowrap min-w-[60px]" data-id="${d.id}">
-                    ${d.label}
-                </button>
-            `).join('');
-        };
-
-        const updateDiscountButtons = () => {
-            document.querySelectorAll('.btn-discount').forEach(btn => {
-                const id = btn.getAttribute('data-id');
-                let baseClass = "btn-discount flex-1 h-14 rounded text-sm font-bold tracking-tighter border transition-all truncate whitespace-nowrap btn-active ";
-                if (btn.parentElement.id === 'top-discounts') baseClass += "px-1 ";
-                else baseClass += "px-0.5 min-w-[60px] ";
-
-                if (id === state.discountType) {
-                    btn.className = baseClass + "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.3)] transform scale-[1.02] z-10";
-                } else {
-                    btn.className = baseClass + "bg-gray-800 text-gray-400 border-gray-700 hover:bg-gray-700 hover:text-gray-200";
-                }
-            });
-        };
-
-        window.setDiscount = (id) => { triggerHaptic(); state.discountType = id; render(); };
-        window.toggleItemType = (id) => { 
-            triggerHaptic(); 
-            state.items = state.items.map(item => item.id === id ? { ...item, type: item.type === 'main' ? 'general' : 'main' } : item); 
-            render(); 
-        };
-        window.removeItem = (id) => { triggerHaptic(); state.items = state.items.filter(item => item.id !== id); render(); };
-
-        els.btnCardMinus.addEventListener('click', () => { triggerHaptic(); state.cardCount = Math.max(1, state.cardCount - 1); render(); });
-        els.btnCardPlus.addEventListener('click', () => { 
-            triggerHaptic(); 
-            state.cardCount = Math.min(9, state.cardCount + 1);
-            render(); 
-        });
-        els.btnToggleKeypad.addEventListener('click', () => { triggerHaptic(); state.showKeypad = !state.showKeypad; render(); });
-
-        document.querySelectorAll('.btn-num').forEach(btn => {
-            btn.addEventListener('click', () => {
-                triggerHaptic();
-                if (state.price.length < 6) { state.price += btn.getAttribute('data-val'); render(); }
-            });
-        });
-
-        els.btnBackspace.addEventListener('click', () => { triggerHaptic(); state.price = state.price.slice(0, -1); render(); });
-        els.btnAc.addEventListener('click', () => { triggerHaptic(); state.price = ''; render(); });
-
-        const addItem = (type) => {
-            triggerHaptic();
-            const originalPrice = parseInt(state.price);
-            
-            if (!state.price || isNaN(originalPrice) || originalPrice === 0) {
-                if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
-                state.price = '';
-                render();
-                return;
-            }
-            
-            const discount = CONSTANTS.DISCOUNTS.find(d => d.id === state.discountType);
-            const finalPrice = discount.calc(originalPrice);
-
-            state.items.push({ id: Date.now(), type, originalPrice, finalPrice, discountInfo: discount });
-            state.price = '';
-            state.discountType = 'p88';
-            
-            setTimeout(() => { if (state.showKeypad) els.itemList.scrollTop = els.itemList.scrollHeight; }, 10);
-            render();
-        };
-
-        els.btnAddMain.addEventListener('click', () => addItem('main'));
-        els.btnAddGeneral.addEventListener('click', () => addItem('general'));
-
-        els.btnReset.addEventListener('click', () => {
-            triggerHaptic();
-            state.items.length > 0 ? els.resetModal.classList.remove('hidden') : fullReset();
-        });
-        els.btnCancelReset.addEventListener('click', () => { triggerHaptic(); els.resetModal.classList.add('hidden'); });
-        els.btnConfirmReset.addEventListener('click', () => { triggerHaptic(); fullReset(); });
-
-        const fullReset = () => {
-            state.items = []; state.cardCount = 1; state.discountType = 'p88'; state.price = ''; state.showKeypad = true;
-            els.resetModal.classList.add('hidden');
-            render();
-        };
-
-        els.btnMember.addEventListener('click', () => { triggerHaptic(); els.memberModal.classList.remove('hidden'); updateMemberModal(); });
-        els.btnCloseMember.addEventListener('click', () => { triggerHaptic(); els.memberModal.classList.add('hidden'); });
-
-        // 點擊視窗外部關閉 (新增功能)
-        els.memberModal.addEventListener('click', (e) => {
-            if (e.target === els.memberModal) {
-                triggerHaptic();
-                els.memberModal.classList.add('hidden');
-            }
-        });
-
-        const updateMemberModal = () => {
-            if (state.memberId) {
-                els.memberInputView.classList.add('hidden');
-                els.memberDisplayView.classList.remove('hidden');
-                els.displayMemberId.textContent = state.memberId;
-                setTimeout(() => { try { JsBarcode("#barcode-svg", state.memberId, { format: "CODE128", width: 2.8, height: 100, displayValue: false, margin: 10, background: "#ffffff", lineColor: "#000000" }); } catch(e) {} }, 50);
-            } else {
-                els.memberInputView.classList.remove('hidden');
-                els.memberDisplayView.classList.add('hidden');
-            }
-        };
-
-        els.btnSaveMember.addEventListener('click', () => {
-            const val = els.inputMemberId.value;
-            if(val) { triggerHaptic(); localStorage.setItem('fm_member_id', val); state.memberId = val; updateMemberModal(); }
-        });
-
-        els.btnRebindMember.addEventListener('click', () => {
-            triggerHaptic(); state.memberId = ''; localStorage.removeItem('fm_member_id'); els.inputMemberId.value = ''; updateMemberModal();
-        });
-
-        initDiscountButtons();
-        render();
-    </script>
-</body>
-</html>
-
-
+                    <div class="bg-white p-4 rounded-xl mb-6 w-full flex justify-center border-2 border-gray-100 overflow-hidden"><svg id="barcode-svg" class="w-full"></svg></div>
+                    <button id="btn-rebind-member" class="t
