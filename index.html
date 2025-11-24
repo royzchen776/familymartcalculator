@@ -68,7 +68,7 @@
         <!-- Status Bar -->
         <div id="status-bar" class="py-1.5 px-3 border-b flex items-center justify-center gap-2 font-medium transition-colors duration-300 shadow-sm text-xs bg-blue-900/40 text-blue-200 border-blue-800">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-            <span id="status-text">👍 符合門檻，還可以買</span>
+            <span id="status-text">👍 符合門檻</span>
         </div>
 
         <!-- List Area -->
@@ -194,8 +194,8 @@
                 <button id="btn-close-member" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6 18 18"/></svg></button>
                 <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect width="2" height="12" x="7" y="6"/><rect width="2" height="12" x="11" y="6"/><rect width="2" height="12" x="15" y="6"/></svg> 會員條碼</h2>
                 <div id="member-input-view" class="w-full hidden">
-                    <label class="block text-sm text-gray-600 mb-2">請輸入您的手機條碼 (10碼)</label>
-                    <input type="text" id="input-member-id" placeholder="請輸入手機條碼" class="w-full p-3 border rounded-lg mb-4 text-center text-xl font-bold tracking-widest bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none text-gray-800" />
+                    <label class="block text-sm text-gray-600 mb-2">請輸入您的會員號碼 (10碼)</label>
+                    <input type="text" id="input-member-id" placeholder="請輸入會員號碼" class="w-full p-3 border rounded-lg mb-4 text-center text-xl font-bold tracking-widest bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none text-gray-800" />
                     <button id="btn-save-member" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed btn-active">儲存並顯示</button>
                 </div>
                 <div id="member-display-view" class="flex flex-col items-center w-full">
