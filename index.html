@@ -47,7 +47,7 @@
                 <div class="flex items-center gap-2">
                     <div class="flex flex-col items-end text-[9px] text-gray-400 leading-tight mr-1">
                         <span class="scale-[0.9] origin-right">RoyZChen@LITEON</span>
-                        <span class="scale-[0.9] origin-right">v1.1 FixRound</span>
+                        <span class="scale-[0.9] origin-right">v0.9 Beta (Fix)</span>
                     </div>
                     <button id="btn-reset" class="text-xs bg-gray-800 hover:bg-gray-700 active:bg-gray-600 px-2 py-1.5 rounded transition flex items-center gap-1 text-gray-300 border border-gray-700 btn-active">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"/></svg> 重置
@@ -80,7 +80,11 @@
             </div>
         </div>
         
-        <div class="h-2 bg-gray-900"></div>
+        <!-- 橘色提醒橫幅 -->
+        <div id="tips-banner" class="bg-orange-900/80 text-orange-100 text-[10px] py-1 px-3 flex items-center justify-center gap-1.5 border-t border-orange-800/50 backdrop-blur-sm transition-all duration-300 overflow-hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+            <span>小提醒：選用(第)2件優惠時只需輸入<span class="font-bold text-white underline decoration-orange-400 decoration-2">1件</span>商品原價即可</span>
+        </div>
 
         <!-- Bottom Interaction Area -->
         <div class="bg-gray-900 border-t border-gray-800 shadow-[0_-4px_20px_-1px_rgba(0,0,0,0.5)] z-30 transition-all duration-300 safe-pb">
@@ -100,7 +104,6 @@
 
                 <!-- Member Code Btn -->
                 <button id="btn-member" class="flex-1 h-10 bg-gray-800 hover:bg-gray-700 active:bg-gray-600 rounded transition flex items-center justify-center text-blue-300 border border-blue-900/50 btn-active min-w-0">
-                    <!-- 寬版長方形卡片圖示 -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="5" width="20" height="14" rx="2" />
                         <path d="M6 9v6" />
@@ -118,13 +121,16 @@
                 </button>
             </div>
 
-            <!-- Mini Status -->
+            <!-- Mini Status (修正佈局) -->
             <div id="mini-status" class="px-3 py-2 bg-gray-900 flex justify-between items-center border-b border-gray-800 hidden">
-                <div class="flex flex-col text-xs">
+                <!-- 左側：門檻提示 -->
+                <div id="mini-req-status"></div>
+                
+                <!-- 右側：剩餘額度 -->
+                <div class="flex flex-col items-end text-xs">
                     <span id="mini-status-label" class="text-gray-400">剩餘額度</span>
                     <span id="mini-status-val" class="font-bold text-xl text-green-400">$80.0</span>
                 </div>
-                <div id="mini-req-status"></div>
             </div>
 
             <!-- Keypad Container -->
@@ -202,6 +208,7 @@
                 <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect width="2" height="12" x="7" y="6"/><rect width="2" height="12" x="11" y="6"/><rect width="2" height="12" x="15" y="6"/></svg> 會員條碼</h2>
                 <div id="member-input-view" class="w-full hidden">
                     <label class="block text-sm text-gray-600 mb-2">請輸入您的會員號碼 (10碼)</label>
+                    <label class="block text-sm text-gray-600 mb-2">請輸入您的會員號碼 (10碼)</label>
                     <input type="text" id="input-member-id" placeholder="請輸入會員號碼" class="w-full p-3 border rounded-lg mb-4 text-center text-xl font-bold tracking-widest bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none text-gray-800" />
                     <button id="btn-save-member" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed btn-active">儲存並顯示</button>
                 </div>
@@ -265,20 +272,29 @@
                     color: 'bg-green-900/50 text-green-300 border-green-700', 
                     calc: p => Number((p * 0.7).toFixed(1)) 
                 },
+                // 橘色邊框 (多件優惠)
                 { 
                     id: 'b1g2_10', 
                     label: '第2件$10', 
                     html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">第2件</span><span class="text-xl font-bold">+$10</span></div>',
                     short: '+10元', 
-                    color: 'bg-orange-900/50 text-orange-300 border-orange-700', 
+                    color: 'bg-orange-900/50 text-orange-300 border-orange-600 border-2', // Orange border
                     calc: p => Number((p + 10).toFixed(1)) 
+                },
+                { 
+                    id: 'b1g2_60', 
+                    label: '第2件6折', 
+                    html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">第2件</span><span class="text-xl font-bold">6折</span></div>',
+                    short: '2件6折', 
+                    color: 'bg-purple-900/50 text-purple-300 border-orange-600 border-2', // Orange border
+                    calc: p => Number((p + (p * 0.6)).toFixed(1)) 
                 },
                 { 
                     id: 'b2_79', 
                     label: '2件79折', 
                     html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">2件</span><span class="text-xl font-bold">79折</span></div>',
                     short: '2件79折', 
-                    color: 'bg-teal-900/50 text-teal-300 border-teal-700', 
+                    color: 'bg-teal-900/50 text-teal-300 border-orange-600 border-2', // Orange border
                     calc: p => Number((p * 2 * 0.79).toFixed(1)) 
                 },
                 { 
@@ -286,16 +302,8 @@
                     label: '2件69折', 
                     html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">2件</span><span class="text-xl font-bold">69折</span></div>',
                     short: '2件69折', 
-                    color: 'bg-indigo-900/50 text-indigo-300 border-indigo-700', 
+                    color: 'bg-indigo-900/50 text-indigo-300 border-orange-600 border-2', // Orange border
                     calc: p => Number((p * 2 * 0.69).toFixed(1)) 
-                },
-                { 
-                    id: 'b1g2_60', 
-                    label: '第2件6折', 
-                    html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">第2件</span><span class="text-xl font-bold">6折</span></div>',
-                    short: '2件6折', 
-                    color: 'bg-purple-900/50 text-purple-300 border-purple-700', 
-                    calc: p => Number((p + (p * 0.6)).toFixed(1)) 
                 }
             ]
         };
@@ -321,8 +329,10 @@
             discountRow: document.getElementById('discount-row'),
             mainBudgetVal: document.getElementById('main-budget-val'),
             mainBudgetLabel: document.getElementById('main-budget-label'),
+            // 修正：補上漏掉的 ID 定義
             iconChevronDown: document.getElementById('icon-chevron-down'),
             iconKeyboard: document.getElementById('icon-keyboard'),
+            
             inputContainer: document.getElementById('input-container'),
             // Modals
             memberModal: document.getElementById('member-modal'),
@@ -338,6 +348,8 @@
             btnReset: document.getElementById('btn-reset'),
             btnCancelReset: document.getElementById('btn-cancel-reset'),
             btnConfirmReset: document.getElementById('btn-confirm-reset'),
+            // Tips
+            tipsBanner: document.getElementById('tips-banner'),
             // Actions
             btnAddMain: document.getElementById('btn-add-main'),
             btnAddGeneral: document.getElementById('btn-add-general'),
@@ -389,7 +401,6 @@
             if (remaining < 0) {
                 statusClass = 'bg-red-900/40 text-red-200 border-red-800';
                 statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>';
-                // MODIFY HERE: Use Math.ceil
                 statusMsg = `⚠️ 需補差額 ${Math.ceil(Math.abs(remaining))} 元`;
             } else if (!isMainSatisfied) {
                 statusClass = 'bg-orange-900/40 text-orange-200 border-orange-800';
@@ -397,7 +408,6 @@
                 
                 let msgParts = [];
                 if (totalMissingValue > 0) {
-                    // MODIFY HERE: Use Math.ceil
                     msgParts.push(`總金額少$${Math.ceil(totalMissingValue)}`);
                 } else {
                 }
@@ -416,6 +426,19 @@
             }
             els.statusBar.className = `py-1.5 px-3 border-b flex items-center justify-center gap-2 font-medium transition-colors duration-300 shadow-sm text-xs ${statusClass}`;
             els.statusBar.innerHTML = `${statusIcon}<span>${statusMsg}</span>`;
+            
+            // Mini Status Update
+            if (!isMainSatisfied) {
+                let msgParts = [];
+                if (totalMissingValue > 0) {
+                     msgParts.push(`總額少$${Math.ceil(totalMissingValue)}`);
+                }
+                msgParts.push(`需再${missingCount}件`);
+                
+                els.miniReqStatus.innerHTML = `<div class="flex flex-col items-start text-[10px] leading-tight text-orange-300"><span class="font-bold flex items-center gap-1 text-red-400"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg> 未達標</span><span>${msgParts.join(', ')}</span></div>`;
+            } else {
+                els.miniReqStatus.innerHTML = `<div class="text-green-500 text-xs font-bold flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> 主食達標</div>`;
+            }
 
             // List
             if (state.items.length === 0) {
@@ -465,12 +488,36 @@
             // MODIFY HERE: Use Math.ceil
             els.mainBudgetVal.textContent = `$${remaining < 0 ? Math.ceil(Math.abs(remaining)) : formatMoney(Math.abs(remaining))}`;
             els.mainBudgetVal.className = `font-bold text-xl leading-none ${remaining < 0 ? 'text-red-400' : 'text-green-400'}`;
+            
+            // Tips Banner Logic (Auto Hide)
+            if (state.items.length > 0) {
+                els.tipsBanner.classList.add('hidden', 'h-0', 'py-0', 'opacity-0');
+                els.tipsBanner.classList.remove('py-1', 'opacity-100');
+            } else {
+                els.tipsBanner.classList.remove('hidden', 'h-0', 'py-0', 'opacity-0');
+                els.tipsBanner.classList.add('py-1', 'opacity-100');
+            }
+
+           // Keypad view toggle (Fix for missing icons update)
+            if (state.showKeypad) {
+                els.keypadArea.style.maxHeight = '500px';
+                els.iconChevronDown.classList.remove('hidden');
+                els.iconKeyboard.classList.add('hidden');
+                els.btnToggleKeypad.classList.replace('text-gray-400', 'text-yellow-400');
+                els.btnToggleKeypad.classList.replace('border-gray-700', 'border-yellow-900/50');
+                els.miniStatus.classList.add('hidden');
+            } else {
+                els.keypadArea.style.maxHeight = '0';
+                els.iconChevronDown.classList.add('hidden');
+                els.iconKeyboard.classList.remove('hidden');
+                els.btnToggleKeypad.classList.replace('text-yellow-400', 'text-gray-400');
+                els.btnToggleKeypad.classList.replace('border-yellow-900/50', 'border-gray-700');
+                els.miniStatus.classList.remove('hidden');
+            }
 
             updateDiscountButtons();
         };
 
-        // ... (Rest of the code remains the same) ...
-        
         // --- Init ---
         const initDiscountButtons = () => {
             const topDiscounts = CONSTANTS.DISCOUNTS.filter(d => d.top);
@@ -500,9 +547,25 @@
                 else baseClass += "px-0.5 min-w-[60px] ";
 
                 if (id === state.discountType) {
-                    btn.className = baseClass + "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.3)] transform scale-[1.02] z-10";
+                    // 檢查是否為多件優惠 (Orange style)
+                    const isMultiItem = ['b1g2_10', 'b1g2_60', 'b2_79', 'b2_69'].includes(id);
+                    
+                    if (isMultiItem) {
+                        // Active state for multi-item: Orange background, White text
+                        btn.className = baseClass + "bg-orange-500 text-white border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.5)] transform scale-[1.02] z-10";
+                    } else {
+                        // Active state for single-item: White background, Black text
+                        btn.className = baseClass + "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.3)] transform scale-[1.02] z-10";
+                    }
                 } else {
-                    btn.className = baseClass + "bg-gray-800 text-gray-400 border-gray-700 hover:bg-gray-700 hover:text-gray-200";
+                    const discount = CONSTANTS.DISCOUNTS.find(d => d.id === id);
+                    if (discount && discount.color.includes('border-orange-600')) {
+                         // Inactive state for multi-item: Dark bg, Orange border
+                         btn.className = baseClass + "bg-gray-800 text-gray-400 border-orange-600/50 hover:bg-gray-700 hover:text-gray-200 border-2";
+                    } else {
+                         // Inactive state for others
+                         btn.className = baseClass + "bg-gray-800 text-gray-400 border-gray-700 hover:bg-gray-700 hover:text-gray-200";
+                    }
                 }
             });
         };
@@ -582,6 +645,14 @@
         els.btnMember.addEventListener('click', () => { triggerHaptic(); els.memberModal.classList.remove('hidden'); updateMemberModal(); });
         els.btnCloseMember.addEventListener('click', () => { triggerHaptic(); els.memberModal.classList.add('hidden'); });
 
+        // 點擊視窗外部關閉
+        els.memberModal.addEventListener('click', (e) => {
+            if (e.target === els.memberModal) {
+                triggerHaptic();
+                els.memberModal.classList.add('hidden');
+            }
+        });
+
         const updateMemberModal = () => {
             if (state.memberId) {
                 els.memberInputView.classList.add('hidden');
@@ -608,3 +679,4 @@
     </script>
 </body>
 </html>
+
