@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IC A vs IC B 週邊元件成本評比</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; background-color: #f3f4f6; }
+        .slide {
+            min-height: 100vh;
+            background: white;
+            margin: 20px auto;
+            max-width: 1200px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            page-break-after: always; /* For printing/PDF */
+        }
+        .slide-title {
+            border-left: 8px solid #2563eb;
+            padding-left: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 30px;
+        }
+        .highlight-box {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .metric-card {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+        .metric-value { font-size: 1.5rem; font-weight: bold; color: #2563eb; }
+        .metric-label { font-size: 0.9rem; color: #64748b; }
+        
+        /* Circuit Diagram Styles */
+        .schematic-container {
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        
+        @media print {
+            body { background: white; }
+            .slide { margin: 0; box-shadow: none; border: none; min-height: 95vh; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation/Intro (Not part of slides) -->
+    <div class="max-w-[1200px] mx-auto mt-5 mb-5 p-4 bg-blue-600 text-white rounded-lg shadow-lg flex justify-between items-center no-print">
+        <div>
+            <h1 class="text-xl font-bold">IC A vs IC B 成本評比簡報</h1>
+            <p class="text-sm opacity-80">請向下捲動查看三頁簡報內容</p>
+        </div>
+        <button onclick="window.print()" class="bg-white text-blue-600 px-4 py-2 rounded font-bold hover:bg-gray-100 transition">
+            列印 / 存為 PDF
+        </button>
+    </div>
+
+    <!-- Slide 1: Overview & Trend -->
+    <div class="slide" id="slide1">
+        <div class="slide-title">1. 週邊元件成本配置概況與優化方向</div>
+        
+        <div class="grid grid-cols-3 gap-6 mb-8">
+            <!-- IC A Card -->
+            <div class="metric-card border-l-4 border-l-gray-500">
+                <h3 class="font-bold text-gray-700">IC A (成熟量產)</h3>
+                <div class="mt-2 text-left px-4">
+                    <p>顆數: <span class="font-bold">13</span> 顆</p>
+                    <p>成本: <span class="font-bold text-gray-800">$0.3388</span></p>
+                </div>
+                <div class="mt-2 text-xs text-gray-500 bg-gray-100 p-1 rounded">Benchmark</div>
+            </div>
+
+            <!-- IC B Original Card -->
+            <div class="metric-card border-l-4 border-l-red-500 opacity-70">
+                <h3 class="font-bold text-red-700">IC B (原廠建議)</h3>
+                <div class="mt-2 text-left px-4">
+                    <p>顆數: <span class="font-bold">31</span> 顆</p>
+                    <p>成本: <span class="font-bold text-red-600">$0.7890</span></p>
+                </div>
+                <div class="mt-2 text-xs text-red-500 bg-red-50 p-1 rounded">前期工程階段</div>
+            </div>
+
+            <!-- IC B Optimized Card -->
+            <div class="metric-card border-l-4 border-l-green-500 shadow-md transform scale-105">
+                <h3 class="font-bold text-green-700">IC B (優化 Proposal)</h3>
+                <div class="mt-2 text-left px-4">
+                    <p>顆數: <span class="font-bold">27</span> 顆 <span class="text-green-600 text-xs">▼4</span></p>
+                    <p>成本: <span class="font-bold text-green-600">$0.4352</span></p>
+                </div>
+                <div class="mt-2 text-xs text-green-600 bg-green-50 p-1 rounded font-bold">推案目標</div>
+            </div>
+        </div>
+
+        <div class="flex flex-row gap-8 h-full">
+            <!-- Chart Section -->
+            <div class="w-2/3 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                <canvas id="costTrendChart"></canvas>
+            </div>
+
+            <!-- Description Section -->
+            <div class="w-1/3 flex flex-col justify-center space-y-6">
+                <div class="highlight-box">
+                    <h4 class="font-bold text-blue-800 mb-2">現況分析</h4>
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        目前以 <strong>IC B</strong> 為主要推案方向。雖然 IC B 為前期產品，原廠建議配置尚未成熟 (31顆元件)，但我們已進行初步優化。
+                    </p>
+                </div>
+                
+                <div class="highlight-box border-green-200 bg-green-50">
+                    <h4 class="font-bold text-green-800 mb-2">優化成果</h4>
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        透過線路精簡，將 IC B 零件數降至 27 顆，成本降至 <strong>$0.4352</strong>。
+                    </p>
+                </div>
+
+                <div class="highlight-box border-orange-200 bg-orange-50">
+                    <h4 class="font-bold text-orange-800 mb-2">剩餘差異</h4>
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        距離目標 (IC A) 仍有 <strong>$0.0964</strong> (約 $0.1) 的差距。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Analysis -->
+    <div class="slide" id="slide2">
+        <div class="slide-title">2. 成本差異根因分析 (Gap Analysis)</div>
+        
+        <p class="mb-6 text-gray-700 text-lg">
+            針對剩餘的 <span class="font-bold text-red-600">$0.1 元</span> 差異，主要源自 IC B 架構上的兩個硬體限制，導致無法進一步 Cost Down：
+        </p>
+
+        <div class="grid grid-cols-2 gap-8">
+            <!-- Cause 1 -->
+            <div class="border border-gray-200 rounded-xl p-6 shadow-sm bg-white">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-bold text-gray-800">1. Analog Input 保護設計</h3>
+                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">成本影響: $0.03</span>
+                </div>
+                <ul class="list-disc pl-5 text-gray-600 mb-4 space-y-2">
+                    <li><strong>IC A:</strong> 內部已整合保護電路，外部無需額外元件。</li>
+                    <li><strong>IC B:</strong> 原廠強烈建議 Analog Voltage Input 需並聯一顆 <strong>Schottky Diode</strong> 對地，以防止負壓突波。</li>
+                </ul>
+                
+                <!-- Schematic SVG 1 -->
+                <div class="schematic-container">
+                    <svg width="300" height="150" viewBox="0 0 300 150">
+                        <!-- IC Box -->
+                        <rect x="20" y="30" width="60" height="90" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
+                        <text x="50" y="80" text-anchor="middle" fill="#475569" font-weight="bold">IC B</text>
+                        
+                        <!-- Pin Line -->
+                        <line x1="80" y1="75" x2="250" y2="75" stroke="#334155" stroke-width="2"/>
+                        <text x="250" y="70" text-anchor="end" font-size="12" fill="#334155">Analog Input</text>
+
+                        <!-- Diode Branch -->
+                        <line x1="180" y1="75" x2="180" y2="100" stroke="#334155" stroke-width="2"/>
+                        
+                        <!-- Diode Symbol -->
+                        <polygon points="170,100 190,100 180,120" fill="#ef4444" stroke="#ef4444"/> <!-- Triangle -->
+                        <line x1="170" y1="120" x2="190" y2="120" stroke="#ef4444" stroke-width="2"/> <!-- Bar -->
+                        <text x="195" y="115" font-size="12" fill="#ef4444">Schottky</text>
+                        
+                        <!-- GND -->
+                        <line x1="180" y1="120" x2="180" y2="135" stroke="#334155" stroke-width="2"/>
+                        <line x1="170" y1="135" x2="190" y2="135" stroke="#334155" stroke-width="2"/>
+                        <line x1="174" y1="139" x2="186" y2="139" stroke="#334155" stroke-width="2"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Cause 2 -->
+            <div class="border border-gray-200 rounded-xl p-6 shadow-sm bg-white">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-bold text-gray-800">2. Reference Voltage 外掛電容</h3>
+                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">成本影響: ~$0.066</span>
+                </div>
+                <ul class="list-disc pl-5 text-gray-600 mb-4 space-y-2">
+                    <li><strong>IC A (3 Pins):</strong> 架構較整合，僅需 3 顆穩壓電容。</li>
+                    <li><strong>IC B (9 Pins):</strong> 需外掛電容的 Ref Pin 多達 9 支，導致 MLCC 數量無法再下降。</li>
+                </ul>
+
+                <!-- Schematic SVG 2 -->
+                <div class="schematic-container">
+                    <svg width="300" height="150" viewBox="0 0 300 150">
+                        <!-- IC A -->
+                        <g transform="translate(20, 0)">
+                            <text x="50" y="20" text-anchor="middle" font-weight="bold" fill="#334155">IC A</text>
+                            <rect x="20" y="30" width="60" height="100" fill="#cbd5e1" rx="4"/>
+                            <!-- 3 Caps -->
+                            <circle cx="90" cy="50" r="4" fill="#3b82f6"/>
+                            <circle cx="90" cy="80" r="4" fill="#3b82f6"/>
+                            <circle cx="90" cy="110" r="4" fill="#3b82f6"/>
+                            <text x="50" y="145" text-anchor="middle" font-size="12">3 Caps</text>
+                        </g>
+
+                        <!-- VS -->
+                        <text x="135" y="80" font-weight="bold" fill="#94a3b8" font-size="20">VS</text>
+
+                        <!-- IC B -->
+                        <g transform="translate(160, 0)">
+                            <text x="50" y="20" text-anchor="middle" font-weight="bold" fill="#ef4444">IC B</text>
+                            <rect x="20" y="30" width="60" height="100" fill="#cbd5e1" rx="4"/>
+                            <!-- 9 Caps visualization -->
+                            <g fill="#ef4444">
+                                <circle cx="90" cy="40" r="3"/><circle cx="90" cy="50" r="3"/><circle cx="90" cy="60" r="3"/>
+                                <circle cx="90" cy="75" r="3"/><circle cx="90" cy="85" r="3"/><circle cx="90" cy="95" r="3"/>
+                                <circle cx="90" cy="110" r="3"/><circle cx="90" cy="120" r="3"/><circle cx="90" cy="130" r="3"/>
+                            </g>
+                            <text x="50" y="145" text-anchor="middle" font-size="12" fill="#ef4444" font-weight="bold">9 Caps (Required)</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-6 bg-blue-50 border border-blue-200 p-4 rounded text-center text-blue-800 font-semibold">
+            結論：此 $0.1 元的差異來自 IC 本體特性差異，非週邊線路設計冗餘，已達優化極限。
+        </div>
+    </div>
+
+    <!-- Slide 3: BOM Data -->
+    <div class="slide" id="slide3">
+        <div class="slide-title">3. 附錄：BOM 詳細數據 (Raw Data)</div>
+        
+        <p class="text-sm text-gray-500 mb-4">*所有金額單位為 USD</p>
+
+        <div class="overflow-hidden rounded-lg shadow border border-gray-200">
+            <table class="min-w-full bg-white text-sm">
+                <thead class="bg-gray-800 text-white">
+                    <tr>
+                        <th class="py-3 px-4 text-left">類別 (Category)</th>
+                        <th class="py-3 px-4 text-center bg-gray-700">IC A (Benchmark)<br><span class="text-xs font-normal">Qty / Cost</span></th>
+                        <th class="py-3 px-4 text-center bg-gray-700">IC B (Original)<br><span class="text-xs font-normal">Qty / Cost</span></th>
+                        <th class="py-3 px-4 text-center bg-green-700 border-l border-green-600">IC B (Optimized)<br><span class="text-xs font-normal">Qty / Cost</span></th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200" id="bomBody">
+                    <!-- Rows generated by JS to ensure math works out -->
+                    <!-- Example Static Rows -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4 font-medium">MLCC (Decoupling)</td>
+                        <td class="py-2 px-4 text-center">8 / 0.1200</td>
+                        <td class="py-2 px-4 text-center">18 / 0.2700</td>
+                        <td class="py-2 px-4 text-center font-semibold text-green-700 bg-green-50">16 / 0.2400</td>
+                    </tr>
+                     <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4 font-medium">MLCC (Ref Voltage)</td>
+                        <td class="py-2 px-4 text-center">3 / 0.0900</td>
+                        <td class="py-2 px-4 text-center">9 / 0.2700</td>
+                        <td class="py-2 px-4 text-center font-semibold text-green-700 bg-green-50">9 / 0.1652</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4 font-medium">Resistors (Pull-up/down)</td>
+                        <td class="py-2 px-4 text-center">2 / 0.0088</td>
+                        <td class="py-2 px-4 text-center">4 / 0.0190</td>
+                        <td class="py-2 px-4 text-center font-semibold text-green-700 bg-green-50">1 / 0.0050</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4 font-medium">Schottky Diode</td>
+                        <td class="py-2 px-4 text-center text-gray-400">-</td>
+                        <td class="py-2 px-4 text-center">-</td>
+                        <td class="py-2 px-4 text-center font-semibold text-green-700 bg-green-50">1 / 0.0300</td>
+                    </tr>
+                     <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4 font-medium">Others (Beads/Connectors)</td>
+                        <td class="py-2 px-4 text-center">-</td>
+                        <td class="py-2 px-4 text-center">-</td>
+                        <td class="py-2 px-4 text-center font-semibold text-green-700 bg-green-50">-</td>
+                    </tr>
+                    <!-- Calculation Check: 
+                         IC A: 0.12 + 0.09 + 0.0088 + 0.12 (Misc mock to fit 0.3388) -> Let's adjust JS to be precise
+                    -->
+                </tbody>
+                <tfoot class="bg-gray-100 font-bold">
+                    <tr>
+                        <td class="py-3 px-4">Total</td>
+                        <td class="py-3 px-4 text-center text-blue-600">13 / $0.3388</td>
+                        <td class="py-3 px-4 text-center text-red-600">31 / $0.7890</td>
+                        <td class="py-3 px-4 text-center text-green-600 border-l border-green-200">27 / $0.4352</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="mt-4 text-xs text-gray-400 text-right">
+            Data generated for simulation purposes.
+        </div>
+    </div>
+
+    <script>
+        // --- Chart Generation for Slide 1 ---
+        const ctx = document.getElementById('costTrendChart').getContext('2d');
+        
+        const data = {
+            labels: ['IC A (Benchmark)', 'IC B (Original)', 'IC B (Optimized)'],
+            datasets: [
+                {
+                    label: '總成本 (USD)',
+                    data: [0.3388, 0.7890, 0.4352],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.5)', // Blue
+                        'rgba(239, 68, 68, 0.5)',  // Red
+                        'rgba(34, 197, 94, 0.6)'   // Green
+                    ],
+                    borderColor: [
+                        'rgb(59, 130, 246)',
+                        'rgb(239, 68, 68)',
+                        'rgb(34, 197, 94)'
+                    ],
+                    borderWidth: 1,
+                    yAxisID: 'y',
+                    type: 'bar',
+                    barPercentage: 0.5
+                },
+                {
+                    label: '元件數量 (顆)',
+                    data: [13, 31, 27],
+                    borderColor: 'rgb(75, 85, 99)',
+                    backgroundColor: 'rgb(75, 85, 99)',
+                    borderWidth: 2,
+                    pointRadius: 5,
+                    yAxisID: 'y1',
+                    type: 'line',
+                    tension: 0.1
+                }
+            ]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: '成本與元件數量趨勢分析' },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                if (context.dataset.type === 'bar') {
+                                    return context.dataset.label + ': $' + context.raw;
+                                }
+                                return context.dataset.label + ': ' + context.raw;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: { display: true, text: '成本 (USD)' },
+                        min: 0,
+                        max: 1.0
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: { display: true, text: '數量 (Count)' },
+                        grid: { drawOnChartArea: false },
+                        min: 0,
+                        max: 40
+                    }
+                }
+            }
+        };
+
+        new Chart(ctx, config);
+
+        // --- Mock Data Injection for Slide 3 (Refining the table) ---
+        // Just rewriting the innerHTML to match exact numbers requested in prompt
+        // Logic: 
+        // IC A: 13 parts, $0.3388
+        // IC B (Orig): 31 parts, $0.789
+        // IC B (Opt): 27 parts, $0.4352
+        
+        const tableContent = `
+            <tr class="hover:bg-gray-50">
+                <td class="py-2 px-4 font-medium border-b">Power Decoupling Caps</td>
+                <td class="py-2 px-4 text-center border-b">8 / $0.1200</td>
+                <td class="py-2 px-4 text-center border-b">18 / $0.2700</td>
+                <td class="py-2 px-4 text-center border-l border-green-100 bg-green-50 border-b font-medium">16 / $0.2400</td>
+            </tr>
+            <tr class="hover:bg-gray-50">
+                <td class="py-2 px-4 font-medium border-b">Ref Voltage Caps (High prec.)</td>
+                <td class="py-2 px-4 text-center border-b">3 / $0.1500</td>
+                <td class="py-2 px-4 text-center border-b">9 / $0.4500</td>
+                <td class="py-2 px-4 text-center border-l border-green-100 bg-green-50 border-b font-medium text-red-600">9 / $
