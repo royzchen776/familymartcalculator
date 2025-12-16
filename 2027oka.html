@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2027 沖繩新春賞櫻・家族之旅</title>
+    <style>
+        :root {
+            --primary-color: #ff85a2; /* 櫻花粉 */
+            --secondary-color: #4da6ff; /* 沖繩藍 */
+            --bg-color: #fff9fb;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --accent-color: #ff6b6b;
+            --google-blue: #4285f4;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "PingFang TC", "Heiti TC", "Microsoft JhengHei", sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            /* 移除背景圖，改為清爽漸層 */
+            background: linear-gradient(135deg, #fff0f5 0%, #e0f7fa 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #555;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.6);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .concept-box {
+            background: white;
+            padding: 25px;
+            border-left: 6px solid var(--primary-color);
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .concept-box ul {
+            padding-left: 20px;
+        }
+        
+        .concept-box li {
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            color: var(--secondary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 50px;
+            margin-bottom: 25px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: 1.6em;
+        }
+
+        .icon {
+            font-size: 1.6em;
+            margin-right: 12px;
+        }
+
+        /* Flight Info */
+        .flight-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.2s;
+        }
+        
+        .flight-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .flight-info strong {
+            color: var(--secondary-color);
+            display: block;
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        /* Daily Itinerary */
+        .day-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            border-top: 6px solid var(--secondary-color);
+        }
+
+        .day-header {
+            background: #f0f9ff;
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e1f0fa;
+        }
+
+        .day-title {
+            font-weight: 700;
+            font-size: 1.25em;
+            color: #0056b3;
+        }
+
+        .day-date {
+            font-size: 0.95em;
+            color: #666;
+            background: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+        }
+
+        .timeline {
+            padding: 25px;
+        }
+
+        .event {
+            display: flex;
+            flex-wrap: wrap; 
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .event:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .time {
+            font-weight: bold;
+            color: var(--accent-color);
+            min-width: 70px;
+            font-size: 1.1em;
+            padding-top: 2px;
+        }
+
+        .activity {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .activity h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.15em;
+            color: #333;
+        }
+
+        .activity p {
+            margin: 0;
+            font-size: 1em;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .highlight-tag {
+            display: inline-block;
+            background-color: #fff0f5;
+            color: var(--primary-color);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 8px;
+            border: 1px solid var(--primary-color);
+            vertical-align: middle;
+        }
+
+        /* Map Button Styling */
+        .map-btn {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+            padding: 6px 14px;
+            background-color: #fff;
+            color: var(--google-blue);
+            border: 1px solid #dadce0;
+            border-radius: 20px;
+            font-size: 0.9em;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .map-btn:hover {
+            background-color: #f1f3f4;
+            box-shadow: 0 1px 4px rgba(60,64,67,0.2);
+            transform: translateY(-1px);
+        }
+
+        .map-btn::before {
+            content: "📍"; 
+            margin-right: 6px;
+            font-size: 1.1em;
+        }
+
+        /* Tips Section */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .tip-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+        }
+
+        .tip-title {
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            color: #888;
+            font-size: 0.95em;
+            border-top: 1px solid #eee;
+        }
+
+        /* Specific border colors for days */
+        .day-card:nth-child(2) { border-top-color: #888; } /* Day 1 */
+        .day-card:nth-child(2) .day-header { background: #f5f5f5; border-bottom: 1px solid #e0e0e0; }
+        
+        .day-card:nth-child(4) { border-top-color: #ff85a2; } /* Day 3 */
+        .day-card:nth-child(4) .day-header { background: #fff0f5; border-bottom: 1px solid #ffe0e9; }
+        
+        .day-card:nth-child(6) { border-top-color: #ffc107; } /* Day 5 */
+        .day-card:nth-child(6) .day-header { background: #fffde7; border-bottom: 1px solid #fff9c4; }
+
+
+        @media (max-width: 600px) {
+            .flight-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            header {
+                padding: 40px 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .time {
+                margin-bottom: 5px;
+            }
+        }
+        
+        @media print {
+            body { background-color: white; }
+            .container { width: 100%; max-width: 100%; padding: 0; }
+            header { padding: 20px; border: 1px solid #ccc; background-image: none !important; }
+            .day-card { page-break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
+            .map-btn { display: none; } /* Hide map buttons when printing */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>🌸 2027 沖繩新春賞櫻<br>家族漫遊 5 日</h1>
+        <div class="subtitle">日期：2027年2月6日 (六) ~ 2月10日 (三)</div>
+    </header>
+
+    <div class="concept-box">
+        <h3>📖 旅程核心概念</h3>
+        <p>這是一趟專為家人設計的「慢活之旅」。</p>
+        <ul>
+            <li>✨ <strong>不趕路</strong>：睡飽再出門，累了隨時停。</li>
+            <li>🚙 <strong>免鐵腿</strong>：單軌列車接駁 + 全程自駕，景點精選好走路線。</li>
+            <li>🌸 <strong>賞美景</strong>：2月限定「粉紅寒緋櫻」與沖繩著名的「蔚藍大海」。</li>
+            <li>🍱 <strong>吃美食</strong>：阿古豬火鍋、百年老宅料理、海景咖啡廳。</li>
+        </ul>
+    </div>
+
+    <!-- Flight Info -->
+    <div class="section-title">
+        <span class="icon">✈️</span>
+        <h2>航班資訊 (中華航空)</h2>
+    </div>
+    <div class="flight-card">
+        <div class="flight-info">
+            <strong>去程 CI132</strong>
+            <span>2/6 (六) 高雄 15:50 🛫 沖繩 18:30</span>
+        </div>
+    </div>
+    <div class="flight-card">
+        <div class="flight-info">
+            <strong>回程 CI133</strong>
+            <span>2/10 (三) 沖繩 19:30 🛫 高雄 20:25</span>
+        </div>
+    </div>
+    <p style="text-align: center; color: #666; font-size: 0.9em;">*選擇晚去晚回，最後一天玩好玩滿！</p>
+
+
+    <!-- Itinerary -->
+    <div class="section-title">
+        <span class="icon">🗓️</span>
+        <h2>每日行程亮點</h2>
+    </div>
+
+    <!-- Day 1 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span class="day-title">Day 1：初抵沖繩，養精蓄銳</span>
+            <span class="day-date">2/6 (六)</span>
+        </div>
+        <div class="timeline">
+            <div class="event">
+                <div class="time">18:30</div>
+                <div class="activity">
+                    <h3>抵達那霸機場</h3>
+                    <p>出關領行李。</p>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">19:30</div>
+                <div class="activity">
+                    <h3>🚝 單軌列車前往飯店</h3>
+                    <p>搭乘 Yui-Rail 輕鬆前往那霸市區飯店。</p>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">晚餐</div>
+                <div class="activity">
+                    <h3>飯店周邊美食</h3>
+                    <p>選擇暖呼呼的拉麵或居酒屋，早點休息。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=那霸市區美食" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span class="day-title">Day 2：海洋巡禮與百年老宅</span>
+            <span class="day-date">2/7 (日)</span>
+        </div>
+        <div class="timeline">
+            <div class="event">
+                <div class="time">09:00</div>
+                <div class="activity">
+                    <h3>🚙 市區取車出發</h3>
+                    <p>開啟自駕之旅！一路向北兜風。</p>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">12:00</div>
+                <div class="activity">
+                    <h3>🍱 午餐：百年古家 大家 <span class="highlight-tag">必吃</span></h3>
+                    <p>在百年歷史老宅聽著瀑布聲，享用「阿古豬涮涮鍋」。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=百年古家+大家" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">13:30</div>
+                <div class="activity">
+                    <h3>🐋 美麗海水族館</h3>
+                    <p>必看：黑潮之海大鯨鯊、戶外海豚表演。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=美麗海水族館" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">16:00</div>
+                <div class="activity">
+                    <h3>🌲 備瀨福木林道</h3>
+                    <p>綠色隧道散步或坐水牛車。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=備瀨福木林道" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">晚餐</div>
+                <div class="activity">
+                    <h3>名護燒肉大餐</h3>
+                    <p>享用肉質鮮美的燒肉，補充體力。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=名護+燒肉" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 3 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span class="day-title">Day 3：粉紅櫻花與神秘洞窟</span>
+            <span class="day-date">2/8 (一)</span>
+        </div>
+        <div class="timeline">
+            <div class="event">
+                <div class="time">09:30</div>
+                <div class="activity">
+                    <h3>🌸 八重岳櫻之森公園 <span class="highlight-tag">季節限定</span></h3>
+                    <p>車遊日本最早開的櫻花！穿梭粉紅寒緋櫻隧道。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=八重岳櫻之森公園" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">11:00</div>
+                <div class="activity">
+                    <h3>💙 古宇利島</h3>
+                    <p>跨海大橋兜風，看可愛的心形岩。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=古宇利島+心形岩" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">12:30</div>
+                <div class="activity">
+                    <h3>🍤 古宇利蝦蝦飯</h3>
+                    <p>島上超人氣美食，搭配無敵海景。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=古宇利蝦蝦飯" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">14:30</div>
+                <div class="activity">
+                    <h3>✨ CAVE OKINAWA</h3>
+                    <p>充滿夢幻燈光秀的鐘乳石洞，平緩好走。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=CAVE+OKINAWA" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">16:00</div>
+                <div class="activity">
+                    <h3>🎡 美國村 (American Village)</h3>
+                    <p>異國風情海邊步道，看夕陽。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=美國村" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 4 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span class="day-title">Day 4：神社祈福與海景溫泉</span>
+            <span class="day-date">2/9 (二)</span>
+        </div>
+        <div class="timeline">
+            <div class="event">
+                <div class="time">10:00</div>
+                <div class="activity">
+                    <h3>⛩️ 波上宮</h3>
+                    <p>沖繩地位最高的神社，佇立在懸崖上，祈求闔家平安。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=波上宮" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">12:00</div>
+                <div class="activity">
+                    <h3>🦞 系滿魚市場</h3>
+                    <p>海鮮控天堂！現烤龍蝦、大干貝、生魚片。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=系滿魚市場" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">14:00</div>
+                <div class="activity">
+                    <h3>✈️ 瀨長島 (Umikaji Terrace)</h3>
+                    <p>純白希臘風建築，看飛機起降。推薦找間海景咖啡廳，享用美味的舒芙蕾鬆餅或下午茶。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=瀨長島" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">17:00</div>
+                <div class="activity">
+                    <h3>🛍️ 國際通</h3>
+                    <p>最熱鬧的街道，採買伴手禮與藥妝。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=國際通" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 5 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span class="day-title">Day 5：無敵海景購物城</span>
+            <span class="day-date">2/10 (三)</span>
+        </div>
+        <div class="timeline">
+            <div class="event">
+                <div class="time">10:00</div>
+                <div class="activity">
+                    <h3>🏢 PARCO CITY <span class="highlight-tag">全室內</span></h3>
+                    <p>準時開門入場。全沖繩最大、最新，全程冷氣舒適。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=サンエー浦添西海岸+PARCO+CITY" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">午餐</div>
+                <div class="activity">
+                    <h3>2F 海景美食街</h3>
+                    <p>邊吃美食邊看無敵海景。</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=PARCO+CITY+美食街" target="_blank" class="map-btn">Google 地圖</a>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">16:00</div>
+                <div class="activity">
+                    <h3>🚗 離開前往還車</h3>
+                    <p>避開下班車潮，提早出發。</p>
+                </div>
+            </div>
+            <div class="event">
+                <div class="time">17:30</div>
+                <div class="activity">
+                    <h3>🛫 抵達機場</h3>
+                    <p>CI133 (19:30 起飛) 平安回家。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logistics -->
+    <div class="section-title">
+        <span class="icon">📝</span>
+        <h2>行前小叮嚀</h2>
+    </div>
+
+    <div class="tips-grid">
+        <div class="tip-card">
+            <span class="tip-title">🧥 穿著建議</span>
+            <p>氣溫約 15-20°C，海風大。請務必攜帶<strong>防風外套</strong>或輕羽絨、帽子。</p>
+        </div>
+        <div class="tip-card">
+            <span class="tip-title">👟 鞋子選擇</span>
+            <p>雖然盡量少走路，但建議還是穿<strong>好走的運動鞋</strong>。</p>
+        </div>
+        <div class="tip-card">
+            <span class="tip-title">🚙 租車安排</span>
+            <p>Day 2 市區取車 → Day 5 機場還車。<br>車款配置：4人~5人 1台SIENTA，6人 1台Noah。</p>
+        </div>
+        <div class="tip-card">
+            <span class="tip-title">💊 隨身藥品</span>
+            <p>請準備個人常備藥，若易暈車請準備暈車藥。</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>❤️ 期待與大家一起渡過美好的沖繩假期！ ❤️</p>
+    </footer>
+
+</div>
+
+</body>
+</html>
+
+
