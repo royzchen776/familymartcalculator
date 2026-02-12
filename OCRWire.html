@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR 警示系統</title>
+    <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #222;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h3 { margin: 10px 0; }
+
+        /* 相機容器 */
+        .camera-container {
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+            aspect-ratio: 3/4;
+            background: #000;
+            overflow: hidden;
+            border: 2px solid #555;
+            border-radius: 8px;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 掃描框線 (視覺引導) */
+        .scan-region {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 20%;
+            border: 2px solid #0f0;
+            box-shadow: 0 0 0 999px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        /* 狀態顯示 */
+        #status {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #ccc;
+            text-align: center;
+            min-height: 40px;
+        }
+
+        /* 隱藏 Canvas (用於後台處理) */
+        canvas { display: none; }
+
+        /* 警示彈窗 */
+        #alert-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 0, 0, 0.9);
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #alert-modal h1 {
+            font-size: 3rem;
+            margin: 0 0 20px 0;
+            color: white;
+        }
+
+        #alert-modal p {
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            background: white;
+            color: red;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <h3>零件編號掃描器</h3>
+    
+    <div class="camera-container">
+        <video id="video" autoplay playsinline></video>
+        <div class="scan-region"></div>
+    </div>
+
+    <div id="status">正在初始化相機與 OCR 引擎...</div>
+
+    <canvas id="canvas"></canvas>
+
+    <div id="alert-modal">
+        <h1>⚠️ 警告 ⚠️</h1>
+        <p>偵測到列管編號：</p>
+        <p id="detected-text" style="font-family: monospace; font-size: 2rem; background: rgba(0,0,0,0.3); padding: 5px 10px;"></p>
+        <button onclick="resetScanner()">確定</button>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const statusDiv = document.getElementById('status');
+        const alertModal = document.getElementById('alert-modal');
+        const detectedTextDisplay = document.getElementById('detected-text');
+
+        // 這裡設定你要警示的清單
+        const blackList = [
+            "B2542702",
+            "B2543001",
+            "B2550101",
+            "B2542801",
+            "B2542901"
+        ];
+
+        let isScanning = true;
+        let worker = null;
+
+        // 1. 初始化 Tesseract Worker
+        async function initOCR() {
+            worker = Tesseract.createWorker({
+                logger: m => {
+                    // 只顯示載入進度，不顯示每一幀的辨識細節以免洗版
+                    if(m.status === 'loading tesseract core') {
+                        statusDiv.innerText = `載入核心中: ${(m.progress * 100).toFixed(0)}%`;
+                    }
+                }
+            });
+            
+            await worker.load();
+            await worker.loadLanguage('eng'); // 使用英文模式 (包含數字)
+            await worker.initialize('eng');
+            
+            // 設定白名單字元，只辨識 B 和 數字，這樣可以大幅提高準確度
+            await worker.setParameters({
+                tessedit_char_whitelist: 'B0123456789',
+            });
+
+            statusDiv.innerText = "系統就緒，請對準文字...";
+            startScanning();
+        }
+
+        // 2. 啟動相機
+        async function startCamera() {
+            try {
+                // 指向後置鏡頭 (environment)
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "environment" } 
+                });
+                video.srcObject = stream;
+                // 等待影片開始播放後再初始化 OCR
+                video.onloadedmetadata = () => {
+                    initOCR();
+                };
+            } catch (err) {
+                statusDiv.innerText = "無法存取相機，請確認權限或使用 HTTPS 連線。";
+                console.error(err);
+            }
+        }
+
+        // 3. 影像預處理 (關鍵步驟：針對黑底雕刻字)
+        function preprocessImage(ctx, width, height) {
+            let imageData = ctx.getImageData(0, 0, width, height);
+            let data = imageData.data;
+
+            // 遍歷每個像素
+            for (let i = 0; i < data.length; i += 4) {
+                let r = data[i];
+                let g = data[i+1];
+                let b = data[i+2];
+
+                // 步驟 A: 反轉顏色 (Invert)
+                // 因為通常 OCR 喜歡白底黑字，但你的工件是黑底。
+                // 反轉後，黑底變白，雕刻字(通常偏灰白)會變深色。
+                r = 255 - r;
+                g = 255 - g;
+                b = 255 - b;
+
+                // 步驟 B: 灰階化 (Grayscale)
+                let gray = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+                // 步驟 C: 二值化 (Thresholding) 以增加對比
+                // 如果灰度大於 100 (可調整)，設為全白，否則全黑
+                let val = (gray > 100) ? 255 : 0;
+
+                data[i] = data[i+1] = data[i+2] = val;
+            }
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        // 4. 掃描迴圈
+        async function startScanning() {
+            if (!isScanning) return;
+
+            // 設定 Canvas 大小與影片一致
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+
+            // 畫出影片當前幀
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // 執行影像預處理 (反轉+二值化)
+            preprocessImage(ctx, canvas.width, canvas.height);
+
+            try {
+                // 執行辨識
+                const { data: { text } } = await worker.recognize(canvas);
+                
+                // 清理文字：移除空白與換行
+                const cleanText = text.replace(/\s/g, '');
+                
+                // 使用正規表達式尋找 B + 7位數字
+                // RegExp 解釋: B 開頭, 後面接 7 個數字
+                const regex = /B\d{7}/g;
+                const matches = cleanText.match(regex);
+
+                if (matches) {
+                    statusDiv.innerText = `偵測到: ${matches.join(", ")}`;
+                    
+                    // 檢查是否在黑名單中
+                    for (let code of matches) {
+                        if (blackList.includes(code)) {
+                            triggerAlert(code);
+                            return; // 停止這一輪掃描
+                        }
+                    }
+                } else {
+                    // 為了除錯，顯示部分辨識到的文字
+                    if(cleanText.length > 3) statusDiv.innerText = `掃描中... (${cleanText.substring(0, 8)}...)`;
+                }
+
+            } catch (err) {
+                console.error(err);
+            }
+
+            // 繼續下一輪掃描 (稍微延遲避免過熱)
+            if (isScanning) {
+                requestAnimationFrame(startScanning);
+            }
+        }
+
+        // 5. 觸發警示
+        function triggerAlert(code) {
+            isScanning = false; // 暫停掃描
+            detectedTextDisplay.innerText = code;
+            alertModal.style.display = 'flex';
+            
+            // 可以在這裡加入震動 (如果裝置支援)
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        }
+
+        // 6. 重置掃描
+        function resetScanner() {
+            alertModal.style.display = 'none';
+            detectedTextDisplay.innerText = '';
+            statusDiv.innerText = "重新開始掃描...";
+            isScanning = true;
+            startScanning();
+        }
+
+        // 啟動程式
+        startCamera();
+
+    </script>
+</body>
+</html>
