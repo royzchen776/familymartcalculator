@@ -1,0 +1,289 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eFuse OTP 加入 ECC 技術方案</title>
+    <style>
+        /* 基礎設定 */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Microsoft JhengHei'; 
+            background-color: #f1f5f9; 
+            padding: 20px;
+            color: #334155;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* 主容器 */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* 標題區 */
+        .header {
+            background-color: #1e293b;
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-text h1 { font-size: 26px; margin-bottom: 5px; }
+        .header-text p { color: #94a3b8; font-size: 16px; margin: 0; }
+        .header-icon { font-size: 40px; line-height: 1; }
+
+        /* 內容區：改為三欄式或垂直排列 */
+        .content {
+            padding: 30px;
+            background-color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* 橫向排列的兩大區塊 (解法 + 驗證) */
+        .top-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+        }
+
+        /* 卡片共用樣式 */
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .card-title span { margin-right: 12px; font-size: 24px; }
+        .card-desc { color: #475569; font-size: 15px; margin-bottom: 20px; line-height: 1.5; }
+
+        /* 各區配色 */
+        .c-solution { border-top: 5px solid #3b82f6; }
+        .c-solution .card-title { color: #1d4ed8; }
+        .c-verify { border-top: 5px solid #10b981; }
+        .c-verify .card-title { color: #047857; }
+        .c-edgecase { border-top: 5px solid #8b5cf6; } /* 紫色，代表進階/防護 */
+        .c-edgecase .card-title { color: #6d28d9; }
+
+        /* --- 內部元件樣式 --- */
+
+        /* 記憶體配置圖 */
+        .memory-map { margin-top: auto; display: flex; flex-direction: column; gap: 20px;}
+        .map-label { display: flex; justify-content: space-between; font-size: 15px; font-weight: bold; margin-bottom: 8px; color: #475569;}
+        .map-bar-container { width: 100%; height: 42px; background: #cbd5e1; border-radius: 6px; display: flex; overflow: hidden; }
+        .bar-data-old { width: 100%; background: #94a3b8; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 16px;}
+        .bar-data-new { width: 95%; background: #3b82f6; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 16px; border-right: 2px solid #1e40af;}
+        .bar-ecc { width: 5%; background: #10b981; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 14px;}
+
+        /* 長條圖 */
+        .chart-container { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: auto;}
+        .chart-labels { display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; color: #475569; margin-bottom: 12px;}
+        .chart-bar-bg { width: 100%; height: 36px; background: #d1fae5; border-radius: 18px; position: relative; overflow: hidden; border-right: 3px solid #34d399;}
+        .chart-bar-fill { width: 61.5%; height: 100%; background: #10b981; display: flex; align-items: center; padding-left: 15px; color: white; font-weight: bold; font-size: 15px; border-radius: 18px;}
+        .chart-max-text { position: absolute; right: 15px; top: 0; height: 100%; display: flex; align-items: center; color: #065f46; font-weight: bold; font-size: 15px;}
+        .chart-conclusion { text-align: center; color: #059669; font-weight: bold; margin-top: 15px; font-size: 17px;}
+
+        /* 邊界條件 (ECC 損壞) 樣式 */
+        .edgecase-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        .scenario-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+        }
+        .scenario-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #334155;
+            display: flex;
+            align-items: center;
+        }
+        .scenario-title::before {
+            content: "🔍";
+            margin-right: 8px;
+        }
+
+        /* 模擬記憶體區塊 */
+        .bracket-group { margin-bottom: 15px; }
+        .bracket { border: 2px solid #94a3b8; border-bottom: none; border-radius: 6px 6px 0 0; height: 10px; width: 100%; margin-bottom: 5px; }
+        .bracket-text { text-align: center; font-size: 13px; color: #64748b; font-weight: bold; margin-top: -20px; background: #f8fafc; display: inline-block; padding: 0 10px; left: 50%; position: relative; transform: translateX(-50%);}
+        
+        .mem-visual { display: flex; height: 35px; border-radius: 6px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
+        .mv-data { flex: 8; background: #3b82f6; display: flex; justify-content: center; align-items: center; color: white; font-size: 13px; font-weight: bold; position: relative;}
+        .mv-ecc { flex: 2; background: #10b981; border-left: 2px solid white; display: flex; justify-content: center; align-items: center; color: white; font-size: 12px; font-weight: bold; position: relative;}
+        
+        .boom { position: absolute; background: #ef4444; color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; justify-content: center; align-items: center; font-size: 12px; box-shadow: 0 0 5px rgba(239, 68, 68, 0.8); z-index: 10; top: -8px;}
+        .boom-data { left: 40%; }
+        .boom-ecc { left: 50%; transform: translateX(-50%); }
+
+        .result-box {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 6px;
+            color: #15803d;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .edgecase-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- 標題 -->
+        <div class="header">
+            <div class="header-text">
+                <h1>eFuse OTP 加入 ECC 技術方案與驗證</h1>
+                <p>空間重配、演算法極限測試與邊界條件防護</p>
+            </div>
+            <div class="header-icon">🛡️</div>
+        </div>
+
+        <div class="content">
+            
+            <!-- 上排：解法與驗證 -->
+            <div class="top-row">
+                
+                <!-- 解決方案 -->
+                <div class="card c-solution">
+                    <div class="card-title"><span>💡</span> 解決方案：空間重配 (19B + 1B)</div>
+                    <div class="card-desc">硬體光罩維持不變，從原 20 Bytes 中挪用 1 Byte (8 bits) 作為 Hamming Code 錯誤糾正碼空間。</div>
+                    <div class="memory-map">
+                        <div>
+                            <div class="map-label">
+                                <span>修改前 (現狀)</span>
+                                <span>總量: 20 Bytes</span>
+                            </div>
+                            <div class="map-bar-container">
+                                <div class="bar-data-old">Data (追蹤資訊) : 20 Bytes</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="map-label" style="color: #1d4ed8;">
+                                <span>修改後 (提案)</span>
+                                <span>總量: 20 Bytes (不變)</span>
+                            </div>
+                            <div class="map-bar-container">
+                                <div class="bar-data-new">Data : 19 Bytes</div>
+                                <div class="bar-ecc">ECC</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 技術驗證 -->
+                <div class="card c-verify">
+                    <div class="card-title"><span>📊</span> 數學驗證：1 Byte ECC 夠用嗎？</div>
+                    <div class="card-desc">根據 Hamming Code 公式 (2^k ≥ m+k+1)，8 bits 的 ECC 空間遠大於保護 19 Bytes (152 bits) 的需求。</div>
+                    <div class="chart-container">
+                        <div class="chart-labels">
+                            <span>目前需保護的 Data 資料量</span>
+                            <span>1 Byte ECC 理論保護上限</span>
+                        </div>
+                        <div class="chart-bar-bg">
+                            <div class="chart-bar-fill">152 bits (19 Bytes)</div>
+                            <div class="chart-max-text">極限 247 bits</div>
+                        </div>
+                        <div class="chart-conclusion">
+                            ✅ 100% 達成：自動偵測並修正任何單一位元錯誤
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 下排：邊界條件 (將原本的 Backup Slide 整合進來) -->
+            <div class="card c-edgecase">
+                <div class="card-title"><span>🛡️</span> 邊界防護：如果 ECC 本身發生 Bit Flip？</div>
+                <div class="card-desc">ECC 演算法並非「只監控 Data」，而是將「Data + ECC」視為一個<strong>整體的密碼字 (Codeword)</strong> 進行運算。無論錯誤發生在何處，演算法皆能精準定位並處理。</div>
+                
+                <div class="edgecase-grid">
+                    
+                    <!-- 情境 A -->
+                    <div class="scenario-box">
+                        <div class="scenario-title">情境 A：Data 區發生 1-bit Flip</div>
+                        
+                        <div class="bracket-group">
+                            <div class="bracket"></div>
+                            <span class="bracket-text">整體保護範圍 (20 Bytes)</span>
+                        </div>
+                        
+                        <div class="mem-visual">
+                            <div class="mv-data">
+                                Data (19B)
+                                <div class="boom boom-data">💥</div>
+                            </div>
+                            <div class="mv-ecc">ECC</div>
+                        </div>
+                        
+                        <div class="result-box">
+                            ➔ 演算法定位於 Data，反轉修復<br>✅ Data 100% 正確還原
+                        </div>
+                    </div>
+
+                    <!-- 情境 B -->
+                    <div class="scenario-box">
+                        <div class="scenario-title">情境 B：ECC 區發生 1-bit Flip</div>
+                        
+                        <div class="bracket-group">
+                            <div class="bracket"></div>
+                            <span class="bracket-text">整體保護範圍 (20 Bytes)</span>
+                        </div>
+                        
+                        <div class="mem-visual">
+                            <div class="mv-data">Data (19B)</div>
+                            <div class="mv-ecc">
+                                ECC
+                                <div class="boom boom-ecc">💥</div>
+                            </div>
+                        </div>
+                        
+                        <div class="result-box">
+                            ➔ 演算法定位於 ECC，因 Data 未壞，直接放行<br>✅ 讀出的 Data 依然是正確的
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
+```
