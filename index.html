@@ -15,8 +15,6 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- JsBarcode -->
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 
     <style>
         body { background-color: #000; color: #e5e7eb; touch-action: manipulation; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
@@ -31,6 +29,7 @@
         
         /* PWA Safe Area for iPhone X+ */
         .safe-pb { padding-bottom: env(safe-area-inset-bottom); }
+        .pt-safe-top { padding-top: env(safe-area-inset-top); }
     </style>
 </head>
 <body class="flex justify-center min-h-screen bg-black text-gray-200 select-none overflow-hidden">
@@ -47,7 +46,7 @@
                 <div class="flex items-center gap-2">
                     <div class="flex flex-col items-end text-[9px] text-gray-400 leading-tight mr-1">
                         <span class="scale-[0.9] origin-right">RoyZChen@LITEON</span>
-                        <span class="scale-[0.9] origin-right">v0.9 Beta (Fix)</span>
+                        <span class="scale-[0.9] origin-right">v1.2 (Fixed DeepLink)</span>
                     </div>
                     <button id="btn-reset" class="text-xs bg-gray-800 hover:bg-gray-700 active:bg-gray-600 px-2 py-1.5 rounded transition flex items-center gap-1 text-gray-300 border border-gray-700 btn-active">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"/></svg> 重置
@@ -103,8 +102,8 @@
                 </div>
 
                 <!-- Member Code Btn -->
-                <button id="btn-member" class="flex-1 h-10 bg-gray-800 hover:bg-gray-700 active:bg-gray-600 rounded transition flex items-center justify-center text-blue-300 border border-blue-900/50 btn-active min-w-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <button id="btn-member" class="flex-1 h-10 bg-gray-800 hover:bg-gray-700 active:bg-gray-600 rounded transition flex items-center justify-center text-blue-300 border border-blue-900/50 btn-active min-w-0 relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="5" width="20" height="14" rx="2" />
                         <path d="M6 9v6" />
                         <path d="M9 9v6" />
@@ -112,6 +111,10 @@
                         <path d="M15 9v6" />
                         <path d="M18 9v6" />
                     </svg>
+                    <!-- External link hint -->
+                    <div class="absolute top-1 right-1 bg-gray-900 rounded-full p-[1px] text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+                    </div>
                 </button>
 
                 <!-- Toggle Keypad -->
@@ -121,7 +124,7 @@
                 </button>
             </div>
 
-            <!-- Mini Status (修正佈局) -->
+            <!-- Mini Status -->
             <div id="mini-status" class="px-3 py-2 bg-gray-900 flex justify-between items-center border-b border-gray-800 hidden">
                 <!-- 左側：門檻提示 -->
                 <div id="mini-req-status"></div>
@@ -137,8 +140,8 @@
             <div id="keypad-area" class="transition-all duration-200 overflow-hidden" style="max-height: 550px;">
                 <!-- Row 2 -->
                 <div class="p-2 pb-1 flex gap-2 h-16 items-end">
-                    <!-- Top Discounts: 40% Width -->
-                    <div id="top-discounts" class="flex gap-2 shrink-0" style="width: calc(40% - 0.3rem);"></div>
+                    <!-- Top Discounts -->
+                    <div id="top-discounts" class="flex gap-2 shrink-0" style="width: calc(60% - 0.2rem);"></div>
                     
                     <div id="input-container" class="flex-1 h-14 flex items-center justify-center relative overflow-hidden input-underline">
                         <span id="display-price" class="text-3xl font-bold text-white tracking-widest"></span>
@@ -201,25 +204,6 @@
             </div>
         </div>
 
-        <!-- Member Modal -->
-        <div id="member-modal" class="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 hidden">
-            <div class="bg-white w-full max-w-sm rounded-2xl p-6 flex flex-col items-center shadow-2xl relative text-gray-900">
-                <button id="btn-close-member" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6 18 18"/></svg></button>
-                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect width="2" height="12" x="7" y="6"/><rect width="2" height="12" x="11" y="6"/><rect width="2" height="12" x="15" y="6"/></svg> 會員條碼</h2>
-                <div id="member-input-view" class="w-full hidden">
-                    <label class="block text-sm text-gray-600 mb-2">請輸入您的會員號碼 (10碼)</label>
-                    <label class="block text-sm text-gray-600 mb-2">請輸入您的會員號碼 (10碼)</label>
-                    <input type="text" id="input-member-id" placeholder="請輸入會員號碼" class="w-full p-3 border rounded-lg mb-4 text-center text-xl font-bold tracking-widest bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none text-gray-800" />
-                    <button id="btn-save-member" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed btn-active">儲存並顯示</button>
-                </div>
-                <div id="member-display-view" class="flex flex-col items-center w-full">
-                    <div id="display-member-id" class="text-3xl font-bold text-gray-800 tracking-[0.2em] mb-4 font-mono"></div>
-                    <div class="bg-white p-4 rounded-xl mb-6 w-full flex justify-center border-2 border-gray-100 overflow-hidden"><svg id="barcode-svg" class="w-full"></svg></div>
-                    <button id="btn-rebind-member" class="text-gray-400 text-sm flex items-center gap-1 hover:text-gray-600 btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> 重新綁定號碼</button>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <script>
@@ -237,9 +221,7 @@
             items: [],
             price: '',
             discountType: 'p88',
-            showKeypad: true,
-            memberId: localStorage.getItem('fm_member_id') || '1341700735',
-            tempMemberId: ''
+            showKeypad: true
         };
 
         const CONSTANTS = {
@@ -270,15 +252,15 @@
                     html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">友善時光</span><span class="text-xl font-bold">7折</span></div>',
                     short: '-30%', 
                     color: 'bg-green-900/50 text-green-300 border-green-700', 
-                    calc: p => Number((p * 0.7).toFixed(1)) 
+                    calc: p => Number((p * 0.7).toFixed(1)),
+                    top: true
                 },
-                // 橘色邊框 (多件優惠)
                 { 
                     id: 'b1g2_10', 
                     label: '第2件$10', 
                     html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">第2件</span><span class="text-xl font-bold">+$10</span></div>',
                     short: '+10元', 
-                    color: 'bg-orange-900/50 text-orange-300 border-orange-600 border-2', // Orange border
+                    color: 'bg-orange-900/50 text-orange-300 border-orange-600 border-2',
                     calc: p => Number((p + 10).toFixed(1)) 
                 },
                 { 
@@ -286,15 +268,23 @@
                     label: '第2件6折', 
                     html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">第2件</span><span class="text-xl font-bold">6折</span></div>',
                     short: '2件6折', 
-                    color: 'bg-purple-900/50 text-purple-300 border-orange-600 border-2', // Orange border
+                    color: 'bg-purple-900/50 text-purple-300 border-orange-600 border-2',
                     calc: p => Number((p + (p * 0.6)).toFixed(1)) 
+                },
+                { 
+                    id: 'b2_80',
+                    label: '2件8折', 
+                    html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">2件</span><span class="text-xl font-bold">8折</span></div>',
+                    short: '2件8折', 
+                    color: 'bg-pink-900/50 text-pink-300 border-orange-600 border-2',
+                    calc: p => Number((p * 2 * 0.8).toFixed(1)) 
                 },
                 { 
                     id: 'b2_79', 
                     label: '2件79折', 
                     html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">2件</span><span class="text-xl font-bold">79折</span></div>',
                     short: '2件79折', 
-                    color: 'bg-teal-900/50 text-teal-300 border-orange-600 border-2', // Orange border
+                    color: 'bg-teal-900/50 text-teal-300 border-orange-600 border-2',
                     calc: p => Number((p * 2 * 0.79).toFixed(1)) 
                 },
                 { 
@@ -302,7 +292,7 @@
                     label: '2件69折', 
                     html: '<div class="flex flex-col items-center leading-none gap-0.5"><span class="text-xs font-normal opacity-90">2件</span><span class="text-xl font-bold">69折</span></div>',
                     short: '2件69折', 
-                    color: 'bg-indigo-900/50 text-indigo-300 border-orange-600 border-2', // Orange border
+                    color: 'bg-indigo-900/50 text-indigo-300 border-orange-600 border-2',
                     calc: p => Number((p * 2 * 0.69).toFixed(1)) 
                 }
             ]
@@ -329,28 +319,17 @@
             discountRow: document.getElementById('discount-row'),
             mainBudgetVal: document.getElementById('main-budget-val'),
             mainBudgetLabel: document.getElementById('main-budget-label'),
-            // 修正：補上漏掉的 ID 定義
             iconChevronDown: document.getElementById('icon-chevron-down'),
             iconKeyboard: document.getElementById('icon-keyboard'),
             
             inputContainer: document.getElementById('input-container'),
-            // Modals
-            memberModal: document.getElementById('member-modal'),
             btnMember: document.getElementById('btn-member'),
-            btnCloseMember: document.getElementById('btn-close-member'),
-            memberInputView: document.getElementById('member-input-view'),
-            memberDisplayView: document.getElementById('member-display-view'),
-            inputMemberId: document.getElementById('input-member-id'),
-            btnSaveMember: document.getElementById('btn-save-member'),
-            displayMemberId: document.getElementById('display-member-id'),
-            btnRebindMember: document.getElementById('btn-rebind-member'),
+            // Modals
             resetModal: document.getElementById('reset-modal'),
             btnReset: document.getElementById('btn-reset'),
             btnCancelReset: document.getElementById('btn-cancel-reset'),
             btnConfirmReset: document.getElementById('btn-confirm-reset'),
-            // Tips
             tipsBanner: document.getElementById('tips-banner'),
-            // Actions
             btnAddMain: document.getElementById('btn-add-main'),
             btnAddGeneral: document.getElementById('btn-add-general'),
             btnBackspace: document.getElementById('btn-backspace'),
@@ -365,7 +344,6 @@
             const totalSpent = state.items.reduce((acc, item) => acc + item.finalPrice, 0);
             const remaining = totalBudget - totalSpent;
 
-            // Logic for Main Dish Threshold (Bin Packing / Greedy)
             const mainDishes = state.items.filter(item => item.type === 'main').map(i => ({...i, used: false})).sort((a, b) => b.finalPrice - a.finalPrice);
             
             let satisfiedCards = 0;
@@ -408,10 +386,8 @@
                 
                 let msgParts = [];
                 if (totalMissingValue > 0) {
-                    msgParts.push(`總金額少$${Math.ceil(totalMissingValue)}`);
-                } else {
+                    msgParts.push(`主食差額$${Math.ceil(totalMissingValue)}`);
                 }
-                
                 msgParts.push(`需再${missingCount}件主食`);
                 statusMsg = `⚠️ 主食門檻未達: ${msgParts.join('，')}`;
 
@@ -431,7 +407,7 @@
             if (!isMainSatisfied) {
                 let msgParts = [];
                 if (totalMissingValue > 0) {
-                     msgParts.push(`總額少$${Math.ceil(totalMissingValue)}`);
+                     msgParts.push(`主食差$${Math.ceil(totalMissingValue)}`);
                 }
                 msgParts.push(`需再${missingCount}件`);
                 
@@ -479,17 +455,21 @@
                 }).join('') + '<div class="h-2"></div>';
             }
 
-            // Input & Budget Display (Updated Logic)
+            // Input & Budget Display
             els.displayPrice.textContent = state.price;
             els.displayPricePlaceholder.style.display = state.price ? 'none' : 'inline';
-            els.inputContainer.classList.toggle('active', state.price.length > 0); // Highlight underline
+            els.inputContainer.classList.toggle('active', state.price.length > 0); 
             
             els.mainBudgetLabel.textContent = remaining < 0 ? '需補' : '剩餘';
-            // MODIFY HERE: Use Math.ceil
             els.mainBudgetVal.textContent = `$${remaining < 0 ? Math.ceil(Math.abs(remaining)) : formatMoney(Math.abs(remaining))}`;
             els.mainBudgetVal.className = `font-bold text-xl leading-none ${remaining < 0 ? 'text-red-400' : 'text-green-400'}`;
             
-            // Tips Banner Logic (Auto Hide)
+            // 修正：連動 mini-status 的數值
+            els.miniStatusLabel.textContent = remaining < 0 ? '需補差額' : '剩餘額度';
+            els.miniStatusVal.textContent = `$${remaining < 0 ? Math.ceil(Math.abs(remaining)) : formatMoney(Math.abs(remaining))}`;
+            els.miniStatusVal.className = `font-bold text-xl ${remaining < 0 ? 'text-red-400' : 'text-green-400'}`;
+            
+            // Tips Banner Logic
             if (state.items.length > 0) {
                 els.tipsBanner.classList.add('hidden', 'h-0', 'py-0', 'opacity-0');
                 els.tipsBanner.classList.remove('py-1', 'opacity-100');
@@ -498,7 +478,7 @@
                 els.tipsBanner.classList.add('py-1', 'opacity-100');
             }
 
-           // Keypad view toggle (Fix for missing icons update)
+           // Keypad view toggle
             if (state.showKeypad) {
                 els.keypadArea.style.maxHeight = '500px';
                 els.iconChevronDown.classList.remove('hidden');
@@ -523,14 +503,12 @@
             const topDiscounts = CONSTANTS.DISCOUNTS.filter(d => d.top);
             const bottomDiscounts = CONSTANTS.DISCOUNTS.filter(d => !d.top);
 
-            // Top: Width calculated to align with first 2 bottom buttons (40% minus gap adjustment)
             els.topDiscounts.innerHTML = topDiscounts.map(d => `
                 <button onclick="setDiscount('${d.id}')" class="btn-discount flex-1 h-14 px-1 rounded text-sm font-bold tracking-tighter border transition-all truncate whitespace-nowrap ${d.html ? 'flex flex-col justify-center items-center' : ''}" data-id="${d.id}">
                     ${d.html ? d.html : d.label}
                 </button>
             `).join('');
 
-            // Bottom: Distributed
             els.discountRow.innerHTML = bottomDiscounts.map(d => `
                 <button onclick="setDiscount('${d.id}')" class="btn-discount flex-1 h-14 px-0.5 rounded text-sm font-bold tracking-tighter border transition-all truncate whitespace-nowrap min-w-[60px] ${d.html ? 'flex flex-col justify-center items-center' : ''}" data-id="${d.id}">
                     ${d.html ? d.html : d.label}
@@ -541,29 +519,23 @@
         const updateDiscountButtons = () => {
             document.querySelectorAll('.btn-discount').forEach(btn => {
                 const id = btn.getAttribute('data-id');
-                // Modified baseClass to include centering
                 let baseClass = "btn-discount flex-1 h-14 rounded text-sm font-bold tracking-tighter border transition-all btn-active flex justify-center items-center ";
                 if (btn.parentElement.id === 'top-discounts') baseClass += "px-1 ";
-                else baseClass += "px-0.5 min-w-[60px] ";
+                else baseClass += "px-0.5 min-w-[50px] "; 
 
                 if (id === state.discountType) {
-                    // 檢查是否為多件優惠 (Orange style)
-                    const isMultiItem = ['b1g2_10', 'b1g2_60', 'b2_79', 'b2_69'].includes(id);
+                    const isMultiItem = ['b1g2_10', 'b1g2_60', 'b2_80', 'b2_79', 'b2_69'].includes(id); 
                     
                     if (isMultiItem) {
-                        // Active state for multi-item: Orange background, White text
                         btn.className = baseClass + "bg-orange-500 text-white border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.5)] transform scale-[1.02] z-10";
                     } else {
-                        // Active state for single-item: White background, Black text
                         btn.className = baseClass + "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.3)] transform scale-[1.02] z-10";
                     }
                 } else {
                     const discount = CONSTANTS.DISCOUNTS.find(d => d.id === id);
                     if (discount && discount.color.includes('border-orange-600')) {
-                         // Inactive state for multi-item: Dark bg, Orange border
                          btn.className = baseClass + "bg-gray-800 text-gray-400 border-orange-600/50 hover:bg-gray-700 hover:text-gray-200 border-2";
                     } else {
-                         // Inactive state for others
                          btn.className = baseClass + "bg-gray-800 text-gray-400 border-gray-700 hover:bg-gray-700 hover:text-gray-200";
                     }
                 }
@@ -583,7 +555,7 @@
         els.btnCardMinus.addEventListener('click', () => { triggerHaptic(); state.cardCount = Math.max(1, state.cardCount - 1); render(); });
         els.btnCardPlus.addEventListener('click', () => { 
             triggerHaptic(); 
-            state.cardCount = Math.min(9, state.cardCount + 1); // Limit to 9
+            state.cardCount = Math.min(9, state.cardCount + 1); 
             render(); 
         });
         els.btnToggleKeypad.addEventListener('click', () => { triggerHaptic(); state.showKeypad = !state.showKeypad; render(); });
@@ -591,23 +563,32 @@
         document.querySelectorAll('.btn-num').forEach(btn => {
             btn.addEventListener('click', () => {
                 triggerHaptic();
-                if (state.price.length < 6) { state.price += btn.getAttribute('data-val'); render(); }
+                const val = btn.getAttribute('data-val');
+                // 防呆：防止第一碼輸入 0 或 00
+                if (state.price === '' && (val === '0' || val === '00')) return;
+                
+                // 限制最多 3 位數
+                if (state.price.length < 3 || (state.price.length === 2 && val === '00')) { 
+                    // 防止按 00 導致超過 3 位
+                    if(state.price.length === 2 && val === '00'){
+                        state.price += '0';
+                    } else {
+                        state.price += val; 
+                    }
+                    render(); 
+                }
             });
         });
 
         els.btnBackspace.addEventListener('click', () => { triggerHaptic(); state.price = state.price.slice(0, -1); render(); });
         els.btnAc.addEventListener('click', () => { triggerHaptic(); state.price = ''; render(); });
 
-        // Add Item Logic with Zero Check
         const addItem = (type) => {
             triggerHaptic();
             const originalPrice = parseInt(state.price);
             
             if (!state.price || isNaN(originalPrice) || originalPrice === 0) {
-                // Error feedback
-                if (navigator.vibrate) navigator.vibrate([50, 50, 50]); // Error pattern
-                
-                // Clear input
+                if (navigator.vibrate) navigator.vibrate([50, 50, 50]); 
                 state.price = '';
                 render();
                 return;
@@ -641,37 +622,48 @@
             render();
         };
 
-        // Member
-        els.btnMember.addEventListener('click', () => { triggerHaptic(); els.memberModal.classList.remove('hidden'); updateMemberModal(); });
-        els.btnCloseMember.addEventListener('click', () => { triggerHaptic(); els.memberModal.classList.add('hidden'); });
+        // 開啟全家 App (使用安全的 Fallback 機制)
+        els.btnMember.addEventListener('click', () => { 
+            triggerHaptic(); 
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isAndroid = /android/i.test(navigator.userAgent);
+            
+            // 修正閃退：全家 App 不支援空路徑，我們直接呼叫「開啟付款/會員條碼」的專屬路徑
+            const appPath = 'action.go/pay/barcode';
 
-        // 點擊視窗外部關閉
-        els.memberModal.addEventListener('click', (e) => {
-            if (e.target === els.memberModal) {
-                triggerHaptic();
-                els.memberModal.classList.add('hidden');
+            if (isAndroid) {
+                // Android 最佳作法：加上特定路徑，避免 App 無法解析空指令而閃退
+                window.location.href = `intent://${appPath}#Intent;scheme=familymart;package=grasea.familife;end`;
+            } else if (isIOS) {
+                // iOS 作法：先嘗試開啟 App Scheme，再利用計時器跳轉
+                let hasRedirected = false;
+                
+                const fallbackTimer = setTimeout(() => {
+                    // 若這 2.5 秒內網頁沒有切到背景，表示 App 沒打開，手動跳轉 App Store
+                    if (!hasRedirected && !document.hidden && !document.webkitHidden) {
+                        hasRedirected = true;
+                        window.location.href = 'https://apps.apple.com/tw/app/id431477571';
+                    }
+                }, 2500);
+
+                // 註冊頁面可見度改變的事件 (當真的成功跳出 App，網頁會被丟到背景隱藏)
+                const onVisibilityChange = () => {
+                    if (document.hidden || document.webkitHidden) {
+                        clearTimeout(fallbackTimer);
+                        hasRedirected = true;
+                    }
+                };
+
+                document.addEventListener('visibilitychange', onVisibilityChange);
+                
+                // 執行 Scheme 嘗試開啟 (加上特定路徑)
+                window.location.href = `familymart://${appPath}`;
+                
+                // 5秒後清除事件監聽避免殘留
+                setTimeout(() => {
+                    document.removeEventListener('visibilitychange', onVisibilityChange);
+                }, 5000);
             }
-        });
-
-        const updateMemberModal = () => {
-            if (state.memberId) {
-                els.memberInputView.classList.add('hidden');
-                els.memberDisplayView.classList.remove('hidden');
-                els.displayMemberId.textContent = state.memberId;
-                setTimeout(() => { try { JsBarcode("#barcode-svg", state.memberId, { format: "CODE128", width: 2.8, height: 100, displayValue: false, margin: 10, background: "#ffffff", lineColor: "#000000" }); } catch(e) {} }, 50);
-            } else {
-                els.memberInputView.classList.remove('hidden');
-                els.memberDisplayView.classList.add('hidden');
-            }
-        };
-
-        els.btnSaveMember.addEventListener('click', () => {
-            const val = els.inputMemberId.value;
-            if(val) { triggerHaptic(); localStorage.setItem('fm_member_id', val); state.memberId = val; updateMemberModal(); }
-        });
-
-        els.btnRebindMember.addEventListener('click', () => {
-            triggerHaptic(); state.memberId = ''; localStorage.removeItem('fm_member_id'); els.inputMemberId.value = ''; updateMemberModal();
         });
 
         initDiscountButtons();
@@ -679,4 +671,3 @@
     </script>
 </body>
 </html>
-
