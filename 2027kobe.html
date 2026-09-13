@@ -66,27 +66,6 @@
         }
     </style>
 </head>
-<!-- Chosen Palette: Warm Kyoto Neutral (Warm White #FDFBF7, Slate #1F2937, Warm Amber #D97706, Sage #059669) -->
-<!-- Application Structure Plan: 
-     設計採「多維度互動式導覽 dashboard」架構：
-     1. 頂部 Hero 區塊與倒數計時/亮點摘要。
-     2. 主分頁導覽列 (Tab Bar)：
-        - 📅 每日詳細行程 (Day 1~8 互動切換、亮點標籤、地點篩選)
-        - 🚗 自駕導航 & 鐵路時刻 (GPS一鍵複製、導航電話表格、JR關西廣域Pass使用區間)
-        - 🏨 行李動線與住宿 (階段式行李策略互動圖解)
-        - 📌 行前準備與清單 (動態 Tick 檢查表，支援進度統計)
-        - 📊 旅程數據分析 (Chart.js 圖表：每日活動強度、交通工具佔比、亮點分布)
-     3. 動態 Modal/Drawer 顯示景點與交通細節。
-     此設計大幅簡化原本純文字報告的查找成本，尤其是自駕 GPS 與行李寄放策略呈現得一目了然。
--->
-<!-- Visualization & Content Choices:
-     - 每日行程: 採用 Timeline Card + Filter Buttons (HTML/CSS/JS)，使用者可依「日期」、「目的地」進行動態過濾。
-     - GPS 電話清單: 採用 Table + One-Click JS Copy to Clipboard，解決自駕導航輸入電話的需求。
-     - 行李動線: 採用 HTML/CSS 步驟流動圖 (Step Flow Chart)，清楚標示大行李與小背包在每一天的位置。
-     - 檢查清單: 採用 HTML Checkboxes + LocalStorage 記住勾選狀態，互動性強。
-     - 數據圖表: Chart.js 呈現「每日預期步行體力消耗指數 (Line)」與「交通運具分配比例 (Doughnut)」。無使用任何 SVG 或 Mermaid JS。
--->
-<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 
 <body class="bg-warmbg text-gray-800 font-sans antialiased min-h-screen flex flex-col selection:bg-brand-100 selection:text-brand-700">
 
@@ -98,7 +77,7 @@
                     <span class="text-2xl">✈️</span>
                     <div>
                         <h1 class="font-bold text-lg sm:text-xl tracking-wide text-brand-100">2027 關西黃金三角 8天7夜</h1>
-                        <p class="text-xs text-gray-300">神戶・城崎溫泉・京都・大阪・淡路島</p>
+                        <p class="text-xs text-gray-300">神戶・京都・城崎溫泉・大阪</p>
                     </div>
                 </div>
                 <!-- 頂部日期與標籤 -->
@@ -135,22 +114,21 @@
 
         <!-- ================= SECTION 1: 每日詳細行程 ================= -->
         <section id="section-itinerary" class="space-y-6">
-            <!-- 區塊導論 -->
             <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200">
                 <h2 class="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-                    <span class="text-brand-500">📅</span> 8天7夜 黃金三角互動行程表
+                    <span class="text-brand-500">📅</span> 8天7夜 順時針黃金三角互動行程表
                 </h2>
                 <p class="text-sm text-gray-600 leading-relaxed">
-                    本區塊整合了經過最佳化排程的 8 天詳細動線。針對「平日/假日避開人潮」、「溫泉鄉泡湯」、「週六京都早鳥戰術」與「週一 Outlet 血拚」進行了精準配置。點選下方按鈕可快速切換特定天數或景點類別。
+                    本行程已完美優化！利用週三平日暢遊京都避開人潮，順時針前往城崎溫泉，最後返回神戶。全程不走回頭路，完美發揮 JR 關西廣域周遊券的價值。
                 </p>
                 <!-- 篩選按鈕列 -->
                 <div class="mt-4 flex flex-wrap gap-2 pt-2 border-t border-gray-100">
                     <span class="text-xs font-semibold text-gray-500 flex items-center">天數快選：</span>
-                    <button onclick="filterDay('all')" class="day-filter-btn px-2.5 py-1 rounded text-xs font-medium bg-brand-600 text-white" data-day="all">全部天數</button>
+                    <button onclick="filterDay('all')" class="day-filter-btn px-2.5 py-1 rounded text-xs font-medium bg-brand-600 text-white" data-day="all">全部</button>
                     <button onclick="filterDay(1)" class="day-filter-btn px-2.5 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200" data-day="1">D1 神戶港</button>
-                    <button onclick="filterDay(2)" class="day-filter-btn px-2.5 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200" data-day="2">D2 城崎溫泉</button>
-                    <button onclick="filterDay(3)" class="day-filter-btn px-2.5 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200" data-day="3">D3 城崎➔京都</button>
-                    <button onclick="filterDay(4)" class="day-filter-btn px-2.5 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200" data-day="4">D4 京都黃金散策</button>
+                    <button onclick="filterDay(2)" class="day-filter-btn px-2.5 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200" data-day="2">D2 京都散策</button>
+                    <button onclick="filterDay(3)" class="day-filter-btn px-2.5 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200" data-day="3">D3 城崎溫泉</button>
+                    <button onclick="filterDay(4)" class="day-filter-btn px-2.5 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200" data-day="4">D4 溫泉➔神戶</button>
                     <button onclick="filterDay(5)" class="day-filter-btn px-2.5 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200" data-day="5">D5 淡路島自駕</button>
                     <button onclick="filterDay(6)" class="day-filter-btn px-2.5 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200" data-day="6">D6 神戶+大阪</button>
                     <button onclick="filterDay(7)" class="day-filter-btn px-2.5 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200" data-day="7">D7 三田Outlet</button>
@@ -159,21 +137,18 @@
             </div>
 
             <!-- 時間軸容器 -->
-            <div id="itinerary-cards-container" class="space-y-6">
-                <!-- Cards will be populated by JS for complete interactivity and consistency -->
-            </div>
+            <div id="itinerary-cards-container" class="space-y-6"></div>
         </section>
 
 
         <!-- ================= SECTION 2: 自駕導航 & 鐵路時刻 ================= -->
         <section id="section-navigation" class="hidden space-y-6">
-            <!-- 區塊導論 -->
             <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200">
                 <h2 class="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
                     <span class="text-brand-500">🚗</span> Day 5 淡路島自駕導航與 JR Pass 鐵路指南
                 </h2>
                 <p class="text-sm text-gray-600 leading-relaxed">
-                    本區塊提供 Day 5 淡路島與鳴門漩渦自駕所需的精準 GPS 導航電話（點擊號碼即可直接複製），以及 JR 關西廣域鐵路周遊券 (5日券) 的核心特急列車劃位班次建議。
+                    本區塊提供自駕所需的精準 GPS 導航電話，以及 JR 關西廣域鐵路周遊券 (5日券) 於 D2~D6 期間的核心劃位班次建議。
                 </p>
             </div>
 
@@ -200,49 +175,49 @@
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="p-3 font-bold text-gray-900">豐田租車 神戶三宮站前店</td>
                                 <td class="p-3 font-mono text-brand-600 font-bold">078-222-0100</td>
-                                <td class="p-3 text-gray-600">09:00 取車與 19:00 前還車定位點</td>
+                                <td class="p-3 text-gray-600">取車與還車定位點</td>
                                 <td class="p-3 text-center">
-                                    <button onclick="copyToClipboard('078-222-0100')" class="px-2.5 py-1 bg-gray-100 hover:bg-brand-50 text-brand-700 border border-brand-200 rounded text-xs font-medium transition-colors">複製電話</button>
+                                    <button onclick="copyToClipboard('078-222-0100')" class="px-2.5 py-1 bg-gray-100 hover:bg-brand-50 text-brand-700 border border-brand-200 rounded text-xs font-medium transition-colors">複製</button>
                                 </td>
                             </tr>
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="p-3 font-bold text-gray-900">星巴克 淡路SA (下行線)</td>
                                 <td class="p-3 font-mono text-brand-600 font-bold">0799-23-0333</td>
-                                <td class="p-3 text-gray-600">無敵海景門市，拍攝明石海峽大橋最佳角度</td>
+                                <td class="p-3 text-gray-600">無敵海景門市，拍攝明石大橋最佳角度</td>
                                 <td class="p-3 text-center">
-                                    <button onclick="copyToClipboard('0799-23-0333')" class="px-2.5 py-1 bg-gray-100 hover:bg-brand-50 text-brand-700 border border-brand-200 rounded text-xs font-medium transition-colors">複製電話</button>
+                                    <button onclick="copyToClipboard('0799-23-0333')" class="px-2.5 py-1 bg-gray-100 hover:bg-brand-50 text-brand-700 border border-brand-200 rounded text-xs font-medium transition-colors">複製</button>
                                 </td>
                             </tr>
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="p-3 font-bold text-gray-900">道の駅 うずしお (渦潮)</td>
                                 <td class="p-3 font-mono text-brand-600 font-bold">0799-52-1157</td>
-                                <td class="p-3 text-gray-600">午餐推薦：全日本第一名的淡路島洋蔥牛肉漢堡</td>
+                                <td class="p-3 text-gray-600">午餐推薦：淡路島洋蔥牛肉漢堡</td>
                                 <td class="p-3 text-center">
-                                    <button onclick="copyToClipboard('0799-52-1157')" class="px-2.5 py-1 bg-gray-100 hover:bg-brand-50 text-brand-700 border border-brand-200 rounded text-xs font-medium transition-colors">複製電話</button>
+                                    <button onclick="copyToClipboard('0799-52-1157')" class="px-2.5 py-1 bg-gray-100 hover:bg-brand-50 text-brand-700 border border-brand-200 rounded text-xs font-medium transition-colors">複製</button>
                                 </td>
                             </tr>
                             <tr class="hover:bg-gray-50 transition-colors bg-amber-50/40">
                                 <td class="p-3 font-bold text-gray-900">千疊敷展望台 / 渦之道</td>
                                 <td class="p-3 font-mono text-brand-600 font-bold">088-683-6262</td>
-                                <td class="p-3 text-gray-600">兩景點共用「鳴門公園停車場」，命中最佳潮汐時段</td>
+                                <td class="p-3 text-gray-600">兩景點共用停車場，先看宏觀再走入微觀</td>
                                 <td class="p-3 text-center">
-                                    <button onclick="copyToClipboard('088-683-6262')" class="px-2.5 py-1 bg-gray-100 hover:bg-brand-50 text-brand-700 border border-brand-200 rounded text-xs font-medium transition-colors">複製電話</button>
+                                    <button onclick="copyToClipboard('088-683-6262')" class="px-2.5 py-1 bg-gray-100 hover:bg-brand-50 text-brand-700 border border-brand-200 rounded text-xs font-medium transition-colors">複製</button>
                                 </td>
                             </tr>
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="p-3 font-bold text-gray-900">あわじ花さじき (花棧敷)</td>
                                 <td class="p-3 font-mono text-brand-600 font-bold">0799-74-6426</td>
-                                <td class="p-3 text-gray-600">山丘無敵海景與冬季花海（北淡路高地）</td>
+                                <td class="p-3 text-gray-600">山丘無敵海景與冬季花海</td>
                                 <td class="p-3 text-center">
-                                    <button onclick="copyToClipboard('0799-74-6426')" class="px-2.5 py-1 bg-gray-100 hover:bg-brand-50 text-brand-700 border border-brand-200 rounded text-xs font-medium transition-colors">複製電話</button>
+                                    <button onclick="copyToClipboard('0799-74-6426')" class="px-2.5 py-1 bg-gray-100 hover:bg-brand-50 text-brand-700 border border-brand-200 rounded text-xs font-medium transition-colors">複製</button>
                                 </td>
                             </tr>
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="p-3 font-bold text-gray-900">舞子公園</td>
                                 <td class="p-3 font-mono text-brand-600 font-bold">078-785-5090</td>
-                                <td class="p-3 text-gray-600">回程短暫休息站、上廁所與拍明石大橋夕陽點燈</td>
+                                <td class="p-3 text-gray-600">回程短暫休息站、上廁所拍夕陽點燈</td>
                                 <td class="p-3 text-center">
-                                    <button onclick="copyToClipboard('078-785-5090')" class="px-2.5 py-1 bg-gray-100 hover:bg-brand-50 text-brand-700 border border-brand-200 rounded text-xs font-medium transition-colors">複製電話</button>
+                                    <button onclick="copyToClipboard('078-785-5090')" class="px-2.5 py-1 bg-gray-100 hover:bg-brand-50 text-brand-700 border border-brand-200 rounded text-xs font-medium transition-colors">複製</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -253,37 +228,37 @@
             <!-- JR 特急列車班次建議卡片 -->
             <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200">
                 <h3 class="font-bold text-gray-900 text-lg mb-3 flex items-center gap-2">
-                    <span>🚆</span> JR 關西廣域鐵路周遊券 (5日券) 關鍵班次建議
+                    <span>🚆</span> JR 關西廣域 順時針鐵路指南
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded">Day 2 出發</span>
+                            <span class="text-xs font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded">D2 神戶 ➔ 京都</span>
                             <span class="text-xs text-gray-500">直達免換車</span>
                         </div>
-                        <h4 class="font-bold text-gray-900">特急 濱風 1 號 (Hamakaze)</h4>
-                        <p class="text-xs text-gray-600">三之宮 (09:59 發) ➔ 城崎溫泉 (12:28 抵達)</p>
-                        <p class="text-xs text-emerald-600 font-medium">💡 建議搭乘前於 JR 綠色窗口提前劃位指定席。</p>
+                        <h4 class="font-bold text-gray-900">JR 新快速列車 (Special Rapid)</h4>
+                        <p class="text-xs text-gray-600">三之宮 ➔ JR 京都 (車程約 50 分鐘)</p>
+                        <p class="text-xs text-emerald-600 font-medium">💡 免劃位，班次密集，直接刷 Pass 進站。</p>
                     </div>
 
                     <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold bg-purple-100 text-purple-800 px-2 py-0.5 rounded">Day 3 移動</span>
+                            <span class="text-xs font-bold bg-purple-100 text-purple-800 px-2 py-0.5 rounded">D3 京都 ➔ 城崎</span>
                             <span class="text-xs text-gray-500">直達免換車</span>
                         </div>
                         <h4 class="font-bold text-gray-900">特急 城崎號 (Kinosaki)</h4>
-                        <p class="text-xs text-gray-600">城崎溫泉 (14:31或15:30 發) ➔ JR 京都 (車程約 2.5 小時)</p>
-                        <p class="text-xs text-emerald-600 font-medium">💡 無縫接軌京都飯店 Check-in 與先斗町夜景。</p>
+                        <p class="text-xs text-gray-600">京都 ➔ 城崎溫泉 (車程約 2.5 小時)</p>
+                        <p class="text-xs text-emerald-600 font-medium">💡 強烈建議提早劃位指定席，直達溫泉鄉。</p>
                     </div>
 
                     <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">Day 4 & 6 頻繁用</span>
-                            <span class="text-xs text-gray-500">班次極密集</span>
+                            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">D4 城崎 ➔ 神戶</span>
+                            <span class="text-xs text-gray-500">直達免換車</span>
                         </div>
-                        <h4 class="font-bold text-gray-900">JR 新快速列車 (Special Rapid)</h4>
-                        <p class="text-xs text-gray-600">京都 ↔ 神戶 (約 50 分) | 神戶 ↔ 大阪 (約 22 分)</p>
-                        <p class="text-xs text-emerald-600 font-medium">💡 免劃位，直接感應 JR Pass 進站即可。</p>
+                        <h4 class="font-bold text-gray-900">特急 濱風號 (Hamakaze)</h4>
+                        <p class="text-xs text-gray-600">城崎溫泉 ➔ 三之宮 (車程約 2.5 小時)</p>
+                        <p class="text-xs text-emerald-600 font-medium">💡 搭乘午後班次返回神戶，完美接軌晚餐。</p>
                     </div>
                 </div>
             </div>
@@ -292,13 +267,12 @@
 
         <!-- ================= SECTION 3: 宿點與行李動線 ================= -->
         <section id="section-luggage" class="hidden space-y-6">
-            <!-- 區塊導論 -->
             <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200">
                 <h2 class="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-                    <span class="text-brand-500">🏨</span> 住宿配置與「大行李跨夜寄放」終極動線
+                    <span class="text-brand-500">🏨</span> 住宿配置與「跨夜行李寄放」終極動線
                 </h2>
                 <p class="text-sm text-gray-600 leading-relaxed">
-                    本旅程核心策略為**「以東橫INN神戶三宮站前為大本營」**。D2~D4 前往城崎溫泉與京都外宿時，大行李免費寄放於神戶東橫INN（已發信確認許可），僅攜帶 2 晚換洗的小背包輕裝出發，省去拖行李搭火車的極大負擔！
+                    大行李在 D2~D4 的外宿期間，將安全地免費寄放於神戶東橫INN！你們只需要背著裝有 2 晚衣物的小背包，輕鬆漫步於京都的石板路與城崎的溫泉老街。
                 </p>
             </div>
 
@@ -308,7 +282,6 @@
                     <span>🧳</span> 8 天行李與住宿動線全景圖
                 </h3>
 
-                <!-- Flow step boxes -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
                     <!-- Step 1 -->
                     <div class="p-4 rounded-xl border-2 border-brand-500 bg-brand-50/30 space-y-3 relative">
@@ -316,12 +289,11 @@
                             <span class="bg-brand-600 text-white text-xs font-bold px-2.5 py-1 rounded">前段 (1晚)</span>
                             <span class="text-xs text-gray-500 font-mono">D1 (2/09)</span>
                         </div>
-                        <h4 class="font-bold text-gray-900">東橫INN 神戶三宮站前</h4>
+                        <h4 class="font-bold text-gray-900">東橫INN 神戶三宮</h4>
                         <div class="text-xs space-y-1 text-gray-600">
                             <p class="flex items-center gap-1"><span class="text-emerald-600">🧳 大行李：</span>攜帶進房</p>
-                            <p class="flex items-center gap-1"><span class="text-blue-600">🎒 小背包：</span>隨身攜帶</p>
                         </div>
-                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">抵達神戶後直接 check-in，為隔天輕裝泡湯做準備。</p>
+                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">抵達神戶後直接 check-in，整理隔日外出包。</p>
                     </div>
 
                     <!-- Step 2 -->
@@ -330,12 +302,12 @@
                             <span class="bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded">中段 輕裝 (1晚)</span>
                             <span class="text-xs text-gray-500 font-mono">D2 (2/10)</span>
                         </div>
-                        <h4 class="font-bold text-gray-900">城崎溫泉旅館 (自選)</h4>
+                        <h4 class="font-bold text-gray-900">京都飯店 (自選)</h4>
                         <div class="text-xs space-y-1 text-gray-600">
                             <p class="flex items-center gap-1"><span class="text-amber-600 font-bold">🧳 大行李：</span>寄放神戶東橫</p>
-                            <p class="flex items-center gap-1"><span class="text-blue-600 font-bold">🎒 小背包：</span>輕裝帶至城崎</p>
+                            <p class="flex items-center gap-1"><span class="text-blue-600 font-bold">🎒 小背包：</span>輕裝帶至京都</p>
                         </div>
-                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">D2 早上退房寄放大行李，只背背包搭特急去泡湯吃松葉蟹。</p>
+                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">D2 早上寄放大行李，搭車赴京都避開人潮。</p>
                     </div>
 
                     <!-- Step 3 -->
@@ -344,12 +316,12 @@
                             <span class="bg-purple-600 text-white text-xs font-bold px-2.5 py-1 rounded">中段 輕裝 (1晚)</span>
                             <span class="text-xs text-gray-500 font-mono">D3 (2/11)</span>
                         </div>
-                        <h4 class="font-bold text-gray-900">京都飯店 (待尋/自選)</h4>
+                        <h4 class="font-bold text-gray-900">城崎溫泉旅館 (自選)</h4>
                         <div class="text-xs space-y-1 text-gray-600">
                             <p class="flex items-center gap-1"><span class="text-amber-600 font-bold">🧳 大行李：</span>續寄放神戶</p>
-                            <p class="flex items-center gap-1"><span class="text-blue-600 font-bold">🎒 小背包：</span>特急直達京都</p>
+                            <p class="flex items-center gap-1"><span class="text-blue-600 font-bold">🎒 小背包：</span>帶至城崎泡湯</p>
                         </div>
-                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">傍晚搭車直達京都入住，無重物拖累，散步先斗町超輕鬆。</p>
+                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">從京都搭特急直達城崎溫泉，換上浴衣享受雪景。</p>
                     </div>
 
                     <!-- Step 4 -->
@@ -358,12 +330,11 @@
                             <span class="bg-emerald-600 text-white text-xs font-bold px-2.5 py-1 rounded">後段 大本營 (4晚)</span>
                             <span class="text-xs text-gray-500 font-mono">D4~D8 (2/12-16)</span>
                         </div>
-                        <h4 class="font-bold text-gray-900">東橫INN 神戶三宮站前</h4>
+                        <h4 class="font-bold text-gray-900">東橫INN 神戶三宮</h4>
                         <div class="text-xs space-y-1 text-gray-600">
                             <p class="flex items-center gap-1"><span class="text-emerald-600 font-bold">🧳 大行李：</span>領回歸位！</p>
-                            <p class="flex items-center gap-1"><span class="text-blue-600 font-bold">🎒 小背包：</span>歸位</p>
                         </div>
-                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">D4 晚上返神戶領大行李，連續住 4 晚，狂買戰利品好打包。</p>
+                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">D4 下午返神戶領大行李，連續住 4 晚，狂買戰利品好打包。</p>
                     </div>
                 </div>
             </div>
@@ -372,16 +343,13 @@
 
         <!-- ================= SECTION 4: 行前準備與檢查表 ================= -->
         <section id="section-checklist" class="hidden space-y-6">
-            <!-- 區塊導論 -->
             <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <h2 class="text-xl font-bold text-gray-900 mb-1 flex items-center gap-2">
                             <span class="text-brand-500">📌</span> 行前準備與互動打包檢查表
                         </h2>
-                        <p class="text-sm text-gray-600">點擊核取方塊可標記完成狀態，系統會自動儲存您的勾選進度。</p>
                     </div>
-                    <!-- 進度條 -->
                     <div class="bg-gray-100 p-3 rounded-lg border border-gray-200 flex items-center gap-3 min-w-[200px]">
                         <div class="flex-grow">
                             <div class="flex justify-between text-xs font-bold text-gray-700 mb-1">
@@ -398,94 +366,45 @@
 
             <!-- 清單分類 -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- 1. 必備證件與票券 -->
+                <!-- 1 -->
                 <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200 space-y-3">
                     <h3 class="font-bold text-gray-900 text-base flex items-center gap-2 pb-2 border-b border-gray-100">
                         <span>🧳</span> 必備證件與票券
                     </h3>
-                    <div class="space-y-2.5 text-sm" id="group-docs">
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>護照（確認效期在 6 個月以上）</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>機票電子憑證 / 登機證 (星宇 JX360/361)</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>Visit Japan Web (入境審查/海關 QR Code 截圖)</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors bg-amber-50/50 p-1.5 rounded">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span class="font-semibold text-gray-900">台灣駕照正本 ＆ 駕照日文譯本 (D5租車必備)</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>JR 關西廣域鐵路周遊券 5日券 (兑換憑證)</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>實體 ICOCA 卡或綁定 Apple Pay 交通卡</span>
-                        </label>
+                    <div class="space-y-2.5 text-sm">
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>護照（確認效期 6 個月以上）</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>機票電子憑證 / 登機證</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>Visit Japan Web QR Code</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors bg-amber-50/50 p-1.5 rounded"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span class="font-semibold text-gray-900">台灣駕照正本＆日文譯本 (必備)</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>JR 關西廣域周遊券 5日券</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>旅遊 eSIM (確認開通方式)</span></label>
                     </div>
                 </div>
 
-                <!-- 2. 通訊與電子設備 -->
+                <!-- 2 -->
                 <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200 space-y-3">
                     <h3 class="font-bold text-gray-900 text-base flex items-center gap-2 pb-2 border-b border-gray-100">
                         <span>📱</span> 通訊與電子設備
                     </h3>
-                    <div class="space-y-2.5 text-sm" id="group-tech">
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>日本上網 eSIM (出發前一日預先設定)</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>Type-A 充電線 (星宇機上螢幕充電專用)</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>行動電源 (2月低溫手機掉電快，隨身帶)</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>手機充電頭與備用線材</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>Garmin 手錶專用充電線</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>電動/個人刮鬍刀</span>
-                        </label>
+                    <div class="space-y-2.5 text-sm">
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>Type-A 充電線 (機上螢幕用)</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>行動電源 (低溫掉電快)</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>手機充電器與備用線材</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>Garmin 手錶充電線</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>刮鬍刀</span></label>
                     </div>
                 </div>
 
-                <!-- 3. 冬季打包與個人物品 -->
+                <!-- 3 -->
                 <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200 space-y-3">
                     <h3 class="font-bold text-gray-900 text-base flex items-center gap-2 pb-2 border-b border-gray-100">
-                        <span>🧥</span> 冬季打包建議 (2月氣溫 0~10°C)
+                        <span>🧥</span> 冬季打包 (0~10°C)
                     </h3>
-                    <div class="space-y-2.5 text-sm" id="group-clothes">
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>發熱衣、保暖防風外套 (城崎/京都清晨易下雪)</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>防滑好走防水靴/鞋 (雪地與京都石板路)</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors bg-blue-50/50 p-1.5 rounded">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span class="font-semibold text-gray-900">輕便後背包 (D2~D4 外宿2晚城崎/京都換洗衣物專用)</span>
-                        </label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500">
-                            <span>泡湯小物 (保濕乳液、個人護膚保養品)</span>
-                        </label>
+                    <div class="space-y-2.5 text-sm">
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>發熱衣、保暖防風外套 (防雪)</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>防水好走靴/鞋 (雪地防滑)</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors bg-blue-50/50 p-1.5 rounded"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span class="font-semibold text-gray-900">輕便後背包 (D2~D4 外宿2晚專用)</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>泡湯小物 (保濕乳液等)</span></label>
                     </div>
                 </div>
             </div>
@@ -494,30 +413,26 @@
 
         <!-- ================= SECTION 5: 旅程數據分析 ================= -->
         <section id="section-analytics" class="hidden space-y-6">
-            <!-- 區塊導論 -->
             <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200">
                 <h2 class="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
                     <span class="text-brand-500">📊</span> 旅程體力與交通工具數據分析
                 </h2>
-                <p class="text-sm text-gray-600 leading-relaxed">
-                    透過資料視覺化分析，為您呈現 8 天行程中的體力消耗預估與交通運具分配狀況。有助於提前規劃休息點與穿著合適鞋款。
-                </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- 圖表 1: 每日體力消耗與步行強度指數 -->
+                <!-- 圖表 1 -->
                 <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200">
                     <h3 class="font-bold text-gray-900 text-base mb-1">📈 每日體力消耗預估指數 (1-10分)</h3>
-                    <p class="text-xs text-gray-500 mb-4">D4 京都雙經典與 D7 Outlet 狂購物步行強度最高，建議穿著防水舒壓鞋。</p>
+                    <p class="text-xs text-gray-500 mb-4">D2 京都與 D7 Outlet 步行強度最高，建議穿著防水舒壓鞋。</p>
                     <div class="chart-container">
                         <canvas id="intensityChart"></canvas>
                     </div>
                 </div>
 
-                <!-- 圖表 2: 交通運具使用比例 -->
+                <!-- 圖表 2 -->
                 <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200">
                     <h3 class="font-bold text-gray-900 text-base mb-1">🚆 8 天旅程交通工具分配比例</h3>
-                    <p class="text-xs text-gray-500 mb-4">結合 JR 特急、新快速、自駕與直達巴士的最佳化移動模式。</p>
+                    <p class="text-xs text-gray-500 mb-4">完美發揮 JR Pass 長途效益，結合自駕與直達巴士的最佳化移動。</p>
                     <div class="chart-container">
                         <canvas id="transportChart"></canvas>
                     </div>
@@ -530,14 +445,14 @@
     <!-- 頁尾 -->
     <footer class="bg-gray-900 text-gray-400 text-xs py-6 border-t border-gray-800 mt-10">
         <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
-            <p class="font-medium text-gray-300">2027 關西神戶・城崎・京都 8天7夜 黃金三角之旅 數位導覽手冊</p>
-            <p class="text-gray-500">Designed for seamless Japanese travel experience. Wish you an amazing trip!</p>
+            <p class="font-medium text-gray-300">2027 關西神戶・京都・城崎溫泉 8天7夜 黃金三角之旅</p>
+            <p class="text-gray-500">Designed for seamless Japanese travel experience.</p>
         </div>
     </footer>
 
     <!-- JavaScript 邏輯與互動資料庫 -->
     <script>
-        // 1. 行程資料庫 (Day 1 - Day 8)
+        // 1. 順時針黃金三角行程資料庫
         const itineraryData = [
             {
                 day: 1,
@@ -556,58 +471,61 @@
             {
                 day: 2,
                 date: "2027/02/10 (三)",
-                title: "輕裝出發 ➔ 特急直達城崎 ➔ 七大外湯巡禮 ➔ 松葉蟹晚餐",
-                keyPoint: "啟用 JR Pass、入住溫泉鄉、體驗御所之湯/一之湯、大啖松葉蟹。",
-                stay: "城崎溫泉旅館 (自選素泊方案)",
+                title: "平日京都最順暢！清水寺 ➔ 祇園 ➔ 伏見稻荷夕陽",
+                keyPoint: "啟用 JR Pass，利用平日優勢暢遊京都，享受無人潮的古都風情。",
+                stay: "京都飯店 (自選，建議近京都站或四條河原町)",
                 items: [
-                    { time: "08:30 - 09:30", icon: "🧳", text: "退房與寄物：東橫INN辦理退房，大行李免費寄放櫃台 (出示2/12回住單)，僅背輕便小背包出發。" },
-                    { time: "09:30 - 12:30", icon: "🚆", text: "啟程前往城崎：啟用 JR 關西廣域周遊券。從三之宮搭乘「特急濱風 1 號」(09:59發 ➔ 12:28抵達) 直達城崎溫泉。" },
-                    { time: "13:00 - 15:00", icon: "♨️", text: "溫泉鄉漫步：旅館寄放背包，領取外湯通行證，換上浴衣與木屐沿柳樹運河拍照。" },
-                    { time: "15:00 - 18:00", icon: "🌊", text: "外湯體驗第一彈：首推建築華麗的「御所之湯」或有洞窟風呂的「一之湯」。" },
-                    { time: "🍽️ 晚餐推薦", icon: "🦀", text: "老街海鮮專門店 (如: 海中苑)，現點現吃產地直送松葉蟹 (烤蟹、水煮蟹、蟹肉海鮮丼)。" }
+                    { time: "08:30 - 09:30", icon: "🧳", text: "退房與寄物：東橫INN退房，大行李寄放櫃台 (出示2/12回住單)，背小背包出發。" },
+                    { time: "09:30 - 10:30", icon: "🚆", text: "啟程前往京都：啟用 JR 關西廣域周遊券。搭乘「JR新快速」直達京都站。" },
+                    { time: "10:30 - 13:30", icon: "⛩️", text: "東山經典散策：搭公車至清水道，逛清水寺、三年坂、二年坂一路散步下坡至八坂神社。" },
+                    { time: "13:30 - 15:00", icon: "🍡", text: "祇園與午餐：在八坂神社旁的祇園商圈或河原町享用午餐。" },
+                    { time: "15:30 - 17:30", icon: "🌅", text: "伏見稻荷夕陽魔幻時刻：搭乘電車前往，在午後漫步千本鳥居，欣賞夕陽絕美光影。" },
+                    { time: "18:00 後", icon: "🏮", text: "京都浪漫之夜：散步至鴨川旁的「先斗町」，在充滿紅燈籠的石板路間享用晚餐。" }
                 ]
             },
             {
                 day: 3,
-                date: "2027/02/11 (四/國定假日)",
-                title: "悠閒外湯巡禮 ➔ 但馬牛午餐 ➔ 傍晚特急直奔京都",
-                keyPoint: "睡到自然醒、善用通行證補齊特色外湯、傍晚移動至古都享受京都之夜。",
-                stay: "京都飯店 (自選，建議近京都站或四條河原町)",
+                date: "2027/02/11 (四/假日)",
+                title: "特急直達城崎溫泉 ➔ 外湯巡禮 ➔ 頂級松葉蟹晚餐",
+                keyPoint: "從京都直達溫泉鄉，換上浴衣木屐，享受漫步雪中老街的浪漫。",
+                stay: "城崎溫泉旅館 (自選素泊或一泊二食方案)",
                 items: [
-                    { time: "08:00 - 10:00", icon: "♨️", text: "晨湯與退房：睡到自然醒，吃完早餐退房，小背包寄放車站置物櫃或旅館。" },
-                    { time: "10:00 - 12:30", icon: "🌸", text: "外湯巡禮第二彈：繼續使用外湯通行證，前往「鴻之湯」享受雪中庭園露天風呂，或「曼陀羅湯」體驗桶湯。" },
-                    { time: "12:30 - 14:00", icon: "🥩", text: "但馬牛午餐：享用在地特產「但馬牛料理」(牛排丼、漢堡或燒肉)。" },
-                    { time: "14:30 - 17:30", icon: "🚆", text: "直奔古都：搭乘「特急城崎號 (Kinosaki)」，免換車直達 JR 京都站 (車程約 2.5 小時)。" },
-                    { time: "18:30 後", icon: "🏮", text: "京都浪漫之夜：散步至鴨川旁的「先斗町」或「祇園」，在紅燈籠石板路間享用晚餐。" }
+                    { time: "10:00 - 11:30", icon: "☕", text: "京都早晨：悠閒吃完早餐後退房，準備前往京都車站搭車。" },
+                    { time: "11:30 - 14:00", icon: "🚆", text: "直達溫泉鄉：搭乘「特急城崎號 (Kinosaki)」免換車直達城崎溫泉。" },
+                    { time: "14:00 - 15:30", icon: "👘", text: "完美銜接入住：前往旅館 Check-in。領取「外湯通行證」，換上浴衣與木屐。" },
+                    { time: "15:30 - 18:00", icon: "♨️", text: "外湯體驗 第一彈：推薦先泡建築華麗的「御所之湯」或有洞窟風呂的「一之湯」。" },
+                    { time: "🍽️ 晚餐推薦", icon: "🦀", text: "老街海鮮專門店 (如: 海中苑)，現點現吃冬季產地直送的松葉蟹。" }
                 ]
             },
             {
                 day: 4,
                 date: "2027/02/12 (五)",
-                title: "早鳥破人潮！京都雙經典 ➔ 晚歸神戶大本營",
-                keyPoint: "平日早鳥戰術！收割無人空景，下午悠閒散策，傍晚賞夕陽鳥居。",
+                title: "慵懶晨湯與外湯巡禮 ➔ 但馬牛午餐 ➔ 傍晚返回神戶",
+                keyPoint: "不去大師山吹冷風，徹底貫徹泡湯耍廢宗旨，午後順路回神戶。",
                 stay: "東橫INN 神戶三宮站前 (領回大行李)",
                 items: [
-                    { time: "07:30 - 10:00", icon: "⛩️", text: "清水寺早鳥參拜：(背包寄放車站) 趁大軍未湧入前至清水寺，享受寧靜的三年坂、二年坂與八坂之塔空景。" },
-                    { time: "10:30 - 14:30", icon: "🍡", text: "市區散策與午餐：一路輕鬆下坡逛到八坂神社與祇園。中午前往錦市場或四條河原町享用午餐。" },
-                    { time: "15:00 - 17:30", icon: "🌅", text: "伏見稻荷夕陽魔幻時刻：搭電車前往伏見稻荷大社。在午後漫步千本鳥居，欣賞夕陽絕美光影。" },
-                    { time: "18:00 - 19:30", icon: "🍜", text: "京都車站晚餐：回到 JR 京都站領背包，於地下街或拉麵小路享用晚餐。" },
-                    { time: "19:30 - 20:30", icon: "🚆", text: "滿載返回神戶：搭乘「JR 新快速」列車（約 50 分鐘）返回神戶三宮，入住東橫INN並領回大行李。" }
+                    { time: "08:00 - 10:00", icon: "♨️", text: "晨湯與退房：睡飽後於老街咖啡館吃早餐，退房後小背包寄放車站置物櫃。" },
+                    { time: "10:00 - 12:30", icon: "❄️", text: "外湯巡禮 第二彈：利用通行證繼續泡「鴻之湯」賞雪庭園，或「曼陀羅湯」的桶湯。" },
+                    { time: "12:30 - 14:00", icon: "🥩", text: "但馬牛午餐：享用在地特產「但馬牛料理」(牛排丼、漢堡或燒肉)。" },
+                    { time: "14:30 - 17:00", icon: "🚆", text: "返回大本營：搭乘「特急濱風號 (Hamakaze)」返回神戶三之宮站。" },
+                    { time: "17:00 - 18:00", icon: "🏨", text: "領取行李與入住：返回東橫INN辦理入住，向櫃台領回寄存 2 天的大行李箱。" },
+                    { time: "🍽️ 晚餐推薦", icon: "🍜", text: "三宮高架下居酒屋、特色拉麵或神戶煎餃。" }
                 ]
             },
             {
                 day: 5,
                 date: "2027/02/13 (六)",
                 title: "淡路島 ➔ 鳴門海景自駕一日遊",
-                keyPoint: "租車自駕、跨越明石海峽大橋、鳴門漩渦精準潮汐觀賞。",
+                keyPoint: "租車自駕、跨越明石海峽大橋、鳴門千疊敷與渦之道精準潮汐。",
                 stay: "東橫INN 神戶三宮站前",
                 items: [
                     { time: "09:00 - 09:30", icon: "🚗", text: "三宮取車：於豐田租車辦理手續並設定導航 (GPS: 078-222-0100)。" },
-                    { time: "09:30 - 10:30", icon: "☕", text: "無敵海景星巴克：開上明石大橋，停靠「星巴克 淡路SA (下行線)」，買咖啡拍攝大橋全景。" },
-                    { time: "12:00 - 13:00", icon: "🍔", text: "午餐：洋蔥牛肉漢堡：前往淡路島南端「道の駅 うずしお」享用知名洋蔥牛肉漢堡。" },
-                    { time: "13:00 - 14:45", icon: "🌀", text: "鳴門漩渦：千疊敷與渦之道：先至千疊敷展望台俯瞰全景，再走入渦之道玻璃步道微觀大漩渦。" },
-                    { time: "14:45 - 18:00", icon: "🌸", text: "あわじ花さじき & 舞子公園：欣賞花棧敷花海與大阪灣全景，回程至舞子公園賞夕陽 short stop。" },
-                    { time: "18:00 - 19:00", icon: "⚓", text: "還車與晚餐：開回神戶三宮市區加滿油歸還車輛，於三宮高架下居酒屋享用晚餐。" }
+                    { time: "09:30 - 10:30", icon: "☕", text: "無敵海景星巴克：開上明石大橋，停靠「星巴克 淡路SA (下行線)」拍攝大橋全景。" },
+                    { time: "12:00 - 13:00", icon: "🍔", text: "午餐：洋蔥牛肉漢堡：前往淡路島南端「道の駅 うずしお」享用知名漢堡。" },
+                    { time: "13:00 - 14:45", icon: "🌀", text: "鳴門漩渦：先至「千疊敷展望台」俯瞰全景，再走入「渦之道」玻璃步道微觀大漩渦。" },
+                    { time: "14:45 - 16:45", icon: "🌸", text: "あわじ花さじき：欣賞花棧敷冬季花卉與大阪灣全景。" },
+                    { time: "16:45 - 18:00", icon: "⚓", text: "舞子公園短暫休息：過橋後下交流道，短暫上廁所休息並拍張夕陽點燈照。" },
+                    { time: "18:00 - 19:00", icon: "🚘", text: "還車：開回神戶三宮市區加滿油，於 19:00 前順利歸還車輛。" }
                 ]
             },
             {
@@ -617,11 +535,12 @@
                 keyPoint: "週日與情人節！白天漫步神戶浪漫洋館、傍晚殺去大阪吃喝打卡。",
                 stay: "東橫INN 神戶三宮站前",
                 items: [
-                    { time: "09:30 - 12:00", icon: "🏛️", text: "北野異人館散策：造訪風見雞館、萌黃之館。至星巴克神戶北野異人館店吃「六甲牧場霜淇淋」。" },
-                    { time: "12:00 - 15:00", icon: "⛩️", text: "生田神社與午餐：品嚐神戶洋食蛋包飯，飯後參拜 1,800 年歷史的結緣聖地，體驗特色「水占卜」。" },
-                    { time: "15:00 - 17:00", icon: "🛍️", text: "舊居留地與採買：漫步充滿歐風洋館的神戶舊居留地，於百貨挑選精緻甜點。" },
-                    { time: "17:00 - 21:00", icon: "🍡", text: "大阪道頓堀之夜：搭乘 JR 新快速至大阪轉地鐵去心齋橋。打卡固力果跑跑人，品嚐大阪燒章魚燒。" },
-                    { time: "21:00 後", icon: "🚆", text: "輕鬆返回：搭乘地鐵回大阪站，轉乘 JR 新快速（約22分鐘）返回神戶三宮住宿。" }
+                    { time: "09:30 - 12:00", icon: "🏛️", text: "北野異人館散策：造訪風見雞館。至星巴克北野異人館店吃「六甲牧場霜淇淋」。" },
+                    { time: "12:00 - 13:30", icon: "⛩️", text: "優雅午餐與生田神社：品嚐洋食蛋包飯，飯後參拜結緣聖地，體驗特色「水占卜」。" },
+                    { time: "13:30 - 16:00", icon: "🛍️", text: "舊居留地與採買：漫步充滿歐風洋館的舊居留地，於百貨挑選精緻甜點。" },
+                    { time: "16:00 - 17:00", icon: "🚆", text: "前往大阪：(JR Pass最後一日) 從三之宮搭「新快速」至大阪站，轉地鐵去心齋橋。" },
+                    { time: "17:00 - 21:00", icon: "🍡", text: "大阪道頓堀之夜：打卡固力果跑跑人，品嚐大阪燒、章魚燒，唐吉訶德血拚。" },
+                    { time: "21:00 後", icon: "🌙", text: "輕鬆返回：搭乘地鐵回大阪站，轉乘 JR 新快速返回神戶三宮住宿。" }
                 ]
             },
             {
@@ -631,8 +550,8 @@
                 keyPoint: "平日逛 Outlet 品質最高！搭乘直達巴士輕鬆買滿買齊。",
                 stay: "東橫INN 神戶三宮站前",
                 items: [
-                    { time: "09:30 - 10:30", icon: "🚌", text: "直達 Outlet：從三宮巴士總站搭乘「特急高速巴士」(單程約670日圓) 直達神戶三田 Premium Outlets。" },
-                    { time: "10:30 - 16:00", icon: "🛍️", text: "Outlet 狂買與午餐：西日本最大 Outlet 痛快血拚，平日免排隊！午餐於園區美食廣場享用。" },
+                    { time: "09:30 - 10:30", icon: "🚌", text: "直達 Outlet：從三宮巴士總站搭乘「特急高速巴士」(單程約670日圓) 直達 Outlet。" },
+                    { time: "10:30 - 16:00", icon: "🛍️", text: "Outlet 狂買與午餐：西日本最大 Outlet 痛快血拚，平日免排隊！午餐於園區享用。" },
                     { time: "16:00 - 17:00", icon: "🏨", text: "返回三宮：搭乘高速巴士返回神戶三宮，將大包小包戰利品先放回飯店。" },
                     { time: "17:00 - 19:30", icon: "🍮", text: "神戶市區最後補給：在三宮地下街或商店街補貨藥妝或伴手禮（如風月堂、神戶布丁）。" },
                     { time: "晚上", icon: "🧳", text: "行李打包：回到飯店將戰利品妥善裝箱準備明日返程。" }
@@ -648,7 +567,7 @@
                     { time: "08:30 - 10:00", icon: "🍳", text: "悠閒早晨：於飯店享用早餐，確認行李無遺漏後辦理退房手續。" },
                     { time: "10:15 - 10:45", icon: "🚝", text: "前往機場：從三宮站搭乘 Port Liner (約18分鐘) 直達神戶機場站 (UKB)。" },
                     { time: "10:45 - 12:30", icon: "🛍️", text: "報到與免稅：星宇航空櫃台辦理登機與行李託運，逛神戶機場免稅店補買最後伴手禮。" },
-                    { time: "13:15", icon: "✈️", text: "起飛返台：搭乘星宇航空 JX361 班機 (13:15 起飛 ➔ 16:00 抵達高雄 KHH)，帶著滿滿回憶返家。" }
+                    { time: "13:15", icon: "✈️", text: "起飛返台：搭乘星宇航空 JX361 班機 (13:15 起飛 ➔ 16:00 抵達高雄 KHH)。" }
                 ]
             }
         ];
@@ -687,18 +606,13 @@
                     </div>
                     
                     <div class="p-4 space-y-4">
-                        <!-- Key highlight banner -->
                         <div class="bg-amber-50/80 border-l-4 border-brand-500 p-3 rounded-r text-xs sm:text-sm text-gray-800 flex items-center gap-2">
                             <span class="font-bold text-brand-700 whitespace-nowrap">📌 今日重點：</span>
                             <span>${data.keyPoint}</span>
                         </div>
-
-                        <!-- Schedule Items -->
                         <div class="space-y-1">
                             ${itemsHtml}
                         </div>
-
-                        <!-- Stay Footer -->
                         <div class="pt-2 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
                             <span class="flex items-center gap-1"><span class="text-brand-600">🛌 今晚住宿：</span> <strong class="text-gray-800">${data.stay}</strong></span>
                         </div>
@@ -734,8 +648,6 @@
                     tabBtn.className = "px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800";
                 }
             });
-
-            // If switching to analytics tab, trigger Chart render
             if (tabName === 'analytics') {
                 renderCharts();
             }
@@ -750,7 +662,7 @@
             });
         }
 
-        // 檢查清單進度計算與 LocalStorage 保存
+        // 檢查清單
         function updateChecklistProgress() {
             const checkboxes = document.querySelectorAll('.chk-item');
             let checkedCount = 0;
@@ -762,13 +674,12 @@
             document.getElementById('checklist-progress-text').innerText = `${percent}% (${checkedCount}/${checkboxes.length})`;
             document.getElementById('checklist-progress-bar').style.width = `${percent}%`;
 
-            // Save state
             const states = Array.from(checkboxes).map(cb => cb.checked);
-            localStorage.setItem('kobe_trip_checklist', JSON.stringify(states));
+            localStorage.setItem('kobe_trip_checklist_final', JSON.stringify(states));
         }
 
         function loadChecklistState() {
-            const saved = localStorage.getItem('kobe_trip_checklist');
+            const saved = localStorage.getItem('kobe_trip_checklist_final');
             if (saved) {
                 const states = JSON.parse(saved);
                 const checkboxes = document.querySelectorAll('.chk-item');
@@ -786,17 +697,16 @@
         let transportChartInstance = null;
 
         function renderCharts() {
-            // Chart 1: Intensity Index (Line Chart)
             const ctx1 = document.getElementById('intensityChart').getContext('2d');
             if (intensityChartInstance) intensityChartInstance.destroy();
 
             intensityChartInstance = new Chart(ctx1, {
                 type: 'line',
                 data: {
-                    labels: ['D1 神戶港', 'D2 城崎', 'D3 城崎➔京都', 'D4 京都雙經典', 'D5 淡路島自駕', 'D6 神戶+大阪', 'D7 三田Outlet', 'D8 賦歸'],
+                    labels: ['D1 神戶港', 'D2 京都', 'D3 城崎', 'D4 溫泉➔神戶', 'D5 淡路島自駕', 'D6 神戶+大阪', 'D7 三田Outlet', 'D8 賦歸'],
                     datasets: [{
                         label: '體力/步行強度指數 (1-10)',
-                        data: [4, 5, 5, 9, 6, 8, 8, 3],
+                        data: [4, 9, 5, 4, 6, 8, 8, 3],
                         borderColor: '#D97706',
                         backgroundColor: 'rgba(217, 119, 6, 0.1)',
                         fill: true,
@@ -809,11 +719,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: {
-                            min: 0,
-                            max: 10,
-                            ticks: { stepSize: 2 }
-                        }
+                        y: { min: 0, max: 10, ticks: { stepSize: 2 } }
                     },
                     plugins: {
                         tooltip: {
@@ -821,9 +727,9 @@
                                 label: function(context) {
                                     const tips = [
                                         "適應環境，港灣散步，強度適中",
-                                        "搭特急前往城崎，溫泉老街散步",
-                                        "晨湯＋特急直達京都先斗町散步",
                                         "清水寺＋伏見稻荷，萬步等級體力考驗！",
+                                        "搭特急前往城崎，溫泉老街散步",
+                                        "晨湯耍廢，下午搭車回神戶",
                                         "租車自駕，輕鬆賞海景與渦之道",
                                         "北野異人館坡道＋大阪道頓堀血拚",
                                         "Outlet 狂走掃貨，試穿逛街體力高",
@@ -837,7 +743,6 @@
                 }
             });
 
-            // Chart 2: Transport Mode Split (Doughnut Chart)
             const ctx2 = document.getElementById('transportChart').getContext('2d');
             if (transportChartInstance) transportChartInstance.destroy();
 
@@ -847,32 +752,19 @@
                     labels: ['JR Pass 特急/新快速', '租車自駕 (Day 5)', '高速/神姬巴士', 'Port Liner 機場接駁', '地鐵與市營公車'],
                     datasets: [{
                         data: [45, 20, 15, 10, 10],
-                        backgroundColor: [
-                            '#1F2937', // JR Dark Slate
-                            '#D97706', // Car Amber
-                            '#059669', // Bus Sage
-                            '#3B82F6', // Portliner Blue
-                            '#9333EA'  // Subway Purple
-                        ]
+                        backgroundColor: ['#1F2937', '#D97706', '#059669', '#3B82F6', '#9333EA']
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                boxWidth: 12,
-                                font: { size: 11 }
-                            }
-                        }
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
                     }
                 }
             });
         }
 
-        // 頁面載入初始化
         window.addEventListener('DOMContentLoaded', () => {
             renderItineraryCards();
             loadChecklistState();
