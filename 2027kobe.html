@@ -1047,10 +1047,10 @@
     </script>
 
     <script type="module">
-        // 導入 Firebase 模組 (維持這幾行不變，這是 HTML 專用的 CDN 網址)
+        // 導入 Firebase 模組 (新增 setDoc)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // === 這是你的專屬金鑰 (已整合你提供的最新參數) ===
         const firebaseConfig = {
@@ -1068,11 +1068,17 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
         
+        // 暴露給全域環境，供「行前檢查清單」讀寫使用
+        window.firebaseDB = db;
+        window.firebaseDoc = doc;
+        window.firebaseSetDoc = setDoc;
+        window.firebaseAppId = 'roy-ian-kobe-trip-2027';
+        
         // 關閉模擬模式，強制使用真實雲端！
         const isMockMode = false;
         
         // 這是你的專屬資料庫路徑 ID
-        const appId = 'roy-ian-kobe-trip-2027'; 
+        const appId = window.firebaseAppId;
 
         const expensesListEl = document.getElementById('expenses-list');
         const emptyStateEl = document.getElementById('empty-state');
@@ -1105,9 +1111,9 @@
                     renderExpenses();
                     calculateSettlement();
                     
-                    // 如果當前在分析頁面，自動重繪圓餅圖
+                    // 如果當前在分析頁面，加入延遲讓 DOM 準備好再繪製圓餅圖
                     if (!document.getElementById('section-analytics').classList.contains('hidden')) {
-                        renderCharts();
+                        setTimeout(() => renderCharts(), 50);
                     }
                 }, (error) => {
                     console.error("Firebase listen error:", error);
@@ -1120,6 +1126,25 @@
                 syncStatusEl.textContent = "🔒 驗證失敗";
                 syncStatusEl.className = "text-xs font-medium px-2 py-1 bg-red-100 text-red-800 rounded-full";
             }
+
+            // --- 註冊「行前檢查清單」的即時雲端監聽 ---
+            const checklistRef = doc(db, 'artifacts', appId, 'public', 'data', 'checklist', 'shared');
+            onSnapshot(checklistRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const states = docSnap.data().states || [];
+                    const checkboxes = document.querySelectorAll('.chk-item');
+                    let checkedCount = 0;
+                    checkboxes.forEach((cb, idx) => {
+                        if (states[idx] !== undefined) {
+                            cb.checked = states[idx];
+                        }
+                        if (cb.checked) checkedCount++;
+                    });
+                    const percent = checkboxes.length > 0 ? Math.round((checkedCount / checkboxes.length) * 100) : 0;
+                    document.getElementById('checklist-progress-text').innerText = `${percent}% (${checkedCount}/${checkboxes.length})`;
+                    document.getElementById('checklist-progress-bar').style.width = `${percent}%`;
+                }
+            });
         }
 
         // 提交表單新增花費
