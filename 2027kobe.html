@@ -90,7 +90,7 @@
 
             <!-- 主分頁 Tab 導覽列 -->
             <nav class="flex space-x-2 sm:space-x-4 overflow-x-auto pb-2 pt-1 no-scrollbar text-sm font-medium border-t border-gray-700/60">
-                <button id="tab-itinerary" onclick="switchTab('itinerary')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors bg-brand-500 text-white font-semibold">
+                <button id="tab-itinerary" onclick="switchTab('itinerary')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors bg-brand-500 text-white font-semibold shadow-sm">
                     📅 每日詳細行程
                 </button>
                 <button id="tab-navigation" onclick="switchTab('navigation')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">
@@ -475,7 +475,7 @@
                             <span class="text-gray-300">💱 匯率設定: 1 JPY = </span>
                             <input type="number" id="current-rate" step="0.0001" class="w-24 px-2 py-1 bg-white/10 border border-white/30 rounded text-white font-mono focus:outline-none focus:border-brand-400 transition-colors" value="0.2150">
                             <span class="text-gray-300">TWD</span>
-                            <span id="rate-status" class="text-xs text-brand-400 ml-1">(抓取中...)</span>
+                            <span id="rate-status" class="text-xs text-brand-400 ml-1">(自動最新匯率)</span>
                         </div>
                         <div class="text-left sm:text-right bg-black/20 p-3 rounded-lg border border-white/10">
                             <p class="text-xs text-gray-400 mb-1">👑 最終總結算 (自動匯率折合)</p>
@@ -522,9 +522,9 @@
                                         <option value="租車費">🚗 租車費</option>
                                         <option value="過路費/油/停車">⛽ 過路費/油/停車</option>
                                         <option value="門票">🎟️ 門票</option>
+                                        <option value="其他">📝 其他</option>
                                         <option value="藥妝">💊 藥妝</option>
                                         <option value="車票">🚆 車票</option>
-                                        <option value="其他">📝 其他</option>
                                     </select>
                                 </div>
                             </div>
@@ -812,7 +812,7 @@
             renderItineraryCards(day);
         }
 
-        // 分頁 Tab 切換邏輯
+        // 分頁 Tab 切換邏輯 (加入延遲渲染圖表防跑版)
         function switchTab(tabName) {
             const sections = ['itinerary', 'navigation', 'luggage', 'checklist', 'analytics', 'accounting'];
             sections.forEach(s => {
@@ -828,8 +828,12 @@
                     tabBtn.className = "px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800";
                 }
             });
+            
+            // 如果切換到分析頁，延遲 100 毫秒等畫面打開後再繪製圖表
             if (tabName === 'analytics') {
-                renderCharts();
+                setTimeout(() => {
+                    renderCharts();
+                }, 100);
             }
         }
 
@@ -853,23 +857,33 @@
             });
         }
 
-        // 檢查清單
+        // 檢查清單進度與同步
         function updateChecklistProgress() {
             const checkboxes = document.querySelectorAll('.chk-item');
             let checkedCount = 0;
+            const states = [];
             checkboxes.forEach(cb => {
                 if (cb.checked) checkedCount++;
+                states.push(cb.checked);
             });
             const percent = checkboxes.length > 0 ? Math.round((checkedCount / checkboxes.length) * 100) : 0;
             
             document.getElementById('checklist-progress-text').innerText = `${percent}% (${checkedCount}/${checkboxes.length})`;
             document.getElementById('checklist-progress-bar').style.width = `${percent}%`;
 
-            const states = Array.from(checkboxes).map(cb => cb.checked);
-            localStorage.setItem('kobe_trip_checklist_final', JSON.stringify(states));
+            // 將狀態寫入 Firebase (若 Firebase 已經準備好)
+            if (window.firebaseSetDoc && window.firebaseDoc && window.firebaseDB && window.firebaseAppId) {
+                const docRef = window.firebaseDoc(window.firebaseDB, 'artifacts', window.firebaseAppId, 'public', 'data', 'checklist', 'shared');
+                window.firebaseSetDoc(docRef, { states: states }, { merge: true })
+                    .catch(err => console.error("清單同步失敗:", err));
+            } else {
+                // 備用方案: 存在本地端
+                localStorage.setItem('kobe_trip_checklist_final', JSON.stringify(states));
+            }
         }
 
         function loadChecklistState() {
+            // 這個本地讀取作為備用，實際資料會由下面的 Firebase onSnapshot 接管覆寫
             const saved = localStorage.getItem('kobe_trip_checklist_final');
             if (saved) {
                 const states = JSON.parse(saved);
@@ -879,8 +893,8 @@
                         cb.checked = states[idx];
                     }
                 });
+                updateChecklistProgress();
             }
-            updateChecklistProgress();
         }
 
         // Chart.js 圖表渲染
@@ -889,125 +903,128 @@
         let expenseChartInstance = null;
 
         function renderCharts() {
-            const ctx1 = document.getElementById('intensityChart').getContext('2d');
-            if (intensityChartInstance) intensityChartInstance.destroy();
-
-            intensityChartInstance = new Chart(ctx1, {
-                type: 'line',
-                data: {
-                    labels: ['D1 神戶港', 'D2 京都', 'D3 城崎', 'D4 溫泉➔神戶', 'D5 淡路島自駕', 'D6 神戶+大阪', 'D7 三田Outlet', 'D8 賦歸'],
-                    datasets: [{
-                        label: '體力/步行強度指數 (1-10)',
-                        data: [4, 9, 3, 4, 6, 8, 8, 3],
-                        borderColor: '#D97706',
-                        backgroundColor: 'rgba(217, 119, 6, 0.1)',
-                        fill: true,
-                        tension: 0.3,
-                        pointBackgroundColor: '#B45309',
-                        pointRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { min: 0, max: 10, ticks: { stepSize: 2 } }
+            // 圖表 1: 體力
+            const ctx1 = document.getElementById('intensityChart');
+            if(ctx1) {
+                if (intensityChartInstance) intensityChartInstance.destroy();
+                intensityChartInstance = new Chart(ctx1.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['D1 神戶港', 'D2 京都', 'D3 城崎', 'D4 溫泉➔神戶', 'D5 淡路島自駕', 'D6 神戶+大阪', 'D7 三田Outlet', 'D8 賦歸'],
+                        datasets: [{
+                            label: '體力/步行強度指數 (1-10)',
+                            data: [4, 9, 3, 4, 6, 8, 8, 3],
+                            borderColor: '#D97706',
+                            backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointBackgroundColor: '#B45309',
+                            pointRadius: 5
+                        }]
                     },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const tips = [
-                                        "適應環境，港灣散步，強度適中",
-                                        "清水寺＋伏見稻荷，萬步等級體力考驗！",
-                                        "搭特急前往城崎，溫泉老街悠閒散步",
-                                        "睡到自然醒，下午搭車回神戶",
-                                        "租車自駕，輕鬆賞海景與渦之道",
-                                        "北野異人館坡道＋大阪道頓堀血拚",
-                                        "Outlet 狂走掃貨，試穿逛街體力高",
-                                        "搭 Port Liner 前往機場，輕鬆返台"
-                                    ];
-                                    return ` 強度: ${context.parsed.y} 分 (${tips[context.dataIndex]})`;
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { min: 0, max: 10, ticks: { stepSize: 2 } } },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const tips = [
+                                            "適應環境，港灣散步，強度適中",
+                                            "清水寺＋伏見稻荷，萬步等級體力考驗！",
+                                            "搭特急前往城崎，溫泉老街悠閒散步",
+                                            "睡到自然醒，下午搭車回神戶",
+                                            "租車自駕，輕鬆賞海景與渦之道",
+                                            "北野異人館坡道＋大阪道頓堀血拚",
+                                            "Outlet 狂走掃貨，試穿逛街體力高",
+                                            "搭 Port Liner 前往機場，輕鬆返台"
+                                        ];
+                                        return ` 強度: ${context.parsed.y} 分 (${tips[context.dataIndex]})`;
+                                    }
                                 }
                             }
                         }
-                    }
-                }
-            });
-
-            const ctx2 = document.getElementById('transportChart').getContext('2d');
-            if (transportChartInstance) transportChartInstance.destroy();
-
-            transportChartInstance = new Chart(ctx2, {
-                type: 'doughnut',
-                data: {
-                    labels: ['JR Pass 特急/新快速', '租車自駕 (Day 5)', '高速/神姬巴士', 'Port Liner 機場接駁', '地鐵與市營公車'],
-                    datasets: [{
-                        data: [45, 20, 15, 10, 10],
-                        backgroundColor: ['#1F2937', '#D97706', '#059669', '#3B82F6', '#9333EA']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
-                    }
-                }
-            });
-
-            const ctx3 = document.getElementById('expenseChart').getContext('2d');
-            if (expenseChartInstance) expenseChartInstance.destroy();
-
-            // 處理記帳資料 (只計算公費 shared，並折合台幣)
-            const currentRate = parseFloat(document.getElementById('current-rate').value) || 0.2150;
-            const categoryTotals = {};
-            let hasExpenseData = false;
-
-            if (typeof currentExpenses !== 'undefined' && currentExpenses.length > 0) {
-                currentExpenses.forEach(exp => {
-                    if (exp.split === 'shared') {
-                        hasExpenseData = true;
-                        let amountInTWD = exp.currency === 'JPY' ? (exp.amount * currentRate) : exp.amount;
-                        categoryTotals[exp.category] = (categoryTotals[exp.category] || 0) + amountInTWD;
                     }
                 });
             }
 
-            const labels = Object.keys(categoryTotals);
-            const data = Object.values(categoryTotals).map(val => Math.round(val));
-            
-            // 隨機產生柔和的顏色
-            const backgroundColors = labels.map((_, i) => `hsl(${(i * 360 / labels.length) % 360}, 70%, 65%)`);
+            // 圖表 2: 交通
+            const ctx2 = document.getElementById('transportChart');
+            if(ctx2) {
+                if (transportChartInstance) transportChartInstance.destroy();
+                transportChartInstance = new Chart(ctx2.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['JR Pass 特急/新快速', '租車自駕 (Day 5)', '高速/神姬巴士', 'Port Liner 機場接駁', '地鐵與市營公車'],
+                        datasets: [{
+                            data: [45, 20, 15, 10, 10],
+                            backgroundColor: ['#1F2937', '#D97706', '#059669', '#3B82F6', '#9333EA']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+                        }
+                    }
+                });
+            }
 
-            expenseChartInstance = new Chart(ctx3, {
-                type: 'pie',
-                data: {
-                    labels: hasExpenseData ? labels : ['暫無公費資料'],
-                    datasets: [{
-                        data: hasExpenseData ? data : [1],
-                        backgroundColor: hasExpenseData ? backgroundColors : ['#E5E7EB']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    if(!hasExpenseData) return ' 請先新增公費記帳';
-                                    let label = context.label || '';
-                                    if (label) { label += ': '; }
-                                    label += '$' + context.parsed.toLocaleString() + ' TWD';
-                                    return label;
+            // 圖表 3: 記帳圓餅圖
+            const ctx3 = document.getElementById('expenseChart');
+            if(ctx3) {
+                if (expenseChartInstance) expenseChartInstance.destroy();
+
+                const currentRate = parseFloat(document.getElementById('current-rate').value) || 0.2150;
+                const categoryTotals = {};
+                let hasExpenseData = false;
+
+                if (typeof currentExpenses !== 'undefined' && currentExpenses.length > 0) {
+                    currentExpenses.forEach(exp => {
+                        if (exp.split === 'shared') {
+                            hasExpenseData = true;
+                            let amountInTWD = exp.currency === 'JPY' ? (exp.amount * currentRate) : exp.amount;
+                            categoryTotals[exp.category] = (categoryTotals[exp.category] || 0) + amountInTWD;
+                        }
+                    });
+                }
+
+                const labels = Object.keys(categoryTotals);
+                const data = Object.values(categoryTotals).map(val => Math.round(val));
+                
+                const backgroundColors = labels.map((_, i) => `hsl(${(i * 360 / labels.length) % 360}, 70%, 65%)`);
+
+                expenseChartInstance = new Chart(ctx3.getContext('2d'), {
+                    type: 'pie',
+                    data: {
+                        labels: hasExpenseData ? labels : ['暫無公費資料'],
+                        datasets: [{
+                            data: hasExpenseData ? data : [1],
+                            backgroundColor: hasExpenseData ? backgroundColors : ['#E5E7EB']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        if(!hasExpenseData) return ' 請先新增公費記帳';
+                                        let label = context.label || '';
+                                        if (label) { label += ': '; }
+                                        label += '$' + context.parsed.toLocaleString() + ' TWD';
+                                        return label;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
         }
 
         // 自動抓取即時匯率 API
@@ -1047,12 +1064,11 @@
     </script>
 
     <script type="module">
-        // 導入 Firebase 模組 (新增 setDoc)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // === 這是你的專屬金鑰 (已整合你提供的最新參數) ===
+        // === 你的專屬 Firebase 金鑰 ===
         const firebaseConfig = {
             apiKey: "AIzaSyDU7OIhhr1Yl8X7NjuyOOEPrD3TQgHLNfE",
             authDomain: "kobe-trip-2027.firebaseapp.com",
@@ -1063,57 +1079,49 @@
             measurementId: "G-C0NLV3S6VT"
         };
 
-        // 初始化 Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
         
-        // 暴露給全域環境，供「行前檢查清單」讀寫使用
+        // 暴露 Firebase 給全域，供 Checklist 使用
         window.firebaseDB = db;
         window.firebaseDoc = doc;
         window.firebaseSetDoc = setDoc;
         window.firebaseAppId = 'roy-ian-kobe-trip-2027';
         
-        // 關閉模擬模式，強制使用真實雲端！
         const isMockMode = false;
-        
-        // 這是你的專屬資料庫路徑 ID
         const appId = window.firebaseAppId;
 
         const expensesListEl = document.getElementById('expenses-list');
         const emptyStateEl = document.getElementById('empty-state');
         const syncStatusEl = document.getElementById('sync-status');
         
-        // 儲存本地花費資料以供計算
-        let currentExpenses = [];
+        // 暴露變數讓外層圖表能抓取
+        window.currentExpenses = [];
 
-        async function initAccounting() {
+        async function initApp() {
             try {
-                // 1. 執行匿名登入 (讓 Firebase 允許我們讀寫資料)
+                // 1. 匿名登入
                 await signInAnonymously(auth);
                 
-                // 2. 設定監聽器 (讀取你專屬專案裡的資料)
+                // 2. 監聽記帳資料
                 const expensesRef = collection(db, 'artifacts', appId, 'public', 'data', 'expenses');
-                
-                // 簡單查詢，抓取全部後在記憶體中排序
                 onSnapshot(expensesRef, (snapshot) => {
                     syncStatusEl.textContent = "✅ 已連線同步";
                     syncStatusEl.className = "text-xs font-medium px-2 py-1 bg-emerald-100 text-emerald-800 rounded-full";
                     
-                    currentExpenses = [];
+                    window.currentExpenses = [];
                     snapshot.forEach((doc) => {
-                        currentExpenses.push({ id: doc.id, ...doc.data() });
+                        window.currentExpenses.push({ id: doc.id, ...doc.data() });
                     });
                     
-                    // 在記憶體中依照時間戳記排序 (新的在上)
-                    currentExpenses.sort((a, b) => b.timestamp - a.timestamp);
+                    window.currentExpenses.sort((a, b) => b.timestamp - a.timestamp);
                     
                     renderExpenses();
                     calculateSettlement();
                     
-                    // 如果當前在分析頁面，加入延遲讓 DOM 準備好再繪製圓餅圖
                     if (!document.getElementById('section-analytics').classList.contains('hidden')) {
-                        setTimeout(() => renderCharts(), 50);
+                        setTimeout(() => window.renderCharts(), 50);
                     }
                 }, (error) => {
                     console.error("Firebase listen error:", error);
@@ -1121,36 +1129,35 @@
                     syncStatusEl.className = "text-xs font-medium px-2 py-1 bg-red-100 text-red-800 rounded-full";
                 });
 
+                // 3. 監聽行前清單資料
+                const checklistRef = doc(db, 'artifacts', appId, 'public', 'data', 'checklist', 'shared');
+                onSnapshot(checklistRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const states = docSnap.data().states || [];
+                        const checkboxes = document.querySelectorAll('.chk-item');
+                        let checkedCount = 0;
+                        checkboxes.forEach((cb, idx) => {
+                            if (states[idx] !== undefined) {
+                                cb.checked = states[idx];
+                            }
+                            if (cb.checked) checkedCount++;
+                        });
+                        const percent = checkboxes.length > 0 ? Math.round((checkedCount / checkboxes.length) * 100) : 0;
+                        document.getElementById('checklist-progress-text').innerText = `${percent}% (${checkedCount}/${checkboxes.length})`;
+                        document.getElementById('checklist-progress-bar').style.width = `${percent}%`;
+                    }
+                });
+
             } catch (error) {
                 console.error("Auth error:", error);
                 syncStatusEl.textContent = "🔒 驗證失敗";
                 syncStatusEl.className = "text-xs font-medium px-2 py-1 bg-red-100 text-red-800 rounded-full";
             }
-
-            // --- 註冊「行前檢查清單」的即時雲端監聽 ---
-            const checklistRef = doc(db, 'artifacts', appId, 'public', 'data', 'checklist', 'shared');
-            onSnapshot(checklistRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const states = docSnap.data().states || [];
-                    const checkboxes = document.querySelectorAll('.chk-item');
-                    let checkedCount = 0;
-                    checkboxes.forEach((cb, idx) => {
-                        if (states[idx] !== undefined) {
-                            cb.checked = states[idx];
-                        }
-                        if (cb.checked) checkedCount++;
-                    });
-                    const percent = checkboxes.length > 0 ? Math.round((checkedCount / checkboxes.length) * 100) : 0;
-                    document.getElementById('checklist-progress-text').innerText = `${percent}% (${checkedCount}/${checkboxes.length})`;
-                    document.getElementById('checklist-progress-bar').style.width = `${percent}%`;
-                }
-            });
         }
 
         // 提交表單新增花費
         document.getElementById('expense-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const btn = document.getElementById('exp-submit-btn');
             const originalText = btn.innerHTML;
             btn.innerHTML = "寫入中...";
@@ -1169,37 +1176,22 @@
                 timestamp: Date.now()
             };
 
-            if (isMockMode) {
-                newExpense.id = Date.now().toString();
-                currentExpenses.unshift(newExpense);
-                renderExpenses();
-                calculateSettlement();
-            } else {
-                try {
-                    const expensesRef = collection(db, 'artifacts', appId, 'public', 'data', 'expenses');
-                    await addDoc(expensesRef, newExpense);
-                } catch (error) {
-                    console.error("Error adding document: ", error);
-                    alert("新增失敗，請檢查網路連線與 Firebase 權限設定");
-                }
+            try {
+                const expensesRef = collection(db, 'artifacts', appId, 'public', 'data', 'expenses');
+                await addDoc(expensesRef, newExpense);
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("新增失敗，請檢查網路連線");
             }
 
-            // 重置表單
             document.getElementById('exp-desc').value = '';
             document.getElementById('exp-amount').value = '';
             btn.innerHTML = originalText;
             btn.disabled = false;
         });
 
-        // 刪除花費 (暴露給全域以便 HTML onclick 呼叫)
+        // 刪除花費
         window.deleteExpenseRecord = async (id) => {
-            if (isMockMode) {
-                currentExpenses = currentExpenses.filter(e => e.id !== id);
-                renderExpenses();
-                calculateSettlement();
-                return;
-            }
-
             try {
                 await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'expenses', id));
             } catch (error) {
@@ -1207,22 +1199,18 @@
             }
         };
 
-        // 渲染列表
         function renderExpenses() {
             expensesListEl.innerHTML = '';
-            
-            if (currentExpenses.length === 0) {
+            if (window.currentExpenses.length === 0) {
                 emptyStateEl.classList.remove('hidden');
                 return;
             }
-            
             emptyStateEl.classList.add('hidden');
 
-            currentExpenses.forEach(exp => {
+            window.currentExpenses.forEach(exp => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-50 transition-colors group";
                 
-                // 決定類型標籤的樣式
                 let typeHtml = '';
                 if (exp.split === 'shared') {
                     typeHtml = `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[11px] font-bold">均分</span>`;
@@ -1257,15 +1245,13 @@
             });
         }
 
-        // 核心邏輯：計算結算金額 (完美解決代墊與私人帳務)
-        function calculateSettlement() {
-            // balance > 0 代表 Ian 欠 Roy； balance < 0 代表 Roy 欠 Ian
+        // 核心邏輯：計算結算金額
+        window.calculateSettlement = function() {
             let balanceJPY = 0;
             let balanceTWD = 0;
 
-            currentExpenses.forEach(exp => {
+            window.currentExpenses.forEach(exp => {
                 const amt = exp.amount;
-                
                 if (exp.currency === 'JPY') {
                     if (exp.split === 'shared') {
                         if (exp.paidBy === 'Roy') balanceJPY += (amt / 2);
@@ -1285,11 +1271,9 @@
                 }
             });
 
-            // 渲染 JPY 結算結果
             const jpyEl = document.getElementById('jpy-settlement');
             if (balanceJPY === 0) {
-                jpyEl.innerHTML = `✅ 目前無欠款`;
-                jpyEl.className = "text-lg font-bold text-gray-300";
+                jpyEl.innerHTML = `✅ 目前無欠款`; jpyEl.className = "text-lg font-bold text-gray-300";
             } else if (balanceJPY > 0) {
                 jpyEl.innerHTML = `<span class="text-sm font-normal text-gray-300">Ian 應給 Roy:</span> <br>¥ ${balanceJPY.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
                 jpyEl.className = "text-xl font-bold text-emerald-400";
@@ -1298,11 +1282,9 @@
                 jpyEl.className = "text-xl font-bold text-rose-400";
             }
 
-            // 渲染 TWD 結算結果
             const twdEl = document.getElementById('twd-settlement');
             if (balanceTWD === 0) {
-                twdEl.innerHTML = `✅ 目前無欠款`;
-                twdEl.className = "text-lg font-bold text-gray-300";
+                twdEl.innerHTML = `✅ 目前無欠款`; twdEl.className = "text-lg font-bold text-gray-300";
             } else if (balanceTWD > 0) {
                 twdEl.innerHTML = `<span class="text-sm font-normal text-gray-300">Ian 應給 Roy:</span> <br>$ ${balanceTWD.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
                 twdEl.className = "text-xl font-bold text-amber-400";
@@ -1311,12 +1293,11 @@
                 twdEl.className = "text-xl font-bold text-rose-400";
             }
 
-            // 渲染總結算 (折合台幣)
             const currentRate = parseFloat(document.getElementById('current-rate').value) || 0;
             const consolidatedBalance = balanceTWD + (balanceJPY * currentRate);
             const consEl = document.getElementById('consolidated-settlement');
             
-            if (Math.abs(consolidatedBalance) < 1) { // 允許小數點誤差
+            if (Math.abs(consolidatedBalance) < 1) {
                 consEl.innerHTML = `✅ 帳目已結清`;
                 consEl.className = "text-xl sm:text-2xl font-bold text-gray-300 tracking-wide";
             } else if (consolidatedBalance > 0) {
@@ -1326,8 +1307,7 @@
             }
         }
 
-        // 啟動
-        initAccounting();
+        initApp();
     </script>
 </body>
 </html>
