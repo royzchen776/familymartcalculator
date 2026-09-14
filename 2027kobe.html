@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2027 關西神戶・城崎・京都 8天7夜 黃金三角之旅</title>
+    <title>2027 關西神戶・京都・城崎 8天7夜 黃金三角之旅</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
@@ -102,6 +102,9 @@
                 <button id="tab-checklist" onclick="switchTab('checklist')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">
                     📌 行前準備與清單
                 </button>
+                <button id="tab-accounting" onclick="switchTab('accounting')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">
+                    💰 共同記帳
+                </button>
                 <button id="tab-analytics" onclick="switchTab('analytics')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">
                     📊 旅程數據分析
                 </button>
@@ -110,9 +113,9 @@
     </header>
 
     <!-- 主要內容區域 -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <!-- ================= SECTION 1: 每日詳細行程 ================= -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 relative">
+        
+        <!-- ================= SECTION 1: 互動式行程表 ================= -->
         <section id="section-itinerary" class="space-y-6">
             <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200">
                 <h2 class="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
@@ -197,7 +200,7 @@
                                 </td>
                             </tr>
                             <tr class="hover:bg-gray-50 transition-colors bg-amber-50/40">
-                                <td class="p-3 font-bold text-gray-900">千疊敷展望台 / 渦之道</td>
+                                <td class="p-3 font-bold text-gray-900">鳴門公園 (千疊敷/渦之道)</td>
                                 <td class="p-3 font-mono text-brand-600 font-bold">088-683-6262</td>
                                 <td class="p-3 text-gray-600">兩景點共用停車場，先看宏觀再走入微觀</td>
                                 <td class="p-3 text-center">
@@ -228,7 +231,7 @@
             <!-- JR 特急列車班次建議卡片 -->
             <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200">
                 <h3 class="font-bold text-gray-900 text-lg mb-3 flex items-center gap-2">
-                    <span>🚆</span> JR 關西廣域 順時針鐵路指南
+                    <span>🚆</span> JR 關西廣域 順時針鐵路指南 (使用期間: 2/10~2/14)
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-2">
@@ -302,7 +305,7 @@
                             <span class="bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded">中段 輕裝 (1晚)</span>
                             <span class="text-xs text-gray-500 font-mono">D2 (2/10)</span>
                         </div>
-                        <h4 class="font-bold text-gray-900">京都飯店 (自選)</h4>
+                        <h4 class="font-bold text-gray-900">RIHGA Place 京都</h4>
                         <div class="text-xs space-y-1 text-gray-600">
                             <p class="flex items-center gap-1"><span class="text-amber-600 font-bold">🧳 大行李：</span>寄放神戶東橫</p>
                             <p class="flex items-center gap-1"><span class="text-blue-600 font-bold">🎒 小背包：</span>輕裝帶至京都</p>
@@ -316,12 +319,12 @@
                             <span class="bg-purple-600 text-white text-xs font-bold px-2.5 py-1 rounded">中段 輕裝 (1晚)</span>
                             <span class="text-xs text-gray-500 font-mono">D3 (2/11)</span>
                         </div>
-                        <h4 class="font-bold text-gray-900">城崎溫泉旅館 (自選)</h4>
+                        <h4 class="font-bold text-gray-900">大江戶 Premium</h4>
                         <div class="text-xs space-y-1 text-gray-600">
                             <p class="flex items-center gap-1"><span class="text-amber-600 font-bold">🧳 大行李：</span>續寄放神戶</p>
                             <p class="flex items-center gap-1"><span class="text-blue-600 font-bold">🎒 小背包：</span>帶至城崎泡湯</p>
                         </div>
-                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">從京都搭特急直達城崎溫泉，換上浴衣享受雪景。</p>
+                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">從京都搭特急直達城崎溫泉，換浴衣吃百匯。</p>
                     </div>
 
                     <!-- Step 4 -->
@@ -375,7 +378,7 @@
                         <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>護照（確認效期 6 個月以上）</span></label>
                         <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>機票電子憑證 / 登機證</span></label>
                         <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>Visit Japan Web QR Code</span></label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors bg-amber-50/50 p-1.5 rounded"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span class="font-semibold text-gray-900">台灣駕照正本＆日文譯本 (必備)</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors bg-amber-50/50"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span class="font-semibold text-gray-900">台灣駕照正本＆日文譯本 (必備)</span></label>
                         <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>JR 關西廣域周遊券 5日券</span></label>
                         <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>旅遊 eSIM (確認開通方式)</span></label>
                     </div>
@@ -403,7 +406,7 @@
                     <div class="space-y-2.5 text-sm">
                         <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>發熱衣、保暖防風外套 (防雪)</span></label>
                         <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>防水好走靴/鞋 (雪地防滑)</span></label>
-                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors bg-blue-50/50 p-1.5 rounded"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span class="font-semibold text-gray-900">輕便後背包 (D2~D4 外宿2晚專用)</span></label>
+                        <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors bg-blue-50/50"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span class="font-semibold text-gray-900">輕便後背包 (D2~D3 外宿專用)</span></label>
                         <label class="flex items-start gap-2.5 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"><input type="checkbox" onchange="updateChecklistProgress()" class="chk-item mt-1 rounded text-brand-600 focus:ring-brand-500"><span>泡湯小物 (保濕乳液等)</span></label>
                     </div>
                 </div>
@@ -423,7 +426,7 @@
                 <!-- 圖表 1 -->
                 <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200">
                     <h3 class="font-bold text-gray-900 text-base mb-1">📈 每日體力消耗預估指數 (1-10分)</h3>
-                    <p class="text-xs text-gray-500 mb-4">D2 京都與 D7 Outlet 步行強度最高，建議穿著防水舒壓鞋。</p>
+                    <p class="text-xs text-gray-500 mb-4">D2 京都與 D7 Outlet 步行強度最高，建議穿著舒壓鞋。</p>
                     <div class="chart-container">
                         <canvas id="intensityChart"></canvas>
                     </div>
@@ -435,6 +438,152 @@
                     <p class="text-xs text-gray-500 mb-4">完美發揮 JR Pass 長途效益，結合自駕與直達巴士的最佳化移動。</p>
                     <div class="chart-container">
                         <canvas id="transportChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 6: 共同記帳 (雲端即時同步) ================= -->
+        <section id="section-accounting" class="hidden space-y-6">
+            <!-- 結算儀表板 -->
+            <div class="bg-gradient-to-br from-gray-900 to-japan-indigo rounded-xl p-5 shadow-lg text-white border border-gray-700">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-brand-100">
+                    <span>⚖️</span> 即時結算中心
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm border border-white/10">
+                        <p class="text-sm text-gray-300 mb-1">🇯🇵 日幣 (JPY) 結算</p>
+                        <p id="jpy-settlement" class="text-xl font-bold text-emerald-400">計算中...</p>
+                    </div>
+                    <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm border border-white/10">
+                        <p class="text-sm text-gray-300 mb-1">🇹🇼 台幣 (TWD) 結算</p>
+                        <p id="twd-settlement" class="text-xl font-bold text-amber-400">計算中...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 新增記帳表單 -->
+                <div class="lg:col-span-1">
+                    <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200 sticky top-24">
+                        <h3 class="font-bold text-gray-900 text-base mb-4 flex items-center gap-2">
+                            <span>✍️</span> 新增一筆花費
+                        </h3>
+                        <form id="expense-form" class="space-y-4">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-600 mb-1">天別</label>
+                                    <select id="exp-day" class="w-full text-sm p-2 border border-gray-300 rounded focus:ring-brand-500 focus:border-brand-500" required>
+                                        <option value="D1">D1 (2/09)</option>
+                                        <option value="D2">D2 (2/10)</option>
+                                        <option value="D3">D3 (2/11)</option>
+                                        <option value="D4">D4 (2/12)</option>
+                                        <option value="D5">D5 (2/13)</option>
+                                        <option value="D6">D6 (2/14)</option>
+                                        <option value="D7">D7 (2/15)</option>
+                                        <option value="D8">D8 (2/16)</option>
+                                        <option value="行前">行前準備</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-600 mb-1">項目分類</label>
+                                    <select id="exp-category" class="w-full text-sm p-2 border border-gray-300 rounded focus:ring-brand-500 focus:border-brand-500" required>
+                                        <option value="住宿費">🏨 住宿費</option>
+                                        <option value="車票/交通">🚆 車票/交通</option>
+                                        <option value="正餐">🍽️ 正餐</option>
+                                        <option value="點心/宵夜">🍡 點心/宵夜</option>
+                                        <option value="門票/體驗">🎟️ 門票/體驗</option>
+                                        <option value="伴手禮">🛍️ 伴手禮</option>
+                                        <option value="藥妝/購物">💊 藥妝/購物</option>
+                                        <option value="其他">📝 其他</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">備註 (例如: 東橫INN、章魚燒)</label>
+                                <input type="text" id="exp-desc" class="w-full text-sm p-2 border border-gray-300 rounded focus:ring-brand-500 focus:border-brand-500" placeholder="輸入花費細節..." required>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-3">
+                                <div class="col-span-2">
+                                    <label class="block text-xs font-semibold text-gray-600 mb-1">金額</label>
+                                    <input type="number" id="exp-amount" min="1" class="w-full text-sm p-2 border border-gray-300 rounded focus:ring-brand-500 focus:border-brand-500" placeholder="0" required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-600 mb-1">幣別</label>
+                                    <select id="exp-currency" class="w-full text-sm p-2 border border-gray-300 rounded focus:ring-brand-500 focus:border-brand-500">
+                                        <option value="JPY">JPY ¥</option>
+                                        <option value="TWD">TWD $</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 pt-2 border-t border-gray-100">
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-600 mb-1">誰先代墊？</label>
+                                    <select id="exp-payer" class="w-full text-sm p-2 border border-brand-300 bg-brand-50 rounded text-brand-800 font-bold focus:ring-brand-500">
+                                        <option value="Roy">Roy</option>
+                                        <option value="Ian">Ian</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-600 mb-1">分攤方式</label>
+                                    <select id="exp-split" onchange="togglePrivateFor()" class="w-full text-sm p-2 border border-emerald-300 bg-emerald-50 rounded text-emerald-800 font-bold focus:ring-emerald-500">
+                                        <option value="shared">🤝 兩人均分</option>
+                                        <option value="private">👤 私人花費</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 私人花費時顯示：這是誰的？ -->
+                            <div id="private-for-container" class="hidden bg-gray-50 p-3 rounded border border-gray-200 mt-2">
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">這筆是誰的私人花費？</label>
+                                <select id="exp-private-for" class="w-full text-sm p-2 border border-gray-300 rounded">
+                                    <option value="Roy">Roy</option>
+                                    <option value="Ian">Ian</option>
+                                </select>
+                                <p class="text-[10px] text-gray-500 mt-1">* 若代墊人與擁有者不同，系統會自動將全額計入欠款。</p>
+                            </div>
+
+                            <button type="submit" id="exp-submit-btn" class="w-full mt-4 bg-gray-900 hover:bg-gray-800 text-white font-bold py-2.5 px-4 rounded transition-colors flex items-center justify-center gap-2">
+                                <span>➕ 寫入雲端帳本</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 記帳明細列表 -->
+                <div class="lg:col-span-2">
+                    <div class="bg-cardbg rounded-xl p-0 sm:p-5 shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-4 sm:p-0 mb-2 flex justify-between items-end">
+                            <h3 class="font-bold text-gray-900 text-base flex items-center gap-2">
+                                <span>🧾</span> 旅程花費明細
+                            </h3>
+                            <span id="sync-status" class="text-xs font-medium px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full animate-pulse">連線中...</span>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[600px]">
+                                <thead>
+                                    <tr class="bg-gray-100 text-gray-600 border-y border-gray-200 text-xs uppercase tracking-wider">
+                                        <th class="p-3 font-semibold w-16">天別</th>
+                                        <th class="p-3 font-semibold w-24">分類</th>
+                                        <th class="p-3 font-semibold">備註</th>
+                                        <th class="p-3 font-semibold text-right w-24">金額</th>
+                                        <th class="p-3 font-semibold text-center w-20">代墊</th>
+                                        <th class="p-3 font-semibold text-center w-20">類型</th>
+                                        <th class="p-3 font-semibold text-center w-12">刪除</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="expenses-list" class="divide-y divide-gray-100 text-sm">
+                                    <!-- 雲端資料會動態載入至此 -->
+                                </tbody>
+                            </table>
+                            <div id="empty-state" class="hidden p-8 text-center text-gray-500 text-sm">
+                                尚無記帳紀錄，新增的第一筆資料會顯示在這裡！
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -461,7 +610,7 @@
                 keyPoint: "養足精神、輕鬆適應環境、享用神戶牛排與港灣夜景。",
                 stay: "東橫INN 神戶三宮站前",
                 items: [
-                    { time: "12:15 - 13:30", icon: "✈️", text: "抵達神戶機場，搭乘 Port Liner (約18分鐘) 直達三宮站，前往東橫INN寄放行李。" },
+                    { time: "12:15 - 13:30", icon: "✈️", text: "抵達神戶機場，搭乘 Port Liner 直達三宮站，前往東橫INN寄放行李。" },
                     { time: "13:30 - 15:00", icon: "☕", text: "周邊午茶小憩：南京町（中華街）吃熱包子或前往知名洋菓子店喝咖啡休息。" },
                     { time: "15:00 - 17:00", icon: "🛌", text: "Check-in 與午睡充電：返回東橫INN辦理入住，房間休息補充電力。" },
                     { time: "17:00 - 19:30", icon: "🌉", text: "港灣夜色：前往美利堅公園，打卡神戶港塔與 BE KOBE 地標，賞夕陽與絕美夜景。" },
@@ -473,42 +622,42 @@
                 date: "2027/02/10 (三)",
                 title: "平日京都最順暢！清水寺 ➔ 祇園 ➔ 伏見稻荷夕陽",
                 keyPoint: "啟用 JR Pass，利用平日優勢暢遊京都，享受無人潮的古都風情。",
-                stay: "京都飯店 (自選，建議近京都站或四條河原町)",
+                stay: "RIHGA Place Kyoto Shijokarasuma (麗嘉廣場酒店)",
                 items: [
-                    { time: "08:30 - 09:30", icon: "🧳", text: "退房與寄物：東橫INN退房，大行李寄放櫃台 (出示2/12回住單)，背小背包出發。" },
-                    { time: "09:30 - 10:30", icon: "🚆", text: "啟程前往京都：啟用 JR 關西廣域周遊券。搭乘「JR新快速」直達京都站。" },
+                    { time: "08:30 - 09:30", icon: "🧳", text: "退房與寄物：東橫INN退房，大行李寄放櫃台，背小背包出發。" },
+                    { time: "09:30 - 10:30", icon: "🚆", text: "啟程前往京都：啟用 JR 關西廣域周遊券。搭乘「JR新快速」直達京都站。轉搭地下鐵至四條站寄放背包。" },
                     { time: "10:30 - 13:30", icon: "⛩️", text: "東山經典散策：搭公車至清水道，逛清水寺、三年坂、二年坂一路散步下坡至八坂神社。" },
                     { time: "13:30 - 15:00", icon: "🍡", text: "祇園與午餐：在八坂神社旁的祇園商圈或河原町享用午餐。" },
-                    { time: "15:30 - 17:30", icon: "🌅", text: "伏見稻荷夕陽魔幻時刻：搭乘電車前往，在午後漫步千本鳥居，欣賞夕陽絕美光影。" },
-                    { time: "18:00 後", icon: "🏮", text: "京都浪漫之夜：散步至鴨川旁的「先斗町」，在充滿紅燈籠的石板路間享用晚餐。" }
+                    { time: "15:30 - 17:30", icon: "🌅", text: "伏見稻荷夕陽魔幻時刻：搭乘電車前往，在午後避開尖峰人潮漫步千本鳥居。" },
+                    { time: "18:00 後", icon: "🏮", text: "京都浪漫之夜：散步至鴨川旁的「先斗町」，在充滿紅燈籠の石板路間享用晚餐。" }
                 ]
             },
             {
                 day: 3,
                 date: "2027/02/11 (四/假日)",
-                title: "特急直達城崎溫泉 ➔ 外湯巡禮 ➔ 頂級松葉蟹晚餐",
-                keyPoint: "從京都直達溫泉鄉，換上浴衣木屐，享受漫步雪中老街的浪漫。",
-                stay: "城崎溫泉旅館 (自選素泊或一泊二食方案)",
+                title: "特急直達城崎 ➔ 大江戶 Premium ➔ 外湯巡禮",
+                keyPoint: "從古都直達溫泉鄉，換上浴衣木屐，享受 Premium 等級百匯晚餐。",
+                stay: "大江戶溫泉物語 Premium 城崎",
                 items: [
-                    { time: "10:00 - 11:30", icon: "☕", text: "京都早晨：悠閒吃完早餐後退房，準備前往京都車站搭車。" },
-                    { time: "11:30 - 14:00", icon: "🚆", text: "直達溫泉鄉：搭乘「特急城崎號 (Kinosaki)」免換車直達城崎溫泉。" },
-                    { time: "14:00 - 15:30", icon: "👘", text: "完美銜接入住：前往旅館 Check-in。領取「外湯通行證」，換上浴衣與木屐。" },
-                    { time: "15:30 - 18:00", icon: "♨️", text: "外湯體驗 第一彈：推薦先泡建築華麗的「御所之湯」或有洞窟風呂的「一之湯」。" },
-                    { time: "🍽️ 晚餐推薦", icon: "🦀", text: "老街海鮮專門店 (如: 海中苑)，現點現吃冬季產地直送的松葉蟹。" }
+                    { time: "09:30 - 10:30", icon: "☕", text: "京都早晨：悠閒退房後，搭乘地下鐵(約 4 分鐘)抵達 JR 京都車站準備搭車。" },
+                    { time: "11:15 - 13:53", icon: "🚆", text: "直達溫泉鄉：搭乘「特急城崎號 (Kinosaki)」免換車直達城崎溫泉。" },
+                    { time: "14:00 - 15:30", icon: "👘", text: "完美銜接入住：搭乘接駁車前往大江戶溫泉物語 Premium，放好背包換浴衣。" },
+                    { time: "15:30 - 18:00", icon: "♨️", text: "外湯體驗 第一彈：利用飯店接駁車前往老街，推薦泡「御所之湯」或「一之湯」。" },
+                    { time: "🍽️ 晚餐", icon: "🦀", text: "於大江戶溫泉物語享用 Premium 豪華 Buffet (大啖松葉蟹與牛排)。" }
                 ]
             },
             {
                 day: 4,
                 date: "2027/02/12 (五)",
-                title: "慵懶晨湯與外湯巡禮 ➔ 但馬牛午餐 ➔ 傍晚返回神戶",
-                keyPoint: "不去大師山吹冷風，徹底貫徹泡湯耍廢宗旨，午後順路回神戶。",
+                title: "慵懶 11 點退房 ➔ 晨湯與老街散策 ➔ 返回神戶",
+                keyPoint: "睡到自然醒，利用 11 點退房優勢從容泡湯，午後順路回神戶。",
                 stay: "東橫INN 神戶三宮站前 (領回大行李)",
                 items: [
-                    { time: "08:00 - 10:00", icon: "♨️", text: "晨湯與退房：睡飽後於老街咖啡館吃早餐，退房後小背包寄放車站置物櫃。" },
-                    { time: "10:00 - 12:30", icon: "❄️", text: "外湯巡禮 第二彈：利用通行證繼續泡「鴻之湯」賞雪庭園，或「曼陀羅湯」的桶湯。" },
-                    { time: "12:30 - 14:00", icon: "🥩", text: "但馬牛午餐：享用在地特產「但馬牛料理」(牛排丼、漢堡或燒肉)。" },
+                    { time: "08:00 - 11:00", icon: "♨️", text: "晨湯與慵懶退房：吃豐盛早餐與泡晨湯。享受 11 點退房的優勢從容收拾。" },
+                    { time: "11:30 - 14:00", icon: "❄️", text: "外湯巡禮 第二彈：利用外湯通行證繼續泡「鴻之湯」或「曼陀羅湯」。" },
+                    { time: "12:30 - 14:00", icon: "🥩", text: "午餐與散步：在老街享用但馬牛午餐或溫泉甜點，漫步柳樹河畔。" },
                     { time: "14:30 - 17:00", icon: "🚆", text: "返回大本營：搭乘「特急濱風號 (Hamakaze)」返回神戶三之宮站。" },
-                    { time: "17:00 - 18:00", icon: "🏨", text: "領取行李與入住：返回東橫INN辦理入住，向櫃台領回寄存 2 天的大行李箱。" },
+                    { time: "17:00 - 18:00", icon: "🏨", text: "領取行李與入住：返回東橫INN辦理入住，向櫃台領回寄存的大行李箱。" },
                     { time: "🍽️ 晚餐推薦", icon: "🍜", text: "三宮高架下居酒屋、特色拉麵或神戶煎餃。" }
                 ]
             },
@@ -516,16 +665,16 @@
                 day: 5,
                 date: "2027/02/13 (六)",
                 title: "淡路島 ➔ 鳴門海景自駕一日遊",
-                keyPoint: "租車自駕、跨越明石海峽大橋、鳴門千疊敷與渦之道精準潮汐。",
+                keyPoint: "租車自駕、跨越明石大橋、千疊敷宏觀全景與渦之道微觀潮汐。",
                 stay: "東橫INN 神戶三宮站前",
                 items: [
                     { time: "09:00 - 09:30", icon: "🚗", text: "三宮取車：於豐田租車辦理手續並設定導航 (GPS: 078-222-0100)。" },
-                    { time: "09:30 - 10:30", icon: "☕", text: "無敵海景星巴克：開上明石大橋，停靠「星巴克 淡路SA (下行線)」拍攝大橋全景。" },
-                    { time: "12:00 - 13:00", icon: "🍔", text: "午餐：洋蔥牛肉漢堡：前往淡路島南端「道の駅 うずしお」享用知名漢堡。" },
-                    { time: "13:00 - 14:45", icon: "🌀", text: "鳴門漩渦：先至「千疊敷展望台」俯瞰全景，再走入「渦之道」玻璃步道微觀大漩渦。" },
-                    { time: "14:45 - 16:45", icon: "🌸", text: "あわじ花さじき：欣賞花棧敷冬季花卉與大阪灣全景。" },
+                    { time: "09:30 - 10:30", icon: "☕", text: "星巴克淡路SA下行線：開上明石大橋，停靠絕美海景星巴克拍攝大橋全景。" },
+                    { time: "12:00 - 13:00", icon: "🍔", text: "午餐：洋蔥牛肉漢堡：趕在人潮前前往「道の駅 うずしお」享用知名漢堡。" },
+                    { time: "13:00 - 14:45", icon: "🌀", text: "鳴門漩渦雙景點：抵達鳴門公園，先至「千疊敷展望台」俯瞰全景，再走入「渦之道」。" },
+                    { time: "14:45 - 16:45", icon: "🌸", text: "あわじ花さじき：驅車北上，欣賞花棧敷冬季花卉與大阪灣全景。" },
                     { time: "16:45 - 18:00", icon: "⚓", text: "舞子公園短暫休息：過橋後下交流道，短暫上廁所休息並拍張夕陽點燈照。" },
-                    { time: "18:00 - 19:00", icon: "🚘", text: "還車：開回神戶三宮市區加滿油，於 19:00 前順利歸還車輛。" }
+                    { time: "18:00 - 19:00", icon: "🚘", text: "還車：開回神戶三宮市區加滿油，順利歸還車輛。" }
                 ]
             },
             {
@@ -535,7 +684,7 @@
                 keyPoint: "週日與情人節！白天漫步神戶浪漫洋館、傍晚殺去大阪吃喝打卡。",
                 stay: "東橫INN 神戶三宮站前",
                 items: [
-                    { time: "09:30 - 12:00", icon: "🏛️", text: "北野異人館散策：造訪風見雞館。至星巴克北野異人館店吃「六甲牧場霜淇淋」。" },
+                    { time: "09:30 - 12:00", icon: "🏛️", text: "北野異人館散策：造訪風見雞館。至星巴克吃「六甲牧場霜淇淋」。" },
                     { time: "12:00 - 13:30", icon: "⛩️", text: "優雅午餐與生田神社：品嚐洋食蛋包飯，飯後參拜結緣聖地，體驗特色「水占卜」。" },
                     { time: "13:30 - 16:00", icon: "🛍️", text: "舊居留地與採買：漫步充滿歐風洋館的舊居留地，於百貨挑選精緻甜點。" },
                     { time: "16:00 - 17:00", icon: "🚆", text: "前往大阪：(JR Pass最後一日) 從三之宮搭「新快速」至大阪站，轉地鐵去心齋橋。" },
@@ -636,10 +785,12 @@
 
         // 分頁 Tab 切換邏輯
         function switchTab(tabName) {
-            const sections = ['itinerary', 'navigation', 'luggage', 'checklist', 'analytics'];
+            const sections = ['itinerary', 'navigation', 'luggage', 'checklist', 'analytics', 'accounting'];
             sections.forEach(s => {
                 const secEl = document.getElementById(`section-${s}`);
                 const tabBtn = document.getElementById(`tab-${s}`);
+                if (!secEl || !tabBtn) return;
+                
                 if (s === tabName) {
                     secEl.classList.remove('hidden');
                     tabBtn.className = "px-3 py-2 rounded-md whitespace-nowrap transition-colors bg-brand-500 text-white font-semibold shadow-sm";
@@ -650,6 +801,17 @@
             });
             if (tabName === 'analytics') {
                 renderCharts();
+            }
+        }
+
+        // 切換私人花費選項顯示
+        function togglePrivateFor() {
+            const splitType = document.getElementById('exp-split').value;
+            const container = document.getElementById('private-for-container');
+            if (splitType === 'private') {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
             }
         }
 
@@ -706,7 +868,7 @@
                     labels: ['D1 神戶港', 'D2 京都', 'D3 城崎', 'D4 溫泉➔神戶', 'D5 淡路島自駕', 'D6 神戶+大阪', 'D7 三田Outlet', 'D8 賦歸'],
                     datasets: [{
                         label: '體力/步行強度指數 (1-10)',
-                        data: [4, 9, 5, 4, 6, 8, 8, 3],
+                        data: [4, 9, 3, 4, 6, 8, 8, 3],
                         borderColor: '#D97706',
                         backgroundColor: 'rgba(217, 119, 6, 0.1)',
                         fill: true,
@@ -728,8 +890,8 @@
                                     const tips = [
                                         "適應環境，港灣散步，強度適中",
                                         "清水寺＋伏見稻荷，萬步等級體力考驗！",
-                                        "搭特急前往城崎，溫泉老街散步",
-                                        "晨湯耍廢，下午搭車回神戶",
+                                        "搭特急前往城崎，溫泉老街悠閒散步",
+                                        "睡到自然醒，下午搭車回神戶",
                                         "租車自駕，輕鬆賞海景與渦之道",
                                         "北野異人館坡道＋大阪道頓堀血拚",
                                         "Outlet 狂走掃貨，試穿逛街體力高",
@@ -769,6 +931,247 @@
             renderItineraryCards();
             loadChecklistState();
         });
+    </script>
+
+    <script type="module">
+        // 導入 Firebase 模組 (維持這幾行不變，這是 HTML 專用的 CDN 網址)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // === 這是你的專屬金鑰 (已整合你提供的最新參數) ===
+        const firebaseConfig = {
+            apiKey: "AIzaSyDU7OIhhr1Yl8X7NjuyOOEPrD3TQgHLNfE",
+            authDomain: "kobe-trip-2027.firebaseapp.com",
+            projectId: "kobe-trip-2027",
+            storageBucket: "kobe-trip-2027.firebasestorage.app",
+            messagingSenderId: "411231460300",
+            appId: "1:411231460300:web:c2174d70b00ba41d525b69",
+            measurementId: "G-C0NLV3S6VT"
+        };
+
+        // 初始化 Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        
+        // 關閉模擬模式，強制使用真實雲端！
+        const isMockMode = false;
+        
+        // 這是你的專屬資料庫路徑 ID
+        const appId = 'roy-ian-kobe-trip-2027'; 
+
+        const expensesListEl = document.getElementById('expenses-list');
+        const emptyStateEl = document.getElementById('empty-state');
+        const syncStatusEl = document.getElementById('sync-status');
+        
+        // 儲存本地花費資料以供計算
+        let currentExpenses = [];
+
+        async function initAccounting() {
+            try {
+                // 1. 執行匿名登入 (讓 Firebase 允許我們讀寫資料)
+                await signInAnonymously(auth);
+                
+                // 2. 設定監聽器 (讀取你專屬專案裡的資料)
+                const expensesRef = collection(db, 'artifacts', appId, 'public', 'data', 'expenses');
+                
+                // 簡單查詢，抓取全部後在記憶體中排序
+                onSnapshot(expensesRef, (snapshot) => {
+                    syncStatusEl.textContent = "✅ 已連線同步";
+                    syncStatusEl.className = "text-xs font-medium px-2 py-1 bg-emerald-100 text-emerald-800 rounded-full";
+                    
+                    currentExpenses = [];
+                    snapshot.forEach((doc) => {
+                        currentExpenses.push({ id: doc.id, ...doc.data() });
+                    });
+                    
+                    // 在記憶體中依照時間戳記排序 (新的在上)
+                    currentExpenses.sort((a, b) => b.timestamp - a.timestamp);
+                    
+                    renderExpenses();
+                    calculateSettlement();
+                }, (error) => {
+                    console.error("Firebase listen error:", error);
+                    syncStatusEl.textContent = "⚠️ 連線錯誤";
+                    syncStatusEl.className = "text-xs font-medium px-2 py-1 bg-red-100 text-red-800 rounded-full";
+                });
+
+            } catch (error) {
+                console.error("Auth error:", error);
+                syncStatusEl.textContent = "🔒 驗證失敗";
+                syncStatusEl.className = "text-xs font-medium px-2 py-1 bg-red-100 text-red-800 rounded-full";
+            }
+        }
+
+        // 提交表單新增花費
+        document.getElementById('expense-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('exp-submit-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "寫入中...";
+            btn.disabled = true;
+
+            const splitType = document.getElementById('exp-split').value;
+            const newExpense = {
+                day: document.getElementById('exp-day').value,
+                category: document.getElementById('exp-category').value,
+                desc: document.getElementById('exp-desc').value,
+                amount: parseFloat(document.getElementById('exp-amount').value),
+                currency: document.getElementById('exp-currency').value,
+                paidBy: document.getElementById('exp-payer').value,
+                split: splitType,
+                privateFor: splitType === 'private' ? document.getElementById('exp-private-for').value : null,
+                timestamp: Date.now()
+            };
+
+            if (isMockMode) {
+                newExpense.id = Date.now().toString();
+                currentExpenses.unshift(newExpense);
+                renderExpenses();
+                calculateSettlement();
+            } else {
+                try {
+                    const expensesRef = collection(db, 'artifacts', appId, 'public', 'data', 'expenses');
+                    await addDoc(expensesRef, newExpense);
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert("新增失敗，請檢查網路連線與 Firebase 權限設定");
+                }
+            }
+
+            // 重置表單
+            document.getElementById('exp-desc').value = '';
+            document.getElementById('exp-amount').value = '';
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
+
+        // 刪除花費 (暴露給全域以便 HTML onclick 呼叫)
+        window.deleteExpenseRecord = async (id) => {
+            if (isMockMode) {
+                currentExpenses = currentExpenses.filter(e => e.id !== id);
+                renderExpenses();
+                calculateSettlement();
+                return;
+            }
+
+            try {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'expenses', id));
+            } catch (error) {
+                console.error("Error deleting document: ", error);
+            }
+        };
+
+        // 渲染列表
+        function renderExpenses() {
+            expensesListEl.innerHTML = '';
+            
+            if (currentExpenses.length === 0) {
+                emptyStateEl.classList.remove('hidden');
+                return;
+            }
+            
+            emptyStateEl.classList.add('hidden');
+
+            currentExpenses.forEach(exp => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-50 transition-colors group";
+                
+                // 決定類型標籤的樣式
+                let typeHtml = '';
+                if (exp.split === 'shared') {
+                    typeHtml = `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[11px] font-bold">均分</span>`;
+                } else {
+                    typeHtml = `<div class="flex flex-col items-center leading-tight">
+                                    <span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded text-[11px] font-bold">私人</span>
+                                    <span class="text-[10px] text-gray-500">(${exp.privateFor})</span>
+                                </div>`;
+                }
+
+                const amountColor = exp.currency === 'JPY' ? 'text-blue-600' : 'text-amber-600';
+                const payerColor = exp.paidBy === 'Roy' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-purple-50 text-purple-700 border-purple-200';
+
+                tr.innerHTML = `
+                    <td class="p-3 font-mono text-gray-500 text-xs">${exp.day}</td>
+                    <td class="p-3 font-semibold text-gray-700">${exp.category}</td>
+                    <td class="p-3 text-gray-900">${exp.desc}</td>
+                    <td class="p-3 text-right font-bold font-mono ${amountColor}">
+                        ${exp.amount.toLocaleString()} <span class="text-xs font-normal text-gray-500">${exp.currency}</span>
+                    </td>
+                    <td class="p-3 text-center">
+                        <span class="px-2 py-1 rounded border text-xs font-bold ${payerColor}">${exp.paidBy}</span>
+                    </td>
+                    <td class="p-3 text-center">${typeHtml}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="deleteExpenseRecord('${exp.id}')" class="text-red-400 hover:text-red-600 p-1 opacity-50 group-hover:opacity-100 transition-opacity" title="刪除">
+                            🗑️
+                        </button>
+                    </td>
+                `;
+                expensesListEl.appendChild(tr);
+            });
+        }
+
+        // 核心邏輯：計算結算金額 (完美解決代墊與私人帳務)
+        function calculateSettlement() {
+            // balance > 0 代表 Ian 欠 Roy； balance < 0 代表 Roy 欠 Ian
+            let balanceJPY = 0;
+            let balanceTWD = 0;
+
+            currentExpenses.forEach(exp => {
+                const amt = exp.amount;
+                
+                if (exp.currency === 'JPY') {
+                    if (exp.split === 'shared') {
+                        if (exp.paidBy === 'Roy') balanceJPY += (amt / 2); // Roy付錢，Ian欠Roy一半
+                        if (exp.paidBy === 'Ian') balanceJPY -= (amt / 2); // Ian付錢，Roy欠Ian一半
+                    } else if (exp.split === 'private') {
+                        if (exp.paidBy === 'Roy' && exp.privateFor === 'Ian') balanceJPY += amt; // Roy幫Ian買，Ian欠Roy全額
+                        if (exp.paidBy === 'Ian' && exp.privateFor === 'Roy') balanceJPY -= amt; // Ian幫Roy買，Roy欠Ian全額
+                        // 若 paidBy == privateFor (自己付自己的)，則不影響結算 balance
+                    }
+                } else if (exp.currency === 'TWD') {
+                    if (exp.split === 'shared') {
+                        if (exp.paidBy === 'Roy') balanceTWD += (amt / 2);
+                        if (exp.paidBy === 'Ian') balanceTWD -= (amt / 2);
+                    } else if (exp.split === 'private') {
+                        if (exp.paidBy === 'Roy' && exp.privateFor === 'Ian') balanceTWD += amt;
+                        if (exp.paidBy === 'Ian' && exp.privateFor === 'Roy') balanceTWD -= amt;
+                    }
+                }
+            });
+
+            // 渲染 JPY 結算結果
+            const jpyEl = document.getElementById('jpy-settlement');
+            if (balanceJPY === 0) {
+                jpyEl.innerHTML = `✅ 目前無欠款`;
+                jpyEl.className = "text-lg font-bold text-gray-300";
+            } else if (balanceJPY > 0) {
+                jpyEl.innerHTML = `<span class="text-sm font-normal text-gray-300">Ian 應給 Roy:</span> <br>¥ ${balanceJPY.toLocaleString()}`;
+                jpyEl.className = "text-xl font-bold text-emerald-400";
+            } else {
+                jpyEl.innerHTML = `<span class="text-sm font-normal text-gray-300">Roy 應給 Ian:</span> <br>¥ ${Math.abs(balanceJPY).toLocaleString()}`;
+                jpyEl.className = "text-xl font-bold text-rose-400";
+            }
+
+            // 渲染 TWD 結算結果
+            const twdEl = document.getElementById('twd-settlement');
+            if (balanceTWD === 0) {
+                twdEl.innerHTML = `✅ 目前無欠款`;
+                twdEl.className = "text-lg font-bold text-gray-300";
+            } else if (balanceTWD > 0) {
+                twdEl.innerHTML = `<span class="text-sm font-normal text-gray-300">Ian 應給 Roy:</span> <br>$ ${balanceTWD.toLocaleString()}`;
+                twdEl.className = "text-xl font-bold text-amber-400";
+            } else {
+                twdEl.innerHTML = `<span class="text-sm font-normal text-gray-300">Roy 應給 Ian:</span> <br>$ ${Math.abs(balanceTWD).toLocaleString()}`;
+                twdEl.className = "text-xl font-bold text-rose-400";
+            }
+        }
+
+        // 啟動
+        initAccounting();
     </script>
 </body>
 </html>
