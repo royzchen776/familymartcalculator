@@ -108,6 +108,9 @@
                 <button id="tab-analytics" onclick="switchTab('analytics')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">
                     📊 旅程數據分析
                 </button>
+                <button id="tab-snowplan" onclick="switchTab('snowplan')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">
+                    ❄️ 大雪應變指南
+                </button>
             </nav>
         </div>
     </header>
@@ -452,6 +455,92 @@
             </div>
         </section>
 
+        <!-- ================= SECTION 7: 大雪應變指南 ================= -->
+        <section id="section-snowplan" class="hidden space-y-6">
+            <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200">
+                <h2 class="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                    <span class="text-brand-500">❄️</span> 城崎溫泉 2 月大雪交通應變指南與決策機制
+                </h2>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                    2 月前往城崎溫泉，能在露天風呂中享受「雪見溫泉」是最夢幻的體驗。為了確保旅途順暢且不損失訂房費用，我們導入了「行前決策」與「當下應變」的雙重保險機制。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 決策機制 -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border-2 border-red-200 space-y-4">
+                    <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2 border-b border-gray-100 pb-2">
+                        <span>🛑</span> 終極防線：2/3 決策檢查點 (Check-point)
+                    </h3>
+                    <div class="bg-red-50 p-3 rounded text-sm text-red-800 font-bold border border-red-100 shadow-inner">
+                        王牌優勢：大江戶溫泉 Premium 在 2/3 23:59 前可免費取消！
+                    </div>
+                    <ul class="space-y-3 text-sm text-gray-700">
+                        <li class="flex gap-2.5 items-start">
+                            <span class="text-blue-500 text-base mt-0.5">📅</span>
+                            <div><strong>1/31～2/2 (觀察期)：</strong>打開日本氣象網站，查看 2/11-2/12 豐岡/城崎地區預報。</div>
+                        </li>
+                        <li class="flex gap-2.5 items-start">
+                            <span class="text-emerald-500 text-base mt-0.5">🟢</span>
+                            <div><strong>2/3 白天 (預報小雪/晴天)：</strong>完美！準備享受夢幻雪見溫泉，保留訂房。</div>
+                        </li>
+                        <li class="flex gap-2.5 items-start">
+                            <span class="text-red-500 text-base mt-0.5">🔴</span>
+                            <div><strong>2/3 白天 (預報大雪/暴風雪)：</strong>為避免受困，直接在 23:59 前免費取消訂房。</div>
+                        </li>
+                        <li class="flex gap-2.5 items-start">
+                            <span class="text-amber-500 text-base mt-0.5">🛡️</span>
+                            <div><strong>啟動 Plan B：</strong>JR Pass 依然有效！馬上改訂京都、大阪或岡山，把這兩天變成市區深度遊，完全無金錢損失。</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- JR 影響評估 -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 space-y-4">
+                    <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2 border-b border-gray-100 pb-2">
+                        <span>🚨</span> 大雪對 JR 鐵路的影響評估
+                    </h3>
+                    <div class="space-y-3 text-sm text-gray-700">
+                        <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                            <div class="font-bold text-gray-900 mb-1 flex items-center gap-2">
+                                <span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-xs">Day 3</span>
+                                京都 ➔ 城崎 (山陰本線)
+                            </div>
+                            <p class="text-gray-600 mt-1">沿著日本海行駛，迎風面受強烈冷氣團影響最大。若積雪過深，列車可能會降速行駛（延誤 1 小時以上）或預防性停駛。</p>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                            <div class="font-bold text-gray-900 mb-1 flex items-center gap-2">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-xs">Day 4</span>
+                                城崎 ➔ 神戶 (濱風號)
+                            </div>
+                            <p class="text-gray-600 mt-1">列車一路往南穿越山脈回到溫暖的瀨戶內海側。相較於日本海沿岸，這條路線因暴風雪全面停駛的機率確實相對較低。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 當天應變 -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 md:col-span-2 space-y-4">
+                    <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2 border-b border-gray-100 pb-2">
+                        <span>🛡️</span> 萬一出發當天突遇大雪的 3 大對策
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div class="p-4 bg-blue-50/50 rounded-lg border border-blue-100">
+                            <div class="font-bold text-blue-800 mb-2 flex items-center gap-2"><span class="text-lg">🎒</span> 善用「只背小包包」</div>
+                            <p class="text-gray-600 leading-relaxed">因為大行李安全地留在神戶，萬一列車嚴重延誤，你不需要顧行李，可隨時去超商買熱食或靈活改變交通工具，機動性 100 分。</p>
+                        </div>
+                        <div class="p-4 bg-amber-50/50 rounded-lg border border-amber-100">
+                            <div class="font-bold text-amber-800 mb-2 flex items-center gap-2"><span class="text-lg">📱</span> 隨時關注 JR 情報</div>
+                            <p class="text-gray-600 leading-relaxed">出發前務必查看「JR 西日本近畿地區運行情報」。若顯示延遲，提早到車站並買好乾糧；若顯示停駛，則立刻啟動下方巴士備案。</p>
+                        </div>
+                        <div class="p-4 bg-emerald-50/50 rounded-lg border border-emerald-100">
+                            <div class="font-bold text-emerald-800 mb-2 flex items-center gap-2"><span class="text-lg">🚌</span> 改搭「全但巴士」</div>
+                            <p class="text-gray-600 leading-relaxed">若 JR 停駛，Day 3 京都車站外有「全但巴士」可直達城崎；Day 4 城崎也有直達神戶三宮的高速巴士（車程皆約 3.5 小時）。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- ================= SECTION 6: 共同記帳 (雲端即時同步) ================= -->
         <section id="section-accounting" class="hidden space-y-6">
             <!-- 結算儀表板 -->
@@ -685,7 +774,7 @@
                     { time: "08:00 - 11:00", icon: "♨️", text: "晨湯與慵懶退房：吃豐盛早餐與泡晨湯。享受 11 點退房的優勢從容收拾。" },
                     { time: "11:30 - 14:00", icon: "❄️", text: "外湯巡禮 第二彈：利用外湯通行證繼續泡「鴻之湯」或「曼陀羅湯」。" },
                     { time: "12:30 - 14:00", icon: "🥩", text: "午餐與散步：在老街享用但馬牛午餐或溫泉甜點，漫步柳樹河畔。" },
-                    { time: "14:30 - 17:00", icon: "🚆", text: "返回大本營：搭乘「特急濱風號 (Hamakaze)」返回神戶三之宮站。" },
+                    { time: "14:14 - 16:46", icon: "🚆", text: "返回大本營：搭乘「特急濱風號 (Hamakaze)」返回神戶三之宮站。" },
                     { time: "17:00 - 18:00", icon: "🏨", text: "領取行李與入住：返回東橫INN辦理入住，向櫃台領回寄存的大行李箱。" },
                     { time: "🍽️ 晚餐推薦", icon: "🍜", text: "三宮高架下居酒屋、特色拉麵或神戶煎餃。" }
                 ]
@@ -715,9 +804,9 @@
                 items: [
                     { time: "09:30 - 12:00", icon: "🏛️", text: "北野異人館散策：造訪風見雞館。至星巴克吃「六甲牧場霜淇淋」。" },
                     { time: "12:00 - 13:30", icon: "⛩️", text: "優雅午餐與生田神社：品嚐洋食蛋包飯，飯後參拜結緣聖地，體驗特色「水占卜」。" },
-                    { time: "13:30 - 16:00", icon: "🛍️", text: "舊居留地與採買：漫步充滿歐風洋館的舊居留地，於百貨挑選精緻甜點。" },
-                    { time: "16:00 - 17:00", icon: "🚆", text: "前往大阪：(JR Pass最後一日) 從三之宮搭「新快速」至大阪站，轉地鐵去心齋橋。" },
-                    { time: "17:00 - 21:00", icon: "🍡", text: "大阪道頓堀之夜：打卡固力果跑跑人，品嚐大阪燒、章魚燒，唐吉訶德血拚。" },
+                    { time: "13:30 - 15:00", icon: "🛍️", text: "舊居留地與採買：漫步充滿歐風洋館的舊居留地，於百貨挑選精緻甜點。" },
+                    { time: "15:00 - 16:00", icon: "🚆", text: "前往大阪：(JR Pass最後一日) 從三之宮搭「新快速」至大阪站，轉地鐵去心齋橋。" },
+                    { time: "16:00 - 21:00", icon: "🍡", text: "大阪道頓堀之夜：提早抵達避開人潮！打卡固力果跑跑人，品嚐大阪燒、章魚燒，唐吉訶德血拚。" },
                     { time: "21:00 後", icon: "🌙", text: "輕鬆返回：搭乘地鐵回大阪站，轉乘 JR 新快速返回神戶三宮住宿。" }
                 ]
             },
@@ -814,7 +903,7 @@
 
         // 分頁 Tab 切換邏輯 (加入延遲渲染圖表防跑版)
         function switchTab(tabName) {
-            const sections = ['itinerary', 'navigation', 'luggage', 'checklist', 'analytics', 'accounting'];
+            const sections = ['itinerary', 'navigation', 'luggage', 'checklist', 'analytics', 'accounting', 'snowplan'];
             sections.forEach(s => {
                 const secEl = document.getElementById(`section-${s}`);
                 const tabBtn = document.getElementById(`tab-${s}`);
