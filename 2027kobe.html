@@ -743,7 +743,7 @@
                 stay: "RIHGA Place Kyoto Shijokarasuma (麗嘉廣場酒店)",
                 items: [
                     { time: "08:30 - 09:30", icon: "🧳", text: "退房與寄物：東橫INN退房，大行李寄放櫃台，背小背包出發。" },
-                    { time: "09:30 - 10:30", icon: "🚆", text: "啟程前往京都：啟用 JR 關西廣域周遊券。搭乘「JR新快速」直達京都站。轉搭地下鐵至四條站寄放背包。" },
+                    { time: "09:30 - 10:30", icon: "🚆", text: "啟程前往京都：啟用 JR Pass。搭「JR新快速」直達京都站。轉搭地下鐵烏丸線至「四條站(即烏丸站)」先到飯店寄放背包。" },
                     { time: "10:30 - 13:30", icon: "⛩️", text: "東山經典散策：搭公車至清水道，逛清水寺、三年坂、二年坂一路散步下坡至八坂神社。" },
                     { time: "13:30 - 15:00", icon: "🍡", text: "祇園與午餐：在八坂神社旁的祇園商圈或河原町享用午餐。" },
                     { time: "15:30 - 17:30", icon: "🌅", text: "伏見稻荷夕陽魔幻時刻：搭乘電車前往，在午後避開尖峰人潮漫步千本鳥居。" },
@@ -903,7 +903,7 @@
 
         // 分頁 Tab 切換邏輯 (加入延遲渲染圖表防跑版)
         function switchTab(tabName) {
-            const sections = ['itinerary', 'navigation', 'luggage', 'checklist', 'analytics', 'accounting', 'snowplan'];
+            const sections = ['itinerary', 'navigation', 'luggage', 'checklist', 'analytics', 'accounting', 'snowplan', 'translator'];
             sections.forEach(s => {
                 const secEl = document.getElementById(`section-${s}`);
                 const tabBtn = document.getElementById(`tab-${s}`);
@@ -1144,6 +1144,44 @@
                 renderCharts();
             }
         });
+
+        // 翻譯機邏輯：點擊快捷鍵填入編輯器
+        function fillTranslator(text) {
+            document.getElementById('trans-input').value = text;
+        }
+
+        // 翻譯機邏輯：呼叫免費 API
+        async function doTranslate() {
+            const inputEl = document.getElementById('trans-input');
+            const outputEl = document.getElementById('trans-output');
+            const btnText = document.getElementById('trans-btn-text');
+            const text = inputEl.value.trim();
+            
+            if (!text) {
+                outputEl.innerHTML = '<span class="text-red-500 text-sm">請先輸入或選擇中文句子喔！</span>';
+                return;
+            }
+
+            outputEl.innerHTML = '<span class="text-gray-500 text-sm animate-pulse">正在為你翻譯中...</span>';
+            btnText.innerHTML = '⏳ 翻譯中...';
+
+            try {
+                // 使用 MyMemory 免費翻譯 API (支援中文轉日文)
+                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=zh-TW|ja`);
+                const data = await response.json();
+                
+                if (data && data.responseData && data.responseData.translatedText) {
+                    outputEl.innerHTML = data.responseData.translatedText;
+                } else {
+                    outputEl.innerHTML = '<span class="text-red-500 text-sm">翻譯失敗，請確認網路連線。</span>';
+                }
+            } catch (error) {
+                console.error('Translation error:', error);
+                outputEl.innerHTML = '<span class="text-red-500 text-sm">無法連線到翻譯伺服器。</span>';
+            } finally {
+                btnText.innerHTML = '🔄 翻譯成日文';
+            }
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             renderItineraryCards();
