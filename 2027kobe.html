@@ -88,16 +88,16 @@
                 </div>
             </div>
 
-            <!-- 主分頁 Tab 導覽列 -->
-            <nav class="flex space-x-2 sm:space-x-4 overflow-x-auto pb-2 pt-1 no-scrollbar text-sm font-medium border-t border-gray-700/60">
-                <button id="tab-itinerary" onclick="switchTab('itinerary')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors bg-brand-500 text-white font-semibold shadow-sm">📅 每日詳細行程</button>
-                <button id="tab-navigation" onclick="switchTab('navigation')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">🚗 自駕導航 & 鐵路</button>
-                <button id="tab-luggage" onclick="switchTab('luggage')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">🏨 宿點與行李動線</button>
-                <button id="tab-checklist" onclick="switchTab('checklist')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">📌 行前準備與清單</button>
-                <button id="tab-accounting" onclick="switchTab('accounting')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">💰 共同記帳</button>
-                <button id="tab-analytics" onclick="switchTab('analytics')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">📊 旅程數據分析</button>
-                <button id="tab-translator" onclick="switchTab('translator')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">🗣️ 翻譯機</button>
-                <button id="tab-snowplan" onclick="switchTab('snowplan')" class="px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800">❄️ 大雪應變指南</button>
+            <!-- 主分頁 Tab 導覽列 (自動換行設計) -->
+            <nav class="flex flex-wrap gap-2 pb-3 pt-2 text-sm font-medium border-t border-gray-700/60 justify-center">
+                <button id="tab-itinerary" onclick="switchTab('itinerary')" class="flex-auto sm:flex-none px-2 sm:px-3 py-1.5 sm:py-2 rounded-md transition-colors text-center text-xs sm:text-sm bg-brand-500 text-white font-semibold shadow-sm">📅 每日行程</button>
+                <button id="tab-navigation" onclick="switchTab('navigation')" class="flex-auto sm:flex-none px-2 sm:px-3 py-1.5 sm:py-2 rounded-md transition-colors text-center text-xs sm:text-sm text-gray-300 hover:text-white hover:bg-gray-800 border border-gray-700/50">🚗 交通導航</button>
+                <button id="tab-luggage" onclick="switchTab('luggage')" class="flex-auto sm:flex-none px-2 sm:px-3 py-1.5 sm:py-2 rounded-md transition-colors text-center text-xs sm:text-sm text-gray-300 hover:text-white hover:bg-gray-800 border border-gray-700/50">🏨 住宿行李</button>
+                <button id="tab-checklist" onclick="switchTab('checklist')" class="flex-auto sm:flex-none px-2 sm:px-3 py-1.5 sm:py-2 rounded-md transition-colors text-center text-xs sm:text-sm text-gray-300 hover:text-white hover:bg-gray-800 border border-gray-700/50">📌 行前清單</button>
+                <button id="tab-accounting" onclick="switchTab('accounting')" class="flex-auto sm:flex-none px-2 sm:px-3 py-1.5 sm:py-2 rounded-md transition-colors text-center text-xs sm:text-sm text-gray-300 hover:text-white hover:bg-gray-800 border border-gray-700/50">💰 共同記帳</button>
+                <button id="tab-analytics" onclick="switchTab('analytics')" class="flex-auto sm:flex-none px-2 sm:px-3 py-1.5 sm:py-2 rounded-md transition-colors text-center text-xs sm:text-sm text-gray-300 hover:text-white hover:bg-gray-800 border border-gray-700/50">📊 數據分析</button>
+                <button id="tab-translator" onclick="switchTab('translator')" class="flex-auto sm:flex-none px-2 sm:px-3 py-1.5 sm:py-2 rounded-md transition-colors text-center text-xs sm:text-sm text-gray-300 hover:text-white hover:bg-gray-800 border border-gray-700/50">🗣️ 翻譯機</button>
+                <button id="tab-snowplan" onclick="switchTab('snowplan')" class="flex-auto sm:flex-none px-2 sm:px-3 py-1.5 sm:py-2 rounded-md transition-colors text-center text-xs sm:text-sm text-gray-300 hover:text-white hover:bg-gray-800 border border-gray-700/50">❄️ 大雪應變</button>
             </nav>
         </div>
     </header>
@@ -168,6 +168,36 @@
                     </table>
                 </div>
             </div>
+
+            <!-- JR Pass 鐵路指南 -->
+            <div class="bg-cardbg rounded-xl p-5 shadow-sm border border-gray-200 mt-6">
+                <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2 mb-4">
+                    <span>🚆</span> JR 關西廣域 順時針鐵路指南
+                </h3>
+                <div class="space-y-4">
+                    <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                        <div class="font-bold text-gray-900 flex items-center gap-2 mb-1">
+                            <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-xs">Day 2</span>
+                            神戶 ➔ 京都 (JR 新快速)
+                        </div>
+                        <p class="text-sm text-gray-600">三之宮 ➔ 京都 (車程約 50 分)。班次極密，不需要劃位，直接出示/刷周遊券進站。</p>
+                    </div>
+                    <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                        <div class="font-bold text-gray-900 flex items-center gap-2 mb-1">
+                            <span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-xs">Day 3</span>
+                            京都 ➔ 城崎溫泉 (特急城崎號 Kinosaki)
+                        </div>
+                        <p class="text-sm text-gray-600">車程約 2.5 小時。全車指定席，強烈建議抵達關西機場或提早去機器劃位指定席，可直達溫泉鄉免換車。</p>
+                    </div>
+                    <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                        <div class="font-bold text-gray-900 flex items-center gap-2 mb-1">
+                            <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-xs">Day 4</span>
+                            城崎溫泉 ➔ 神戶 (特急濱風號 Hamakaze)
+                        </div>
+                        <p class="text-sm text-gray-600">14:14 發車，16:46 抵達三之宮站。搭乘這班車可沿途欣賞山陰本線雪景與瀨戶內海海景。</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- ================= SECTION 3: 宿點與行李動線 ================= -->
@@ -196,7 +226,7 @@
                         <div class="text-xs space-y-1 text-gray-600">
                             <p class="flex items-center gap-1"><span class="text-emerald-600">🧳 大行李：</span>攜帶進房</p>
                         </div>
-                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">抵達神戶後直接 check-in，整理隔日外出包。</p>
+                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">俱樂部會員可 15:00 提早進房休息，整理隔日外出包。</p>
                     </div>
 
                     <!-- Step 2 -->
@@ -213,7 +243,7 @@
                             <p class="flex items-center gap-1"><span class="text-amber-600 font-bold">🧳 大行李：</span>寄放神戶東橫</p>
                             <p class="flex items-center gap-1"><span class="text-blue-600 font-bold">🎒 小背包：</span>輕裝帶至京都</p>
                         </div>
-                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">D2 早上寄放大行李，搭車赴京都四條站。</p>
+                        <p class="text-xs text-gray-500 bg-white p-2 rounded border border-gray-200">D2 早上寄放大行李，搭車赴地下鐵四條站(烏丸)。</p>
                     </div>
 
                     <!-- Step 3 -->
@@ -418,7 +448,20 @@
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-600 mb-1">項目分類</label>
                                     <select id="exp-category" class="w-full text-sm p-2 border border-gray-300 rounded">
-                                        <option value="早餐">🍳 早餐</option><option value="午餐">🍱 午餐</option><option value="晚餐">🍽️ 晚餐</option><option value="宵夜">🍜 宵夜</option><option value="點心">🍡 點心</option><option value="飲品">🧋 飲品</option><option value="伴手禮">🛍️ 伴手禮</option><option value="住宿費">🏨 住宿費</option><option value="租車費">🚗 租車費</option><option value="過路費/油/停車">⛽ 過路費/油/停車</option><option value="門票">🎟️ 門票</option><option value="其他">📝 其他</option><option value="藥妝">💊 藥妝</option><option value="車票">🚆 車票</option>
+                                        <option value="早餐">🍳 早餐</option>
+                                        <option value="午餐">🍱 午餐</option>
+                                        <option value="晚餐">🍽️ 晚餐</option>
+                                        <option value="宵夜">🍜 宵夜</option>
+                                        <option value="點心">🍡 點心</option>
+                                        <option value="飲品">🧋 飲品</option>
+                                        <option value="伴手禮">🛍️ 伴手禮</option>
+                                        <option value="住宿費">🏨 住宿費</option>
+                                        <option value="租車費">🚗 租車費</option>
+                                        <option value="過路費/油/停車">⛽ 過路費/油/停車</option>
+                                        <option value="門票">🎟️ 門票</option>
+                                        <option value="藥妝">💊 藥妝</option>
+                                        <option value="車票">🚆 車票</option>
+                                        <option value="其他">📝 其他</option>
                                     </select>
                                 </div>
                             </div>
@@ -643,7 +686,7 @@
                 stay: "RIHGA Place Kyoto Shijokarasuma (麗嘉廣場酒店)",
                 items: [
                     { time: "08:30 - 09:30", icon: "🧳", text: "退房與寄物：東橫INN退房，大行李寄放櫃台，背小背包出發。" },
-                    { time: "09:30 - 10:30", icon: "🚆", text: "啟程前往京都：啟用 JR Pass。搭「JR新快速」直達京都站。轉搭地下鐵烏丸線至「地下鐵四條站」(即烏丸站)先到飯店寄放背包。" },
+                    { time: "09:30 - 10:30", icon: "🚆", text: "啟程前往京都：啟用 JR Pass。搭「JR新快速」直達京都站。轉搭地下鐵至「地下鐵四條站」(烏丸站)，先到飯店寄放背包。", mapQuery: "RIHGA Place Kyoto Shijokarasuma" },
                     { time: "10:30 - 13:30", icon: "⛩️", text: "東山經典散策：搭公車至清水道，逛清水寺、三年坂、二年坂一路散步下坡至八坂神社。", mapQuery: "清水寺" },
                     { time: "13:30 - 15:00", icon: "🍡", text: "祇園與午餐：在八坂神社旁的祇園商圈或河原町享用午餐。", mapQuery: "八坂神社" },
                     { time: "15:30 - 17:30", icon: "🌅", text: "伏見稻荷夕陽魔幻時刻：搭乘電車前往，在午後避開尖峰人潮漫步千本鳥居。", mapQuery: "伏見稻荷大社" },
@@ -796,7 +839,7 @@
             renderItineraryCards(day);
         }
 
-        // 分頁 Tab 切換邏輯 (加入延遲渲染圖表防跑版)
+        // 分頁 Tab 切換邏輯 (保留自動換行的 flex-auto 樣式)
         function switchTab(tabName) {
             const sections = ['itinerary', 'navigation', 'luggage', 'checklist', 'analytics', 'accounting', 'snowplan', 'translator'];
             sections.forEach(s => {
@@ -804,8 +847,8 @@
                 const tabBtn = document.getElementById(`tab-${s}`);
                 if (!secEl || !tabBtn) return;
                 
-                // 保留響應式排版用的 class (flex-auto 讓手機版自動延展對齊，並微調字體大小)
-                const baseClass = "flex-auto sm:flex-none px-2 sm:px-3 py-1.5 sm:py-2 rounded-md whitespace-nowrap transition-colors text-center text-xs sm:text-sm ";
+                // 保留響應式排版用的 class (讓手機版自動延展對齊，並微調字體大小)
+                const baseClass = "flex-auto sm:flex-none px-2 sm:px-3 py-1.5 sm:py-2 rounded-md transition-colors text-center text-xs sm:text-sm ";
                 
                 if (s === tabName) {
                     secEl.classList.remove('hidden');
@@ -816,7 +859,7 @@
                 }
             });
             
-            // 加入 50 毫秒延遲，讓畫面先切換過去，再渲染圖表，避免尺寸為 0 導致圖表消失
+            // 加入 50 毫秒延遲，讓畫面先切換過去再渲染圖表，避免尺寸為 0
             if (tabName === 'analytics') {
                 setTimeout(() => {
                     if (typeof renderCharts === 'function') renderCharts();
@@ -837,6 +880,7 @@
             }).catch(err => console.error('Copy failed', err));
         }
 
+        // 檢查清單
         function updateChecklistProgress() {
             const checkboxes = document.querySelectorAll('.chk-item');
             let checkedCount = 0;
@@ -850,6 +894,7 @@
             document.getElementById('checklist-progress-text').innerText = `${percent}% (${checkedCount}/${checkboxes.length})`;
             document.getElementById('checklist-progress-bar').style.width = `${percent}%`;
 
+            // 同步上傳到 Firebase
             if (window.firebaseSetDoc && window.firebaseDoc && window.firebaseDB && window.firebaseAppId) {
                 const docRef = window.firebaseDoc(window.firebaseDB, 'artifacts', window.firebaseAppId, 'public', 'data', 'checklist', 'shared');
                 window.firebaseSetDoc(docRef, { states: states }, { merge: true }).catch(err => console.error("清單同步失敗:", err));
@@ -1002,7 +1047,7 @@
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // === 貼上你的專屬 Firebase 金鑰 ===
+        // === 你的專屬 Firebase 金鑰 ===
         const firebaseConfig = {
             apiKey: "AIzaSyDU7OIhhr1Yl8X7NjuyOOEPrD3TQgHLNfE",
             authDomain: "kobe-trip-2027.firebaseapp.com",
