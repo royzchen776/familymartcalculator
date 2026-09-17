@@ -191,7 +191,7 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-gray-900">東橫INN 神戶三宮</h4>
-                            <div class="mt-1"><span class="text-[11px] bg-white border border-brand-200 text-brand-700 px-1.5 py-0.5 rounded font-mono font-semibold">入: 16:00 / 退: 10:00</span></div>
+                            <div class="mt-1"><span class="text-[11px] bg-white border border-brand-200 text-brand-700 px-1.5 py-0.5 rounded font-mono font-semibold">入: 15:00 / 退: 10:00</span></div>
                         </div>
                         <div class="text-xs space-y-1 text-gray-600">
                             <p class="flex items-center gap-1"><span class="text-emerald-600">🧳 大行李：</span>攜帶進房</p>
@@ -241,7 +241,7 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-gray-900">東橫INN 神戶三宮</h4>
-                            <div class="mt-1"><span class="text-[11px] bg-white border border-emerald-300 text-emerald-800 px-1.5 py-0.5 rounded font-mono font-semibold">入: 16:00 / 退: 10:00</span></div>
+                            <div class="mt-1"><span class="text-[11px] bg-white border border-emerald-300 text-emerald-800 px-1.5 py-0.5 rounded font-mono font-semibold">入: 15:00 / 退: 10:00</span></div>
                         </div>
                         <div class="text-xs space-y-1 text-gray-600">
                             <p class="flex items-center gap-1"><span class="text-emerald-600 font-bold">🧳 大行李：</span>領回歸位！</p>
@@ -804,19 +804,22 @@
                 const tabBtn = document.getElementById(`tab-${s}`);
                 if (!secEl || !tabBtn) return;
                 
+                // 保留響應式排版用的 class (flex-auto 讓手機版自動延展對齊，並微調字體大小)
+                const baseClass = "flex-auto sm:flex-none px-2 sm:px-3 py-1.5 sm:py-2 rounded-md whitespace-nowrap transition-colors text-center text-xs sm:text-sm ";
+                
                 if (s === tabName) {
                     secEl.classList.remove('hidden');
-                    tabBtn.className = "px-3 py-2 rounded-md whitespace-nowrap transition-colors bg-brand-500 text-white font-semibold shadow-sm";
+                    tabBtn.className = baseClass + "bg-brand-500 text-white font-semibold shadow-sm";
                 } else {
                     secEl.classList.add('hidden');
-                    tabBtn.className = "px-3 py-2 rounded-md whitespace-nowrap transition-colors text-gray-300 hover:text-white hover:bg-gray-800";
+                    tabBtn.className = baseClass + "text-gray-300 hover:text-white hover:bg-gray-800 border border-gray-700/50";
                 }
             });
             
             // 加入 50 毫秒延遲，讓畫面先切換過去，再渲染圖表，避免尺寸為 0 導致圖表消失
             if (tabName === 'analytics') {
                 setTimeout(() => {
-                    renderCharts();
+                    if (typeof renderCharts === 'function') renderCharts();
                 }, 50);
             }
         }
